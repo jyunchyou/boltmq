@@ -1,1 +1,1 @@
-消息对列boltmq
+消息队列boltmq
