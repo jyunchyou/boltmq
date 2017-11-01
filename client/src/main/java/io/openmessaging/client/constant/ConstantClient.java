@@ -3,7 +3,7 @@ package io.openmessaging.client.constant;
 /**
  * Created by fbhw on 17-10-31.
  */
-public class ConstantProducer {
+public class ConstantClient {
 
     public static final int SYNC_MODEL = 0;
 

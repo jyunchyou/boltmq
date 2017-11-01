@@ -1,17 +1,16 @@
 package io.openmessaging.client.producer;
 
-import io.openmessaging.client.common.DefaultMessage;
-import io.openmessaging.client.common.DefaultProperties;
+import io.openmessaging.client.impl.PropertiesImpl;
 
 /**
  * Created by fbhw on 17-10-31.
  */
 public class FactoryProducer {
 
-    public MQProducer createProducer(DefaultProperties defaultProperties){
+    public AbstractProducer createProducer(PropertiesImpl implProperties){
 
-        MQProducer mqProducer = new MQProducer();
-        mqProducer.setDefaultProperties(defaultProperties);
+        AbstractProducer mqProducer = new AbstractProducer();
+        mqProducer.setImplProperties(implProperties);
         return mqProducer;
 
 

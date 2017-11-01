@@ -1,6 +1,6 @@
 package io.openmessaging.client.selector;
 
-import io.openmessaging.client.producer.MessageQueue;
+import io.openmessaging.client.impl.MessageQueue;
 
 import java.util.List;
 
@@ -19,4 +19,6 @@ public class QueueSelectByHash implements QueueSelector{
         return messageQueues.get(hashCode % messageQueues.size());
 
     }
+
+
 }
