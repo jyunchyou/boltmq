@@ -1,6 +1,7 @@
 package io.openmessaging.client.producer;
 
 import io.openmessaging.client.common.CallBack;
+import io.openmessaging.client.net.SendResult;
 import io.openmessaging.client.selector.QueueSelector;
 import io.openmessaging.client.impl.MessageImpl;
 import io.openmessaging.client.impl.PropertiesImpl;
@@ -13,25 +14,26 @@ public class AbstractProducer {
 
     private PropertiesImpl implProperties = null;
     //同步发送
-    public void send(MessageImpl message){
+    public SendResult send(MessageImpl message){
 
-        send(message,null);
-
-    }
-
-    public void send(MessageImpl message, QueueSelector queueSelector){
-
-        this.send(message,3,queueSelector);
+       return  send(message,null);
 
     }
 
-    public void send(MessageImpl message,int delayTime){
-        this.send(message,delayTime,null);
+    public SendResult send(MessageImpl message, QueueSelector queueSelector){
+
+        return this.send(message,3,queueSelector);
+
+    }
+
+    public SendResult send(MessageImpl message,int delayTime){
+        return  this.send(message,delayTime,null);
 
     }
     //delayTime支持固定时长,传入delay等级
-    public void send(MessageImpl message,int delayTime, QueueSelector queueSelector){
+    public SendResult send(MessageImpl message,int delayTime, QueueSelector queueSelector){
 
+        return null;
     }
 
 

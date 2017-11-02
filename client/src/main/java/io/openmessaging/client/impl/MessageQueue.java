@@ -39,4 +39,9 @@ public class MessageQueue implements Serializable{
     public void setBrokerLocal(String brokerLocal) {
         this.brokerLocal = brokerLocal;
     }
+    @Override
+    public String toString(){
+        return "serialVersionUID:"+serialVersionUID+"topicName:"+topicName+"queueId:"+queueId
+                +"brokerLocal:"+brokerLocal;
+    }
 }
