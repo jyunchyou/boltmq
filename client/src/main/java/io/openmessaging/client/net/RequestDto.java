@@ -13,9 +13,14 @@ public class RequestDto {
 
     private String command = null;
 
+    private String language = null;
+
+    private String version = null;
+
     public String getResult() {
         return result;
     }
+
 
     public void setResult(String result) {
         this.result = result;
