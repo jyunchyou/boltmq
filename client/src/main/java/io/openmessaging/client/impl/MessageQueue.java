@@ -13,7 +13,7 @@ public class MessageQueue implements Serializable{
 
     private String  queueId = null;
 
-    private String brokerLocal = null;
+    private String brokerName = null;
 
 
     public String getTopicName() {
@@ -32,16 +32,18 @@ public class MessageQueue implements Serializable{
         this.queueId = queueId;
     }
 
-    public String getBrokerLocal() {
-        return brokerLocal;
-    }
 
-    public void setBrokerLocal(String brokerLocal) {
-        this.brokerLocal = brokerLocal;
-    }
     @Override
     public String toString(){
         return "serialVersionUID:"+serialVersionUID+"topicName:"+topicName+"queueId:"+queueId
-                +"brokerLocal:"+brokerLocal;
+                +"brokerName:"+brokerName;
+    }
+
+    public String getBrokerName() {
+        return brokerName;
+    }
+
+    public void setBrokerName(String brokerName) {
+        this.brokerName = brokerName;
     }
 }

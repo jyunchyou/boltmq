@@ -3,51 +3,52 @@ package io.openmessaging.client.impl;
 /**
  * Created by fbhw on 17-10-31.
  */
-public class MessageImpl<H> {
+public class MessageImpl{
 
-    private String title = null;
+    private String topic = null;
 
+    private String tag = null;
 
+    private String orderId = null;
 
-    private H order = null;
+    private byte[] body = null;
 
-    private PropertiesImpl implProperties = null;
-
-    public MessageImpl(String title, H order, MessageImpl message){
-        this.title = title;
-
-        this.order = order;
-        this.implProperties = implProperties;
-
+    public MessageImpl(String topic, String tag, String orderId,byte[] body){
+        this.topic = topic;
+        this.tag = tag;
+        this.orderId = orderId;
+        this.body = body;
     }
 
-    public String getTitle() {
-        return title;
+    public byte[] getBody() {
+        return body;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setBody(byte[] body) {
+        this.body = body;
     }
 
-
-    public H getOrder() {
-        return order;
+    public String getOrderId() {
+        return orderId;
     }
 
-    public void setOrder(H order) {
-        this.order = order;
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
-    public PropertiesImpl getImplProperties(){
-        return this.implProperties;
+    public String getTag() {
+        return tag;
     }
 
-    public void setImplProperties(PropertiesImpl implProperties){
-        this.implProperties = implProperties;
-
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
+    public String getTopic() {
+        return topic;
+    }
 
-
-
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
 }

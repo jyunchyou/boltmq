@@ -3,7 +3,6 @@ package io.openmessaging.client.producer;
 import io.openmessaging.client.common.CallBack;
 import io.openmessaging.client.impl.MessageQueue;
 import io.openmessaging.client.impl.MessageQueues;
-import io.openmessaging.client.net.KernelClient;
 import io.openmessaging.client.net.SendResult;
 import io.openmessaging.client.selector.QueueSelectByHash;
 import io.openmessaging.client.selector.QueueSelectByRandom;

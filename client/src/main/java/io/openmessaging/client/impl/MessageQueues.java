@@ -145,4 +145,12 @@ public class MessageQueues {
         //TODO　 了解broker,queue,Topic的关系,定制协议,对userBuffer解码
 
     }
+
+    public List getList(){
+        if (messageQueues.size() == 0) {
+            return null;
+        }
+        return this.messageQueues;
+
+    }
 }
