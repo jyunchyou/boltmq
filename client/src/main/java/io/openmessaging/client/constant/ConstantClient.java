@@ -14,4 +14,12 @@ public class ConstantClient {
     public static final long SERIR_ID = 1L;
 
     public static final int PROPERTIES_SIZE = 5;
+
+    public static final String NAMESERVER_ADDRESS = "http://127.0.0.1:8080";
+
+    public static final int UPDATE_LIST_PORT = 12345;
+
+    public static final int USER_BUFFER = 3000;
+
+
 }
