@@ -3,7 +3,7 @@ package io.openmessaging.client.producer;
 import io.openmessaging.client.common.CallBack;
 import io.openmessaging.client.impl.MessageQueue;
 import io.openmessaging.client.impl.MessageQueues;
-import io.openmessaging.client.net.KernelProducer;
+import io.openmessaging.client.net.KernelClient;
 import io.openmessaging.client.net.SendResult;
 import io.openmessaging.client.selector.QueueSelectByHash;
 import io.openmessaging.client.selector.QueueSelectByRandom;
@@ -22,7 +22,7 @@ public class AbstractProducer {
 
     private PropertiesImpl implProperties = null;
 
-    private KernelProducer kernelProducer = null;
+    private KernelClient kernelClient = null;
 
     private QueueSelectByHash queueSelectByHash = new QueueSelectByHash();
 
@@ -71,7 +71,7 @@ public class AbstractProducer {
         }else {
             messageQueue = queueSelectByHash.select(list,shardingKey);
         }
-        return send(message,delayTime,messageQueue);
+        return kernelClient.send(message,delayTime,messageQueue,implProperties);
     }
 
 
