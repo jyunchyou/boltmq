@@ -17,6 +17,8 @@ public class RequestDto {
 
     private String version = null;
 
+    private String serialModel = null;
+
     public String getResult() {
         return result;
     }
@@ -43,6 +45,31 @@ public class RequestDto {
     }
 
     public String toString(){
-        return "id:"+id+"command:"+command+"result:"+result;
+        return "id:"+id+"command:"+command+"result:"+result+"command:"+command+
+                "language:"+language+"version:"+version+"serialModel:"+serialModel;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getSerialModel() {
+        return serialModel;
+    }
+
+    public void setSerialModel(String serialModel) {
+        this.serialModel = serialModel;
     }
 }
