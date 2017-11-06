@@ -17,7 +17,9 @@ public class RequestDto {
 
     private String serialModel = null;
 
+    private int code;// ResponseCode
 
+    //private transient CommandCustomHeader customHeader; 包含String topic
 
     public String getId() {
         return id;

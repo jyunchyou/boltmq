@@ -13,11 +13,14 @@ public class MessageImpl{
 
     private byte[] body = null;
 
-    public MessageImpl(String topic, String tag, String orderId,byte[] body){
+    private int code = 0;
+
+    public MessageImpl(String topic, String tag, String orderId,byte[] body,int code){
         this.topic = topic;
         this.tag = tag;
         this.orderId = orderId;
         this.body = body;
+        this.code = code;
     }
 
     public byte[] getBody() {
@@ -50,5 +53,13 @@ public class MessageImpl{
 
     public void setTopic(String topic) {
         this.topic = topic;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 }

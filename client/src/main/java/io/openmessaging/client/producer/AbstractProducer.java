@@ -42,6 +42,9 @@ public class AbstractProducer {
 
     //开启定时任务
     public void start(){
+        kernelClient.start(String.valueOf(
+                implProperties.getProperties("nameSvrAddress")
+        ));
 
     }
 
@@ -62,7 +65,7 @@ public class AbstractProducer {
 
         List list = messageQueues.getList();
         if (list == null) {
-            messageQueues.updateMessageQueuesFromNameServer();
+            kernelClient.updateMessageQueuesFromNameServer();
             list = messageQueues.getList();
         }
         if (shardingKey == null) {

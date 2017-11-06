@@ -31,9 +31,21 @@ public class KernelClient {
 
         ByteBuffer byteBuffer = clientProcessor.encode(message,delayTime,properties,requestDto);
 
+        SendResult sendResult = clientProcessor.sendSycn(byteBuffer);
 
 
 
-        return new SendResult();
+        return sendResult;
     }
+
+    public void start(String nameSvrAddress){
+
+
+        clientProcessor.init(nameSvrAddress);
+    }
+
+    public void updateMessageQueuesFromNameServer(){
+        clientProcessor.updateMessageQueuesFromNameServer();
+    }
+
 }
