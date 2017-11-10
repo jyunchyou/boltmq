@@ -1,6 +1,8 @@
 package io.openmessaging.client.producer;
 
 import io.openmessaging.client.impl.PropertiesImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -9,6 +11,8 @@ import java.io.IOException;
  */
 public class FactoryProducer {
 
+    Logger logger = LoggerFactory.getLogger(FactoryProducer.class);
+
     public AbstractProducer createProducer(PropertiesImpl implProperties){
 
         AbstractProducer mqProducer = null;
@@ -16,6 +20,7 @@ public class FactoryProducer {
             mqProducer = new AbstractProducer();
         } catch (IOException e) {
             e.printStackTrace();
+            logger.error(e.toString());
         }
         mqProducer.setImplProperties(implProperties);
         return mqProducer;
