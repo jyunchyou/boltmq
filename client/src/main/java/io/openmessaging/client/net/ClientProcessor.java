@@ -4,6 +4,9 @@ import io.openmessaging.client.constant.ConstantClient;
 import io.openmessaging.client.impl.MessageImpl;
 import io.openmessaging.client.impl.MessageQueue;
 import io.openmessaging.client.impl.PropertiesImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,7 +22,11 @@ import java.util.concurrent.ScheduledExecutorService;
 /**
  * Created by fbhw on 17-11-2.
  */
+
+
 public class ClientProcessor {
+
+    Logger logger = LoggerFactory.getLogger(ClientProcessor.class);
 
     Socket socket= new Socket();
 
@@ -62,6 +69,7 @@ public class ClientProcessor {
             serverSocket.bind(inetSocketAddress);
         } catch (IOException e) {
             e.printStackTrace();
+            logger.error(e.toString());
         }
         Executors.newFixedThreadPool(1).submit(new Runnable() {
             @Override
@@ -84,6 +92,7 @@ public class ClientProcessor {
 
                 } catch (IOException e) {
                     e.printStackTrace();
+                    logger.error(e.toString());
                 }
                 while (true) {
 
@@ -118,6 +127,8 @@ public class ClientProcessor {
 
 
         } catch (IOException e) {
+            logger.error(e.toString());
+
             e.printStackTrace();
         }
         decode(userBuffer);
@@ -209,6 +220,8 @@ public class ClientProcessor {
                     return sendResult;
 
                 } catch (IOException e) {
+                    logger.error(e.toString());
+
                     e.printStackTrace();
                 }
           /*  Socket socket = new Socket();
