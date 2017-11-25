@@ -5,8 +5,18 @@ package io.openmessaging.client.net;
  */
 public class SendResult {
 
+    private String info;
+
     public void decode(byte[] buffer){
 
 
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 }

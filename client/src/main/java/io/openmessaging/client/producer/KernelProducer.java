@@ -1,7 +1,9 @@
 package io.openmessaging.client.producer;
 
+import io.netty.channel.Channel;
 import io.openmessaging.client.constant.ConstantClient;
 import io.openmessaging.client.net.ClientProcessor;
+import io.openmessaging.client.net.NettyClient;
 import io.openmessaging.client.net.RequestDto;
 import io.openmessaging.client.net.SendResult;
 
@@ -13,6 +15,7 @@ import java.nio.ByteBuffer;
 public class KernelProducer {
 
     ClientProcessor clientProcessor = new ClientProcessor();
+    NettyClient nettyClient = new NettyClient();
 
     public SendResult send(Message message, int delayTime, SendQueue sendQueue, Properties properties){
 
@@ -26,16 +29,15 @@ public class KernelProducer {
 
         ByteBuffer byteBuffer = clientProcessor.encode(message,delayTime,properties,requestDto);
 
-        SendResult sendResult = clientProcessor.sendSycn(byteBuffer);
+        Channel channel = nettyClient.bind(sendQueue.getBrokerInfo());
 
+        SendResult sendResult = nettyClient.sendSycn(channel,byteBuffer);
 
 
         return sendResult;
     }
 
     public void start(String nameSvrAddress){
-
-
         clientProcessor.init(nameSvrAddress);
     }
 

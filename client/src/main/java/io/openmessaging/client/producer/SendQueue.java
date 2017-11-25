@@ -13,7 +13,7 @@ public class SendQueue implements Serializable{
 
     private String  queueId = null;
 
-    private String brokerName = null;
+    private BrokerInfo brokerInfo = null;
 
 
     public String getTopicName() {
@@ -33,17 +33,11 @@ public class SendQueue implements Serializable{
     }
 
 
-    @Override
-    public String toString(){
-        return "serialVersionUID:"+serialVersionUID+"topicName:"+topicName+"queueId:"+queueId
-                +"brokerName:"+brokerName;
+    public BrokerInfo getBrokerInfo() {
+        return brokerInfo;
     }
 
-    public String getBrokerName() {
-        return brokerName;
-    }
-
-    public void setBrokerName(String brokerName) {
-        this.brokerName = brokerName;
+    public void setBrokerInfo(BrokerInfo brokerInfo) {
+        this.brokerInfo = brokerInfo;
     }
 }
