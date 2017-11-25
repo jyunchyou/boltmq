@@ -1,4 +1,4 @@
-package io.openmessaging.client.impl;
+package io.openmessaging.client.producer;
 
 
 
@@ -7,7 +7,7 @@ import java.util.HashMap;
 /**
  * Created by fbhw on 17-10-31.
  */
-public class PropertiesImpl{
+public class Properties {
 
     private HashMap properties = new HashMap(io.openmessaging.client.constant.ConstantClient.PROPERTIES_SIZE);
 

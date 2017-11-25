@@ -1,4 +1,4 @@
-package io.openmessaging.client.net;
+package io.openmessaging.client.table;
 
 /**
  * Created by fbhw on 17-11-8.

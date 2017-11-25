@@ -1,9 +1,9 @@
-package io.openmessaging.client.impl;
+package io.openmessaging.client.producer;
 
 /**
  * Created by fbhw on 17-10-31.
  */
-public class MessageImpl{
+public class Message {
 
     private String topic = null;
 
@@ -15,7 +15,7 @@ public class MessageImpl{
 
     private int code = 0;
 
-    public MessageImpl(String topic, String tag, String orderId,byte[] body,int code){
+    public Message(String topic, String tag, String orderId, byte[] body, int code){
         this.topic = topic;
         this.tag = tag;
         this.orderId = orderId;

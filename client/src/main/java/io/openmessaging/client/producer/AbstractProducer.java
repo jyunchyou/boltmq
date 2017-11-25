@@ -1,14 +1,10 @@
 package io.openmessaging.client.producer;
 
 import io.openmessaging.client.common.CallBack;
-import io.openmessaging.client.impl.MessageQueue;
-import io.openmessaging.client.impl.MessageQueues;
 import io.openmessaging.client.net.SendResult;
 import io.openmessaging.client.selector.QueueSelectByHash;
 import io.openmessaging.client.selector.QueueSelectByRandom;
 import io.openmessaging.client.selector.QueueSelector;
-import io.openmessaging.client.impl.MessageImpl;
-import io.openmessaging.client.impl.PropertiesImpl;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,22 +15,22 @@ import java.util.List;
 public class AbstractProducer {
 
 
-    private PropertiesImpl implProperties = null;
+    private Properties implProperties = null;
 
-    private KernelClient kernelClient = null;
+    private KernelProducer kernelProducer = null;
 
     private QueueSelectByHash queueSelectByHash = new QueueSelectByHash();
 
     private QueueSelectByRandom queueSelectByRandom = new QueueSelectByRandom();
 
-    private MessageQueues messageQueues = new MessageQueues();
+    private SendQueues sendQueues = new SendQueues();
 
     public AbstractProducer() throws IOException {
     }
 
 
     //同步发送
-    public SendResult send(MessageImpl message){
+    public SendResult send(Message message){
 
        return  send(message,null);
 
@@ -42,69 +38,69 @@ public class AbstractProducer {
 
     //开启定时任务
     public void start(){
-        kernelClient.start(String.valueOf(
+        kernelProducer.start(String.valueOf(
                 implProperties.getProperties("nameSvrAddress")
         ));
 
     }
 
-    public SendResult send(MessageImpl message, QueueSelector queueSelector){
+    public SendResult send(Message message, QueueSelector queueSelector){
 
         return this.send(message,3,queueSelector);
 
     }
 
-    public SendResult send(MessageImpl message,int delayTime){
+    public SendResult send(Message message, int delayTime){
         return  this.send(message,delayTime,null);
 
     }
     //delayTime支持固定时长,传入delay等级
-    public SendResult send(MessageImpl message,int delayTime,Object shardingKey){
+    public SendResult send(Message message, int delayTime, Object shardingKey){
 
-        MessageQueue messageQueue = null;
+        SendQueue sendQueue = null;
 
-        List list = messageQueues.getList();
+        List list = sendQueues.getList();
         if (list == null) {
-            kernelClient.updateMessageQueuesFromNameServer();
-            list = messageQueues.getList();
+            kernelProducer.updateMessageQueuesFromNameServer();
+            list = sendQueues.getList();
         }
         if (shardingKey == null) {
-            messageQueue = queueSelectByRandom.select(list);
+            sendQueue = queueSelectByRandom.select(list);
         }else {
-            messageQueue = queueSelectByHash.select(list,shardingKey);
+            sendQueue = queueSelectByHash.select(list,shardingKey);
         }
-        return kernelClient.send(message,delayTime,messageQueue,implProperties);
+        return kernelProducer.send(message,delayTime, sendQueue,implProperties);
     }
 
 
 
     //异步发送
-    public void asyncSend(MessageImpl message, CallBack callBack){
+    public void asyncSend(Message message, CallBack callBack){
 
         this.asyncSend(message,callBack,null);
     }
 
-    public void asyncSend(MessageImpl message, CallBack callBack,QueueSelector queueSelector){
+    public void asyncSend(Message message, CallBack callBack, QueueSelector queueSelector){
 
     }
     //单向发送
-    public void onewaySend(MessageImpl message){
+    public void onewaySend(Message message){
 
         this.onewaySend(message,null);
 
     }
 
-    public void onewaySend(MessageImpl message, QueueSelector queueSelector){
+    public void onewaySend(Message message, QueueSelector queueSelector){
 
 
     }
 
 
-    public PropertiesImpl getImplProperties() {
+    public Properties getImplProperties() {
         return implProperties;
     }
 
-    public void setImplProperties(PropertiesImpl implProperties) {
+    public void setImplProperties(Properties implProperties) {
         this.implProperties = implProperties;
     }
 }

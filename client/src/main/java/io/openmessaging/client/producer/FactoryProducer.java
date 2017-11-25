@@ -1,6 +1,5 @@
 package io.openmessaging.client.producer;
 
-import io.openmessaging.client.impl.PropertiesImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +12,7 @@ public class FactoryProducer {
 
     Logger logger = LoggerFactory.getLogger(FactoryProducer.class);
 
-    public AbstractProducer createProducer(PropertiesImpl implProperties){
+    public AbstractProducer createProducer(Properties implProperties){
 
         AbstractProducer mqProducer = null;
         try {

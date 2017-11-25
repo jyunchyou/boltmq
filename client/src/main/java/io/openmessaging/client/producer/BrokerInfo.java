@@ -1,4 +1,4 @@
-package io.openmessaging.client.route;
+package io.openmessaging.client.producer;
 
 /**
  * Created by fbhw on 17-11-6.

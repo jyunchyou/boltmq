@@ -1,6 +1,6 @@
 package io.openmessaging.client.selector;
 
-import io.openmessaging.client.impl.MessageQueue;
+import io.openmessaging.client.producer.SendQueue;
 
 import java.util.List;
 import java.util.Random;
@@ -10,18 +10,18 @@ import java.util.Random;
  */
 public class QueueSelectByRandom implements QueueSelector{
 
-    public MessageQueue select(List<MessageQueue> messageQueues,Object arg){
+    public SendQueue select(List<SendQueue> sendQueues, Object arg){
         Random random = new Random(System.currentTimeMillis());
         int randomNum = random.nextInt();
-        int indexNum = randomNum % messageQueues.size();
-        return messageQueues.get(indexNum);
+        int indexNum = randomNum % sendQueues.size();
+        return sendQueues.get(indexNum);
 
 
 
     }
 
-    public MessageQueue select(List<MessageQueue> messageQueues){
-       return  this.select(messageQueues,null);
+    public SendQueue select(List<SendQueue> sendQueues){
+       return  this.select(sendQueues,null);
 
     }
 

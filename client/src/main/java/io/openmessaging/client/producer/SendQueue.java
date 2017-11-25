@@ -1,11 +1,11 @@
-package io.openmessaging.client.impl;
+package io.openmessaging.client.producer;
 
 import java.io.Serializable;
 
 /**
  * Created by fbhw on 17-10-31.
  */
-public class MessageQueue implements Serializable{
+public class SendQueue implements Serializable{
 
     public static final long serialVersionUID = 1L;
 

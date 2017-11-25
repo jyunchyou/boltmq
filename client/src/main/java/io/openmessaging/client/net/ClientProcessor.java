@@ -1,17 +1,14 @@
 package io.openmessaging.client.net;
 
 import io.openmessaging.client.constant.ConstantClient;
-import io.openmessaging.client.impl.MessageImpl;
-import io.openmessaging.client.impl.MessageQueue;
-import io.openmessaging.client.impl.PropertiesImpl;
+import io.openmessaging.client.producer.Message;
+import io.openmessaging.client.producer.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -144,7 +141,7 @@ public class ClientProcessor {
     //////////////////////////////////////////////////////////////////////////////////////////////////////
    /* -------------------------------下面为消息发送--------------------------------------------------------*/
 
-    public ByteBuffer encode(MessageImpl message,int delayTime,PropertiesImpl properties,RequestDto requestDto){
+    public ByteBuffer encode(Message message, int delayTime, Properties properties, RequestDto requestDto){
 
         return null;
     }

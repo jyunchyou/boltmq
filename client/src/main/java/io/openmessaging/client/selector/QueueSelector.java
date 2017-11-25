@@ -1,6 +1,6 @@
 package io.openmessaging.client.selector;
 
-import io.openmessaging.client.impl.MessageQueue;
+import io.openmessaging.client.producer.SendQueue;
 
 import java.util.List;
 
@@ -9,6 +9,6 @@ import java.util.List;
  */
 public interface QueueSelector {
 
-    MessageQueue select(List<MessageQueue> messageQueues, Object arg);
+    SendQueue select(List<SendQueue> sendQueues, Object arg);
 
 }

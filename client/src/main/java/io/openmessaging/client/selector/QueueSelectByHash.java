@@ -1,6 +1,6 @@
 package io.openmessaging.client.selector;
 
-import io.openmessaging.client.impl.MessageQueue;
+import io.openmessaging.client.producer.SendQueue;
 
 import java.util.List;
 
@@ -10,13 +10,13 @@ import java.util.List;
 public class QueueSelectByHash implements QueueSelector{
 
 
-    public MessageQueue select(List<MessageQueue> messageQueues,Object arg){
+    public SendQueue select(List<SendQueue> sendQueues, Object arg){
         int hashCode = arg.hashCode();
         if (hashCode < 0) {
             hashCode = Math.abs(hashCode);
 
         }
-        return messageQueues.get(hashCode % messageQueues.size());
+        return sendQueues.get(hashCode % sendQueues.size());
 
     }
 

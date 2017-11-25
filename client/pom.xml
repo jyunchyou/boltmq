@@ -37,6 +37,12 @@
             <artifactId>logback-core</artifactId>
             <version>1.0.13</version>
         </dependency>
+        <!--netty相关-->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty</artifactId>
+            <version>3.9.0.Final</version>
+        </dependency>
 
 
 
