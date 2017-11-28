@@ -43,6 +43,24 @@
             <artifactId>netty-all</artifactId>
             <version>5.0.0.Alpha2</version>
         </dependency>
+
+        <dependency>
+            <groupId>a</groupId>
+            <artifactId>b</artifactId>
+            <version>*</version>
+            <systemPath>/home/fbhw/下载/dysms_java/java/api_demo/alicom-dysms-api/libs/aliyun-java-sdk-core-3.3.1.jar</systemPath>
+<scope>system</scope>
+        </dependency>
+        <dependency>
+            <groupId>c</groupId>
+            <artifactId>d</artifactId>
+            <version>*</version>
+            <systemPath>/home/fbhw/下载/dysms_java/java/api_demo/alicom-dysms-api/libs/aliyun-java-sdk-dysmsapi-1.0.0.jar</systemPath>
+
+            <scope>system</scope>
+        </dependency>
+
+
     </dependencies>
 
 
