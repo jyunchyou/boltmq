@@ -1,11 +1,11 @@
 package io.openmessaging.client.net;
 
 import io.openmessaging.client.exception.OutOfBodyLengthException;
+import io.openmessaging.client.exception.OutOfByteBufferException;
 import io.openmessaging.client.producer.Message;
 import io.openmessaging.client.producer.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 import java.util.Map;
@@ -54,7 +54,7 @@ import java.util.Set;
 public class EncodeAndDecode {
 
     Logger logger = LoggerFactory.getLogger(EncodeAndDecode.class);
-    public ByteBuffer encode(Message message,Properties properties, RequestDto requestDto) throws OutOfBodyLengthException {
+    public ByteBuffer encode(Message message,Properties properties, RequestDto requestDto) throws OutOfBodyLengthException, OutOfByteBufferException {
 
 
 
@@ -76,6 +76,8 @@ public class EncodeAndDecode {
 
         //properties byte
         int allLength = properties.getAllLength();
+
+
 
         //massage byte
         byte[] topic = message.getTopic().getBytes();
@@ -121,15 +123,56 @@ public class EncodeAndDecode {
 
         }
 
+
         //开始putByteBuffer
-        int byteBufferLen = id.length+language.length+version.length+serialModel.length+2+6+
+        int byteBufferLen = 4 +
+                idLen+languageLen+versionLen+serialModelLen+2+6+//20
 
-                allLength+properties.getSize()*(2+1)+
+                allLength+(properties.getSize()*(2+1))+//51
 
-                2+body.length+(1+1+4);
+        topicLen+orderIdLen+body.length+(1+1+4);//35
+
 
         ByteBuffer byteBuffer = ByteBuffer.allocate(byteBufferLen);
-        byteBuffer.put((byte) byteBufferLen);
+
+        byte[] allLengthByte = new byte[4];
+        if (byteBufferLen > 127 * 127 * 127 * 127) {
+
+
+            logger.error("消息属性和请求传输对象总长度超过byteBuffer限定长度");
+            throw new OutOfByteBufferException();
+
+        }
+
+        else if(byteBufferLen > 127 * 127 * 127){
+            allLengthByte[0] = (byte) (byteBufferLen / (127 * 127 * 127));
+            allLengthByte[1] = (byte) (byteBufferLen / (allLengthByte[0] * 127 * 127));
+            allLengthByte[2] = (byte) (byteBufferLen / (allLengthByte[0] * allLengthByte[1] * 127));
+            allLengthByte[3] = (byte) (byteBufferLen / (allLengthByte[0] * allLengthByte[1] * allLengthByte[2]));
+        }
+        else if(byteBufferLen > 127 * 127){
+            allLengthByte[0] = 0;
+            allLengthByte[1] = (byte) (byteBufferLen / (127 * 127));
+            allLengthByte[2] = (byte) (byteBufferLen / (allLengthByte[1] * 127));
+            allLengthByte[3] = (byte) (byteBufferLen / (allLengthByte[1] * allLengthByte[2]));
+        }else if(byteBufferLen > 127){
+            allLengthByte[0] = 0;
+            allLengthByte[1] = 0;
+            allLengthByte[2] = (byte) (byteBufferLen / 127);
+            allLengthByte[3] = (byte) (byteBufferLen / allLengthByte[2]);
+        }else {
+            allLengthByte[0] = 0;
+            allLengthByte[1] = 0;
+            allLengthByte[2] = 0;
+            allLengthByte[3] = (byte) byteBufferLen;
+
+
+        }
+
+
+
+        byteBuffer.put(allLengthByte);
+
 
         byteBuffer.put(idLen);
         byteBuffer.put(id);
@@ -138,30 +181,57 @@ public class EncodeAndDecode {
         byteBuffer.put(versionLen);
         byteBuffer.put(version);
         byteBuffer.put(serialModelLen);
+        byteBuffer.put(serialModel);
         byteBuffer.put(codeLen);
         byteBuffer.put(code);
         byteBuffer.put(delayTimeLen);
         byteBuffer.put(delayTime);
-
         byteBuffer.put(topicLen);
         byteBuffer.put(topic);
         byteBuffer.put(orderIdLen);
         byteBuffer.put(orderId);
         byteBuffer.put(bodyLen);
         byteBuffer.put(body);
-
         Set<Map.Entry> entrySet = properties.entrySet();
         Iterator iterator = entrySet.iterator();
-        while (iterator.hasNext()) {
 
+
+        int testLen = 0;
+
+        while (iterator.hasNext()) {
             Map.Entry entry = (Map.Entry) iterator.next();
             String key = (String) entry.getKey();
             String value = (String) entry.getValue();
-            byteBuffer.put((byte) key.length());
+            byte keyLenByte = (byte) key.length();
+            byteBuffer.put(keyLenByte);
             byteBuffer.put(key.getBytes());
-            byteBuffer.put((byte) value.length());
+
+            int valueLen = value.length();
+            byte[] valueLenByte = new byte[2];
+            if (valueLen > 127 * 127) {
+
+
+                logger.error("消息属性和请求传输对象总长度超过byteBuffer限定长度");
+                throw new OutOfByteBufferException();
+
+            }
+
+            else if(valueLen > 127){
+
+                valueLenByte[0] = (byte) (valueLen/127);
+                valueLenByte[1] = (byte) (valueLen/(valueLenByte[0]));
+
+            }
+            else {
+
+                valueLenByte[0] = 0;
+                valueLenByte[1] = (byte) valueLen;
+            }
+            byteBuffer.put(valueLenByte);
             byteBuffer.put(value.getBytes());
         }
+
+
         return byteBuffer;
     }
 }

@@ -39,8 +39,8 @@ public class Properties {
 
         Map.Entry<String,String> entry = iterator.next();
 
-        allLength += entry.getKey().length();
-        allLength += entry.getValue().length();
+        allLength += entry.getKey().getBytes().length;
+        allLength += entry.getValue().getBytes().length;
 
         }
         return allLength;

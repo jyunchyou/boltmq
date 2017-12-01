@@ -2,6 +2,8 @@ package io.openmessaging.client.producer;
 
 import io.netty.channel.Channel;
 import io.openmessaging.client.constant.ConstantClient;
+import io.openmessaging.client.exception.OutOfBodyLengthException;
+import io.openmessaging.client.exception.OutOfByteBufferException;
 import io.openmessaging.client.net.*;
 import io.openmessaging.client.table.ConnectionCacheTable;
 import java.nio.ByteBuffer;
@@ -19,7 +21,7 @@ public class KernelProducer {
 
     Map<BrokerInfo,Channel> map = ConnectionCacheTable.getConnectionCacheTable();
 
-    public SendResult send(Message message, int delayTime, SendQueue sendQueue, Properties properties){
+    public SendResult send(Message message, int delayTime, SendQueue sendQueue, Properties properties) throws OutOfBodyLengthException, OutOfByteBufferException {
 
 
         BrokerInfo brokerInfo = sendQueue.getBrokerInfo();
@@ -34,7 +36,9 @@ public class KernelProducer {
         requestDto.setDelayTime(delayTime);
 
 
-        ByteBuffer byteBuffer = encodeAndDecode.encode(message,properties,requestDto);
+        ByteBuffer byteBuffer = null;
+        byteBuffer = encodeAndDecode.encode(message,properties,requestDto);
+
 
         channel = map.get(brokerInfo);
 

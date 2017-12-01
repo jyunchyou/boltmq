@@ -11,7 +11,7 @@ public class Message {
 
     private byte[] body = null;//消息内容
 
-    public Message(String topic,String orderId, byte[] body, int code){
+    public Message(String topic,String orderId, byte[] body){
         this.topic = topic;
         this.orderId = orderId;
         this.body = body;

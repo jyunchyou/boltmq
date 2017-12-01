@@ -38,9 +38,9 @@ public class AbstractProducer {
 
     //开启定时任务
     public void start(){
-        kernelProducer.start(String.valueOf(
-                implProperties.getProperties("nameSvrAddress")
-        ));
+    //    kernelProducer.start(String.valueOf(
+    //            implProperties.getProperties("nameSvrAddress")
+    //    ));
 
     }
 
@@ -61,7 +61,7 @@ public class AbstractProducer {
 
         List list = sendQueues.getList();
         if (list == null) {
-            kernelProducer.updateMessageQueuesFromNameServer();
+          //  kernelProducer.updateMessageQueuesFromNameServer();
             list = sendQueues.getList();
         }
         if (shardingKey == null) {
@@ -69,7 +69,7 @@ public class AbstractProducer {
         }else {
             sendQueue = queueSelectByHash.select(list,shardingKey);
         }
-        return kernelProducer.send(message,delayTime, sendQueue,implProperties);
+        return null;//kernelProducer.send(message,delayTime, sendQueue,implProperties);
     }
 
 
