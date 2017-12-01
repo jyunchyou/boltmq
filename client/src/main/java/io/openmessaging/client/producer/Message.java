@@ -7,20 +7,14 @@ public class Message {
 
     private String topic = null;
 
-    private String tag = null;
+    private String orderId = null;//顺序发送时定义组id
 
-    private String orderId = null;
+    private byte[] body = null;//消息内容
 
-    private byte[] body = null;
-
-    private int code = 0;
-
-    public Message(String topic, String tag, String orderId, byte[] body, int code){
+    public Message(String topic,String orderId, byte[] body, int code){
         this.topic = topic;
-        this.tag = tag;
         this.orderId = orderId;
         this.body = body;
-        this.code = code;
     }
 
     public byte[] getBody() {
@@ -39,14 +33,6 @@ public class Message {
         this.orderId = orderId;
     }
 
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
-
     public String getTopic() {
         return topic;
     }
@@ -55,11 +41,4 @@ public class Message {
         this.topic = topic;
     }
 
-    public int getCode() {
-        return code;
     }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-}

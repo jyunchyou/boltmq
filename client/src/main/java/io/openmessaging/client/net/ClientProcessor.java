@@ -141,7 +141,7 @@ public class ClientProcessor {
     //////////////////////////////////////////////////////////////////////////////////////////////////////
    /* -------------------------------下面为消息发送--------------------------------------------------------*/
 
-    public ByteBuffer encode(Message message, int delayTime, Properties properties, RequestDto requestDto){
+    public ByteBuffer encode(Message message,Properties properties, RequestDto requestDto){
 
         return null;
     }
@@ -179,64 +179,60 @@ public class ClientProcessor {
     //TODO getBrokerAddressByBrokerName() and find connection with broker,queue and topic
     public SendResult sendSycn(ByteBuffer byteBuffer) {
         //bio
-        if (ConstantClient.IO_MODEL == 0) {
-            //消息模式orRoute更新
-                try {
+
+        //消息模式orRoute更新
+        try {
 
 
-                    outputStream.write(byteBuffer.array());
+            outputStream.write(byteBuffer.array());
 
-                    InputStream inputStream = null;
+            InputStream inputStream = null;
 
-                    inputStream = socket.getInputStream();
+            inputStream = socket.getInputStream();
 
-                    byte[] userBuffer = null;
+            byte[] userBuffer = null;
 
-                    byte[] len = new byte[2];
+            byte[] len = new byte[2];
 
-                    inputStream.read(len);
+            inputStream.read(len);
 
-                    int bigNum = len[0];
+            int bigNum = len[0];
 
-                    int smallNum = len[1];
+            int smallNum = len[1];
 
-                    int bufferSize = 0;
+            int bufferSize = 0;
 
-                    if (bigNum != 0) {
-                        bufferSize += bigNum * 127;
-                    }
-                    bufferSize += smallNum;
-                    userBuffer = new byte[bufferSize];
+            if (bigNum != 0) {
+                bufferSize += bigNum * 127;
+            }
+            bufferSize += smallNum;
+            userBuffer = new byte[bufferSize];
 
-                    inputStream.read(userBuffer);
+            inputStream.read(userBuffer);
 
-                    SendResult sendResult = new SendResult();
+            SendResult sendResult = new SendResult();
 
-                    sendResult.decode(userBuffer);
+            sendResult.decode(userBuffer);
 
-                    return sendResult;
+            return sendResult;
 
-                } catch (IOException e) {
-                    logger.error(e.toString());
+        } catch (IOException e) {
+            logger.error(e.toString());
 
-                    e.printStackTrace();
-                }
+            e.printStackTrace();
+        }
           /*  Socket socket = new Socket();
             socket.bind();*/
 
-            //nio
-            if (ConstantClient.IO_MODEL == 1) {
+        //nio
+
 
                 return null;
             }
             //netty
-            else {
 
-                return null;
-            }
 
-        }
 
-        return null;
 
-    }}
+
+    }

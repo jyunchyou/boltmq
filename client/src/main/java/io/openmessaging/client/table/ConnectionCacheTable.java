@@ -13,7 +13,7 @@ public class ConnectionCacheTable {
 
     private static Map<BrokerInfo,Channel> connectionCacheTable = new ConcurrentHashMap();
 
-    private ConnectionCacheTable(){
+    public ConnectionCacheTable(){
 
     }
 

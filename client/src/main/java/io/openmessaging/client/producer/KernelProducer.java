@@ -2,22 +2,28 @@ package io.openmessaging.client.producer;
 
 import io.netty.channel.Channel;
 import io.openmessaging.client.constant.ConstantClient;
-import io.openmessaging.client.net.ClientProcessor;
-import io.openmessaging.client.net.NettyClient;
-import io.openmessaging.client.net.RequestDto;
-import io.openmessaging.client.net.SendResult;
-
+import io.openmessaging.client.net.*;
+import io.openmessaging.client.table.ConnectionCacheTable;
 import java.nio.ByteBuffer;
+import java.util.Map;
 
 /**
  * Created by fbhw on 17-11-5.
  */
+
 public class KernelProducer {
 
-    ClientProcessor clientProcessor = new ClientProcessor();
+   EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
+
     NettyClient nettyClient = new NettyClient();
 
+    Map<BrokerInfo,Channel> map = ConnectionCacheTable.getConnectionCacheTable();
+
     public SendResult send(Message message, int delayTime, SendQueue sendQueue, Properties properties){
+
+
+        BrokerInfo brokerInfo = sendQueue.getBrokerInfo();
+        Channel channel = null;
 
         //构建Dto
         RequestDto requestDto = new RequestDto();
@@ -25,24 +31,23 @@ public class KernelProducer {
         requestDto.setLanguage(ConstantClient.JAVA);
         requestDto.setSerialModel(ConstantClient.JSON);
         requestDto.setVersion(ConstantClient.VERSION);
+        requestDto.setDelayTime(delayTime);
 
 
-        ByteBuffer byteBuffer = clientProcessor.encode(message,delayTime,properties,requestDto);
+        ByteBuffer byteBuffer = encodeAndDecode.encode(message,properties,requestDto);
 
-        Channel channel = nettyClient.bind(sendQueue.getBrokerInfo());
+        channel = map.get(brokerInfo);
 
+        if (channel == null) {
+
+            channel = nettyClient.bind(brokerInfo);
+
+            map.put(brokerInfo, channel);
+
+        }
         SendResult sendResult = nettyClient.sendSycn(channel,byteBuffer);
 
 
         return sendResult;
     }
-
-    public void start(String nameSvrAddress){
-        clientProcessor.init(nameSvrAddress);
-    }
-
-    public void updateMessageQueuesFromNameServer(){
-        clientProcessor.updateMessageQueuesFromNameServer();
-    }
-
 }
