@@ -1,5 +1,8 @@
 package io.openmessaging.client.net;
 
+import com.sun.org.apache.bcel.internal.classfile.Code;
+import io.openmessaging.client.constant.ConstantClient;
+
 /**
  * Created by fbhw on 17-11-2.
  */
@@ -7,17 +10,17 @@ public class RequestDto {
 
     public static final long serialVersionUID = 1L;
 
-    private String id = null;
+    private String id = null;//序号
 
-    private String command = null;
+    private String language = ConstantClient.JAVA;//发送语言
 
-    private String language = null;
+    private String version = ConstantClient.VERSION;//序列化版本
 
-    private String version = null;
+    private String serialModel = ConstantClient.JSON;//序列化方式
 
-    private String serialModel = null;
+    private int code;//注意是返回Broker结果　-1发送超时或失败;0未发送;1发送成功;
 
-    private int code;// ResponseCode
+    private int delayTime = ConstantClient.DELAY_TIME;//规定允许的超时时间
 
     //private transient CommandCustomHeader customHeader; 包含String topic
 
@@ -29,17 +32,11 @@ public class RequestDto {
         this.id = id;
     }
 
-    public String getCommand() {
-        return command;
-    }
-
-    public void setCommand(String command) {
-        this.command = command;
-    }
-
     public String toString(){
-        return "id:"+id+"command:"+command+"command:"+command+
-                "language:"+language+"version:"+version+"serialModel:"+serialModel;
+        return "id:"+id+
+                "language:"+language+"version:"+
+                version+"serialModel:"+serialModel+
+                "code:"+code+"delayTime:"+delayTime;
     }
 
     public String getLanguage() {
@@ -64,5 +61,21 @@ public class RequestDto {
 
     public void setSerialModel(String serialModel) {
         this.serialModel = serialModel;
+    }
+
+    public int getCode(){
+        return code;
+    }
+
+    public void setCode(int code){
+        this.code = code;
+    };
+
+    public int getDelayTime() {
+        return delayTime;
+    }
+
+    public void setDelayTime(int delayTime) {
+        this.delayTime = delayTime;
     }
 }
