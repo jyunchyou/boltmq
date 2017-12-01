@@ -29,7 +29,7 @@ public class ConstantClient {
 
     public static final String JSON = "json";
 
-    public static final int IO_MODEL = 0;
+    public static final int DELAY_TIME = 30000;//默认超时时间
 
 
 
