@@ -2,12 +2,16 @@ package io.openmessaging.client.net;
 
 import io.openmessaging.client.exception.OutOfBodyLengthException;
 import io.openmessaging.client.exception.OutOfByteBufferException;
+import io.openmessaging.client.producer.BrokerInfo;
 import io.openmessaging.client.producer.Message;
 import io.openmessaging.client.producer.Properties;
+import io.openmessaging.client.producer.SendQueue;
+import io.openmessaging.client.table.ConnectionCacheNameServerTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -54,7 +58,7 @@ import java.util.Set;
 public class EncodeAndDecode {
 
     Logger logger = LoggerFactory.getLogger(EncodeAndDecode.class);
-    public ByteBuffer encode(Message message,Properties properties, RequestDto requestDto) throws OutOfBodyLengthException, OutOfByteBufferException {
+    public ByteBuffer encodeMessage(Message message,Properties properties, RequestDto requestDto) throws OutOfBodyLengthException, OutOfByteBufferException {
 
 
 
@@ -233,5 +237,106 @@ public class EncodeAndDecode {
 
 
         return byteBuffer;
+    }
+
+    /**
+     *nameServerRouteTable协议格式
+     *
+     *
+     *  总长度 4字节
+     *  topicName长度 1字节
+     *  topicName byte[]
+        queueId长度 1字节
+        queueId byte[]
+        brokerInfo {
+        ip长度 1字节
+        ip byte[]
+        port转String长度 1字节
+        port 转为byte[]
+        readQueue byte
+        writeQueue byte
+     }
+
+     *
+     *
+     */
+    public List<SendQueue> decodeNameServerRoute(ByteBuffer byteBuffer,List<SendQueue> list){
+
+        list.clear();
+        while (byteBuffer.limit()>byteBuffer.position()) {
+            SendQueue sendQueue = new SendQueue();
+            BrokerInfo brokerInfo = new BrokerInfo();
+
+            byte[] allLength = new byte[4];
+            int allLengthInt = 1;
+            for (int indexNum = 0; indexNum < allLength.length; indexNum++) {
+                allLengthInt = allLengthInt * allLength[indexNum];
+
+            }
+            byteBuffer.get(allLength);
+            //topicName
+            byte[] topicNameLength = new byte[1];
+            byteBuffer.get(topicNameLength);
+            int topicNameLengthInt = topicNameLength[0];
+
+            byte[] topicNameByte = new byte[topicNameLengthInt];
+            byteBuffer.get(topicNameByte);
+            String topicName = String.valueOf(topicNameByte);
+            sendQueue.setTopicName(topicName);
+            //queueId
+            byte[] queueIdLength = new byte[1];
+            byteBuffer.get(queueIdLength);
+            int queueIdLengthInt = queueIdLength[0];
+
+            byte[] queueIdByte = new byte[queueIdLengthInt];
+            byteBuffer.get(queueIdByte);
+            String queueId = String.valueOf(queueIdByte);
+
+
+            sendQueue.setQueueId(queueId);
+
+            //ip
+            byte[] ipLength = new byte[1];
+            byteBuffer.get(ipLength);
+            int ipLengthInt = ipLength[0];
+
+            byte[] ipByte = new byte[ipLengthInt];
+            byteBuffer.get(ipByte);
+            String ip = String.valueOf(ipByte);
+            brokerInfo.setIp(ip);
+            //port
+            byte[] portLength = new byte[1];
+            byteBuffer.get(portLength);
+            int portLengthInt = portLength[0];
+            byte[] portByte = new byte[portLengthInt];
+            byteBuffer.get(portByte);
+
+            String port = String.valueOf(portByte);
+            Integer portInteger = Integer.valueOf(port);
+
+
+            brokerInfo.setPort(portInteger);
+
+            //readQueue
+
+            byte[] readQueueByte = new byte[1];
+            byteBuffer.get(readQueueByte);
+            int readQueueInt = readQueueByte[0];
+
+            brokerInfo.setReadQueue(readQueueInt);
+
+            //writeQueue
+            byte[] writeQueueByte = new byte[1];
+            byteBuffer.get(writeQueueByte);
+            int writeQueueInt = writeQueueByte[0];
+
+
+            brokerInfo.setWriteQueue(writeQueueInt);
+
+            sendQueue.setBrokerInfo(brokerInfo);
+
+            list.add(sendQueue);
+        }
+        return list;
     }
 }
