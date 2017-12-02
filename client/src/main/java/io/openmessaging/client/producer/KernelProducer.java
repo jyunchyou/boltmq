@@ -37,7 +37,7 @@ public class KernelProducer {
 
 
         ByteBuffer byteBuffer = null;
-        byteBuffer = encodeAndDecode.encode(message,properties,requestDto);
+        byteBuffer = encodeAndDecode.encodeMessage(message,properties,requestDto);
 
 
         channel = map.get(brokerInfo);

@@ -47,7 +47,7 @@ public class EncodeAndDecodeTest {
 
         ByteBuffer byteBuffer = null;
         try {
-            byteBuffer = encodeAndDecode.encode(message,properties,requestDto);
+            byteBuffer = encodeAndDecode.encodeMessage(message,properties,requestDto);
 
         } catch (Exception e) {
             e.printStackTrace();

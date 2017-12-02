@@ -19,7 +19,9 @@ public class ConstantClient {
 
     public static final int PROPERTIES_SIZE = 5;
 
-    //public static final String NAMESERVER_ADDRESS = "http://127.0.0.1:8080";
+    public static final String NAMESERVER_IP = "127.0.0.1";
+
+    public static final int NAMESERVER_PORT = 8080;
 
     public static final int UPDATE_LIST_PORT = 12345;
 
