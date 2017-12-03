@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/src/broker.iml" filepath="$PROJECT_DIR$/src/broker.iml" />
       <module fileurl="file://$PROJECT_DIR$/open-messaging-demo.iml" filepath="$PROJECT_DIR$/open-messaging-demo.iml" />
     </modules>
   </component>
