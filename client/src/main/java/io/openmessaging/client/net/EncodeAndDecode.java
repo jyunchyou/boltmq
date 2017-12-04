@@ -253,8 +253,7 @@ public class EncodeAndDecode {
         ip byte[]
         port转String长度 1字节
         port 转为byte[]
-        readQueue byte
-        writeQueue byte
+
      }
 
      *
@@ -317,21 +316,7 @@ public class EncodeAndDecode {
 
             brokerInfo.setPort(portInteger);
 
-            //readQueue
 
-            byte[] readQueueByte = new byte[1];
-            byteBuffer.get(readQueueByte);
-            int readQueueInt = readQueueByte[0];
-
-            brokerInfo.setReadQueue(readQueueInt);
-
-            //writeQueue
-            byte[] writeQueueByte = new byte[1];
-            byteBuffer.get(writeQueueByte);
-            int writeQueueInt = writeQueueByte[0];
-
-
-            brokerInfo.setWriteQueue(writeQueueInt);
 
             sendQueue.setBrokerInfo(brokerInfo);
 

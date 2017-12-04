@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by fbhw on 17-11-25.
@@ -38,9 +40,14 @@ public class NettyClient implements ConnectionHandler {
 
     private EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
 
+    private Bootstrap bootstrap = null;
+
     public NettyClient(){
 
+
     }
+
+
     public  Channel bind(BrokerInfo brokerInfo){
         Channel channel = null;
         if (( channel = connectionCacheTable.get(brokerInfo)) != null) {
@@ -53,12 +60,19 @@ public class NettyClient implements ConnectionHandler {
         String ip = brokerInfo.getIp();
         int port = brokerInfo.getPort();
 
-        try{
-            Bootstrap bootstrap = new Bootstrap();
-            bootstrap.group(eventLoopGroup);
-            bootstrap.channel(NioSocketChannel.class);
-            bootstrap.option(ChannelOption.SO_KEEPALIVE,true);
-            bootstrap.remoteAddress(ip,port);
+        if (bootstrap == null) {
+
+            try {
+                bootstrap = new Bootstrap();
+                bootstrap.group(eventLoopGroup);
+                bootstrap.channel(NioSocketChannel.class);
+                bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
+                //bootstrap.remoteAddress(ip,port);
+            }catch (Exception e){
+                eventLoopGroup.shutdownGracefully();
+        }
+            }
+
             bootstrap.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 protected void initChannel(SocketChannel socketChannel) throws Exception {
@@ -66,8 +80,13 @@ public class NettyClient implements ConnectionHandler {
                     socketChannel.pipeline().addLast(new NettyClientHandler());
                 }
             });
-            ChannelFuture future = bootstrap.connect(ip,port).sync();
-            channel = future.channel();
+        ChannelFuture future = null;
+        try {
+            future = bootstrap.connect(ip,port).sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        channel = future.channel();
 
             if (future.isSuccess()) {
 
@@ -79,11 +98,7 @@ public class NettyClient implements ConnectionHandler {
 
 
 
-        }catch (Exception e){
 
-        }finally {
-            eventLoopGroup.shutdownGracefully();
-        }
         return channel;
     }
 
@@ -113,27 +128,42 @@ public class NettyClient implements ConnectionHandler {
             return channel;
 
         }
-        System.out.println("缓存table中channel 为 null");
+
         String ip = nameServerInfo.getIp();
         int port = nameServerInfo.getPort();
 
 
-        try{
-            Bootstrap bootstrap = new Bootstrap();
-            bootstrap.group(eventLoopGroup);
-            bootstrap.channel(NioSocketChannel.class);
-            bootstrap.option(ChannelOption.SO_KEEPALIVE,true);
-            bootstrap.remoteAddress(ip,port);
-            bootstrap.handler(new ChannelInitializer<SocketChannel>() {
+        if (bootstrap == null) {
+
+            try {
+                bootstrap = new Bootstrap();
+                bootstrap.group(eventLoopGroup);
+                bootstrap.channel(NioSocketChannel.class);
+                bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
+                //bootstrap.remoteAddress(ip,port);
+            }catch (Exception e){
+
+                eventLoopGroup.shutdownGracefully();
+
+            }
+
+        }
+        bootstrap.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 protected void initChannel(SocketChannel socketChannel) throws Exception {
 
                     socketChannel.pipeline().addLast(new UpdateFromNameServerHandler(countDownLatch));
                 }
             });
-            ChannelFuture future = bootstrap.connect(ip,port).sync();
+        ChannelFuture future = null;
+        try {
+            future = bootstrap.connect(ip,port).sync();
+           /* future.channel().close().sync();*/
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-            if (future.isSuccess()) {
+        if (future.isSuccess()) {
 
 
                 channel = (SocketChannel) future.channel();
@@ -143,41 +173,27 @@ public class NettyClient implements ConnectionHandler {
             }else {
                 logger.info("client connect server fail");
             }
-
-
-
-        }catch (Exception e){
-
-            e.printStackTrace();
-            logger.error(e.getMessage());
-        }finally {
-            eventLoopGroup.shutdownGracefully();
-        }
-        return channel;
+                return channel;
     }
 
     public void sendRouteRequest(Channel channel){
-
         ByteBuf byteBuf = Unpooled.wrappedBuffer("getList".getBytes());
-        ChannelFuture channelFuture = channel.write(byteBuf);
-
-        if (channelFuture.isSuccess()){
-
-            String info = "向nameServer发送成功";
-            logger.info(info);
-
-            try {
-                countDownLatch.await();
-            } catch (InterruptedException e) {
-                logger.error(e.getMessage());
-                e.printStackTrace();
-            }
+        ChannelFuture channelFuture = channel.writeAndFlush(byteBuf);
 
 
+        /*try {
+            channelFuture.channel().close().sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
 
-        }else {
-            logger.info("向nameServer发送失败");
+
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+
 
         return ;
 

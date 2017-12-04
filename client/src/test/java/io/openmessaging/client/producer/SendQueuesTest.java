@@ -40,7 +40,7 @@ public class SendQueuesTest {
     @Test
     public void testGetList(){
         List list = sendQueues.getList();
-        Assert.assertNull(list);
+        System.out.println(list);
 
     }
 }

@@ -9,6 +9,7 @@
     <version>1.0</version>
 
 
+    <!--logback相关-->
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -44,6 +45,7 @@
             <version>5.0.0.Alpha2</version>
         </dependency>
 
+        <!--短信验证码sdk-->
         <dependency>
             <groupId>a</groupId>
             <artifactId>b</artifactId>
