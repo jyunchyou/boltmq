@@ -1,5 +1,6 @@
 package io.openmessaging.client.producer;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.util.Constant;
 import io.openmessaging.client.constant.ConstantClient;
@@ -28,7 +29,7 @@ public class SendQueues {
 
    private NettyClient nettyClient = new NettyClient();
 
-   public static ByteBuffer routeByteBuffer = null;
+   public static ByteBuf routeByteBuf = null;
 
    public SendQueues() throws IOException {
 
@@ -59,7 +60,10 @@ public class SendQueues {
             }
 
             nettyClient.sendRouteRequest(channel);
-            messageQueues = encodeAndDecode.decodeNameServerRoute(routeByteBuffer,messageQueues);
+//            System.out.println("aaaa"+new String(routeByteBuffer.array()));
+
+
+           messageQueues = encodeAndDecode.decodeNameServerRoute(routeByteBuf,messageQueues);
 
 
         }

@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
+import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -53,10 +54,11 @@ public class UpdateFromNameServerHandler extends ChannelHandlerAdapter {
 
         ByteBuf byteBuf = (ByteBuf) msg;
 
-        byte[] resultByte = new byte[byteBuf.readableBytes()];
+        System.out.println(byteBuf);
 
-        byteBuf.readBytes(resultByte);
-        logger.info("Server端返回消息:"+new String(resultByte));
+
+//        logger.info("Server端返回消息:"+ new String(bb.array()));
+
 /*
 
         ByteBuffer byteBuffer = (ByteBuffer) msg;
@@ -65,9 +67,10 @@ public class UpdateFromNameServerHandler extends ChannelHandlerAdapter {
 */
 
 
-        SendQueues.routeByteBuffer = ByteBuffer.allocate(resultByte.length);
-        SendQueues.routeByteBuffer.put(resultByte);
-        System.out.println("byteBuffer值为:"+new String((SendQueues.routeByteBuffer.array())));
+        SendQueues.routeByteBuf = byteBuf;
+
+
+
 
         countDownLatch.countDown();
     }

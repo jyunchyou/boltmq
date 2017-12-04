@@ -1,5 +1,6 @@
 package io.openmessaging.client.net;
 
+import io.netty.buffer.ByteBuf;
 import io.openmessaging.client.exception.OutOfBodyLengthException;
 import io.openmessaging.client.exception.OutOfByteBufferException;
 import io.openmessaging.client.producer.BrokerInfo;
@@ -206,11 +207,14 @@ public class EncodeAndDecode {
             Map.Entry entry = (Map.Entry) iterator.next();
             String key = (String) entry.getKey();
             String value = (String) entry.getValue();
-            byte keyLenByte = (byte) key.length();
-            byteBuffer.put(keyLenByte);
-            byteBuffer.put(key.getBytes());
+            byte[] valueByte = value.getBytes();
+            byte[] keyByte = key.getBytes();
+            byte keyLenByte = (byte) keyByte.length;
 
-            int valueLen = value.length();
+            byteBuffer.put(keyLenByte);
+            byteBuffer.put(keyByte);
+
+            int valueLen = valueByte.length;
             byte[] valueLenByte = new byte[2];
             if (valueLen > 127 * 127) {
 
@@ -243,7 +247,6 @@ public class EncodeAndDecode {
      *nameServerRouteTable协议格式
      *
      *
-     *  总长度 4字节
      *  topicName长度 1字节
      *  topicName byte[]
         queueId长度 1字节
@@ -259,59 +262,56 @@ public class EncodeAndDecode {
      *
      *
      */
-    public List<SendQueue> decodeNameServerRoute(ByteBuffer byteBuffer,List<SendQueue> list){
+    public List<SendQueue> decodeNameServerRoute(ByteBuf byteBuf, List<SendQueue> list){
 
         list.clear();
-        while (byteBuffer.limit()>byteBuffer.position()) {
+        while (byteBuf.isReadable()) {
             SendQueue sendQueue = new SendQueue();
             BrokerInfo brokerInfo = new BrokerInfo();
 
-            byte[] allLength = new byte[4];
-            int allLengthInt = 1;
-            for (int indexNum = 0; indexNum < allLength.length; indexNum++) {
-                allLengthInt = allLengthInt * allLength[indexNum];
-
-            }
-            byteBuffer.get(allLength);
             //topicName
             byte[] topicNameLength = new byte[1];
-            byteBuffer.get(topicNameLength);
+            byteBuf.readBytes(topicNameLength);
             int topicNameLengthInt = topicNameLength[0];
 
             byte[] topicNameByte = new byte[topicNameLengthInt];
-            byteBuffer.get(topicNameByte);
-            String topicName = String.valueOf(topicNameByte);
+            byteBuf.readBytes(topicNameByte);
+            String topicName = new String(topicNameByte);
+
             sendQueue.setTopicName(topicName);
             //queueId
             byte[] queueIdLength = new byte[1];
-            byteBuffer.get(queueIdLength);
+            byteBuf.readBytes(queueIdLength);
             int queueIdLengthInt = queueIdLength[0];
 
             byte[] queueIdByte = new byte[queueIdLengthInt];
-            byteBuffer.get(queueIdByte);
-            String queueId = String.valueOf(queueIdByte);
+            byteBuf.readBytes(queueIdByte);
+            String queueId = new String(queueIdByte);
+
 
 
             sendQueue.setQueueId(queueId);
 
             //ip
             byte[] ipLength = new byte[1];
-            byteBuffer.get(ipLength);
+            byteBuf.readBytes(ipLength);
             int ipLengthInt = ipLength[0];
 
             byte[] ipByte = new byte[ipLengthInt];
-            byteBuffer.get(ipByte);
-            String ip = String.valueOf(ipByte);
+            byteBuf.readBytes(ipByte);
+            String ip = new String(ipByte);
             brokerInfo.setIp(ip);
             //port
             byte[] portLength = new byte[1];
-            byteBuffer.get(portLength);
+            byteBuf.readBytes(portLength);
             int portLengthInt = portLength[0];
             byte[] portByte = new byte[portLengthInt];
-            byteBuffer.get(portByte);
+            byteBuf.readBytes(portByte);
 
-            String port = String.valueOf(portByte);
-            Integer portInteger = Integer.valueOf(port);
+            String port = new String(portByte);
+
+            int portInteger = Integer.parseInt(port);
+
 
 
             brokerInfo.setPort(portInteger);
@@ -319,6 +319,10 @@ public class EncodeAndDecode {
 
 
             sendQueue.setBrokerInfo(brokerInfo);
+            System.out.println(topicName);
+            System.out.println(portInteger);
+            System.out.println(queueId);
+            System.out.println(ip);
 
             list.add(sendQueue);
         }

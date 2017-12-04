@@ -38,12 +38,11 @@ public class NettyServer {
             channelFuture = bootstrap.bind(port).sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }finally {
             work.shutdownGracefully();
             boss.shutdownGracefully();
         }
         if (channelFuture.isSuccess()) {
-            System.out.println("Server connect client success");
+            System.out.println("Server connect success");
 
 
         }

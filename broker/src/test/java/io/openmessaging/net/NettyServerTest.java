@@ -21,8 +21,16 @@ public class NettyServerTest{
 
 
     @Test
-    public void testConn(){
-        Executor executor = Executors.newFixedThreadPool(1);
+    public  void testConn() throws InterruptedException {
+
+
+
+        nettyServer.bind(8080);
+
+        Thread.sleep(300000);
+
+
+     /*   Executor executor = Executors.newFixedThreadPool(1);
         logger.info("server were start");
         Runnable runnable = new Runnable() {
             @Override
@@ -30,16 +38,18 @@ public class NettyServerTest{
 
                 nettyServer.bind(8080);
 
-                try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
 
-                    logger.error(e.getMessage());
-                    e.printStackTrace();
-                }
             }
         };
+
         executor.execute(runnable);
+
+        try {            Thread.sleep(30000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
+
+
     }
 
 

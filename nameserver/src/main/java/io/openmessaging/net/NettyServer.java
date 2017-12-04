@@ -8,7 +8,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
 
 /**
  * Created by fbhw on 17-12-3.
@@ -32,6 +31,7 @@ public class NettyServer {
                 socketChannel.pipeline().addLast(new NettyServerHandlerAdapter());
             }
         });
+
         ChannelFuture channelFuture = null;
 
         try {
@@ -41,6 +41,7 @@ public class NettyServer {
             work.shutdownGracefully();
             boss.shutdownGracefully();
         }
+
         if (channelFuture.isSuccess()) {
             System.out.println("Server connect success");
 

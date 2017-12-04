@@ -40,7 +40,10 @@ public class SendQueuesTest {
     @Test
     public void testGetList(){
         List list = sendQueues.getList();
-        System.out.println(list);
+        SendQueue sendQueue = (SendQueue) list.get(0);
+
+       // System.out.println(sendQueue.getBrokerInfo().getIp()+sendQueue.getBrokerInfo().getPort());
+
 
     }
 }
