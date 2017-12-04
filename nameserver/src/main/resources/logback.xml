@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoder 默认配置为PatternLayoutEncoder -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+
+    <appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
+        <file>/home/fbhw/java*/log</file>
+
+        <encoder><!-- 必须指定，否则不会往文件输出内容 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}  [%thread] %-5level %logger{5} - %msg%n</pattern>
+        </encoder>
+
+        <append>true</append>
+        <prudent>false</prudent>
+    </appender>
+
+    <root level="DEBUG">
+        <appender-ref ref="fileAppender" />
+    </root>
+    <root level="ERROR">
+        <appender-ref ref="fileAppender" />
+    </root>
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+
+</configuration>
+
