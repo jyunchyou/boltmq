@@ -13,6 +13,7 @@ public class QueueSelectByRandom implements QueueSelector{
     public SendQueue select(List<SendQueue> sendQueues, Object arg){
         Random random = new Random(System.currentTimeMillis());
         int randomNum = random.nextInt();
+        randomNum = Math.abs(randomNum);
         int indexNum = randomNum % sendQueues.size();
         return sendQueues.get(indexNum);
 

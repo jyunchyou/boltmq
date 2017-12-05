@@ -38,10 +38,39 @@ public class AbstractProducerTest {
         abstractProducer.start();
 
         try {
-            Thread.sleep(100000);
+            Thread.sleep(7000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testSendSync(){
+
+       FactoryProducer factoryProducer = new FactoryProducer();
+
+        Properties properties = new Properties();
+        properties.putProperties("key","value");
+
+        AbstractProducer abstractProducer = factoryProducer.createProducer(properties);
+
+
+
+
+        Message message = new Message("TOPIC_1","1","发送成功！".getBytes());
+
+
+
+
+
+        abstractProducer.send(message);
+
+        try {
+            Thread.sleep(17000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

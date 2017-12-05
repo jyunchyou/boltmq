@@ -37,9 +37,9 @@
 
 
         //同步发送
-        public SendResult send(Message message){
+        public void send(Message message){
 
-           return  send(message,null);
+           send(message,null);
 
         }
 
@@ -49,18 +49,18 @@
 
         }
 
-        public SendResult send(Message message,Object shardingKey){
+        public void send(Message message,Object shardingKey){
 
-            return this.send(message,3,null);
+             this.send(message,3,null);
 
         }
 
-        public SendResult send(Message message, int delayTime){
-            return  this.send(message,delayTime,null);
+        public void send(Message message, int delayTime){
+            this.send(message,delayTime,null);
 
         }
         //delayTime支持固定时长,传入delay等级
-        public SendResult send(Message message,int delayTime,Object shardingKey){
+        public void send(Message message,int delayTime,Object shardingKey){
 
             SendQueue sendQueue = null;
 
@@ -75,7 +75,7 @@
 
             SendResult sendResult = null;
             try {
-                sendResult = kernelProducer.send(message,delayTime,sendQueue,implProperties);
+             kernelProducer.send(message,delayTime,sendQueue,implProperties);
             } catch (OutOfBodyLengthException e) {
 
                 e.printStackTrace();
@@ -84,7 +84,7 @@
                 logger.error("out of byteBuffer exception");
                 e.printStackTrace();
             }
-            return sendResult;
+            return;
 
         }
 

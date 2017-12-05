@@ -20,7 +20,7 @@ public class FactoryProducer {
             mqProducer = new AbstractProducer();
         } catch (IOException e) {
             e.printStackTrace();
-            logger.error(e.toString());
+
         }
         mqProducer.setImplProperties(implProperties);
         return mqProducer;

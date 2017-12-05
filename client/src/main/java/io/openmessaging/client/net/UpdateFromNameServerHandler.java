@@ -54,7 +54,8 @@ public class UpdateFromNameServerHandler extends ChannelHandlerAdapter {
 
         ByteBuf byteBuf = (ByteBuf) msg;
 
-        System.out.println(byteBuf);
+
+        System.out.println("update success");
 
 
 //        logger.info("Server端返回消息:"+ new String(bb.array()));

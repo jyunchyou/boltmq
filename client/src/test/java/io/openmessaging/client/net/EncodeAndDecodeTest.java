@@ -1,5 +1,6 @@
 package io.openmessaging.client.net;
 
+import io.netty.buffer.ByteBuf;
 import io.openmessaging.client.constant.ConstantClient;
 import io.openmessaging.client.exception.OutOfBodyLengthException;
 import io.openmessaging.client.producer.Message;
@@ -45,13 +46,13 @@ public class EncodeAndDecodeTest {
         requestDto.setCode(0);
         requestDto.setDelayTime(10000);
 
-        ByteBuffer byteBuffer = null;
+        ByteBuf byteBuf = null;
         try {
-            byteBuffer = encodeAndDecode.encodeMessage(message,properties,requestDto);
+            byteBuf = encodeAndDecode.encodeMessage(message,properties,requestDto);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        logger.info(byteBuffer.array().toString());
+       // logger.info(byteBuffer.array().toString());
     }
 }

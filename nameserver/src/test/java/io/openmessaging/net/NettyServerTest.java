@@ -1,5 +1,6 @@
 package io.openmessaging.net;
 
+import io.openmessaging.constant.ConstantNameServer;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ public class NettyServerTest {
 
 
 
-        nettyServer.bind(8080);
+        nettyServer.bind(ConstantNameServer.NAMESERVER_PORT);
 
         Thread.sleep(300000);
 

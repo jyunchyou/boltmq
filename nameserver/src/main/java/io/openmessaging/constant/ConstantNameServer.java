@@ -9,4 +9,6 @@ public class ConstantNameServer {
 
     public static final int ROUTE_TABLE_BUFFER_SIZE = 1024;
 
+    public static final int NAMESERVER_PORT = 8090;
+
 }

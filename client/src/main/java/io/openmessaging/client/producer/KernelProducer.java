@@ -1,5 +1,6 @@
 package io.openmessaging.client.producer;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.openmessaging.client.constant.ConstantClient;
 import io.openmessaging.client.exception.OutOfBodyLengthException;
@@ -21,7 +22,7 @@ public class KernelProducer {
 
     Map<BrokerInfo,Channel> map = ConnectionCacheTable.getConnectionCacheTable();
 
-    public SendResult send(Message message, int delayTime, SendQueue sendQueue, Properties properties) throws OutOfBodyLengthException, OutOfByteBufferException {
+    public void send(Message message, int delayTime, SendQueue sendQueue, Properties properties) throws OutOfBodyLengthException, OutOfByteBufferException {
 
 
         BrokerInfo brokerInfo = sendQueue.getBrokerInfo();
@@ -36,8 +37,8 @@ public class KernelProducer {
         requestDto.setDelayTime(delayTime);
 
 
-        ByteBuffer byteBuffer = null;
-        byteBuffer = encodeAndDecode.encodeMessage(message,properties,requestDto);
+        ByteBuf byteBuf = null;
+        byteBuf = encodeAndDecode.encodeMessage(message,properties,requestDto);
 
 
         channel = map.get(brokerInfo);
@@ -49,10 +50,10 @@ public class KernelProducer {
             map.put(brokerInfo, channel);
 
         }
-        SendResult sendResult = nettyClient.sendSycn(channel,byteBuffer);
+        nettyClient.sendSycn(channel,byteBuf);
 
 
-        return sendResult;
+
     }
 
     //开启定时任务

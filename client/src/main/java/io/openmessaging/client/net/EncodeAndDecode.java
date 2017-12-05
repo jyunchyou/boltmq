@@ -1,6 +1,7 @@
 package io.openmessaging.client.net;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.openmessaging.client.exception.OutOfBodyLengthException;
 import io.openmessaging.client.exception.OutOfByteBufferException;
 import io.openmessaging.client.producer.BrokerInfo;
@@ -59,7 +60,7 @@ import java.util.Set;
 public class EncodeAndDecode {
 
     Logger logger = LoggerFactory.getLogger(EncodeAndDecode.class);
-    public ByteBuffer encodeMessage(Message message,Properties properties, RequestDto requestDto) throws OutOfBodyLengthException, OutOfByteBufferException {
+    public ByteBuf encodeMessage(Message message,Properties properties, RequestDto requestDto) throws OutOfBodyLengthException, OutOfByteBufferException {
 
 
 
@@ -138,7 +139,8 @@ public class EncodeAndDecode {
         topicLen+orderIdLen+body.length+(1+1+4);//35
 
 
-        ByteBuffer byteBuffer = ByteBuffer.allocate(byteBufferLen);
+        ByteBuf byteBuf = Unpooled.buffer(byteBufferLen);
+
 
         byte[] allLengthByte = new byte[4];
         if (byteBufferLen > 127 * 127 * 127 * 127) {
@@ -176,27 +178,29 @@ public class EncodeAndDecode {
 
 
 
-        byteBuffer.put(allLengthByte);
+        byteBuf.writeBytes(allLengthByte);
 
 
-        byteBuffer.put(idLen);
-        byteBuffer.put(id);
-        byteBuffer.put(languageLen);
-        byteBuffer.put(language);
-        byteBuffer.put(versionLen);
-        byteBuffer.put(version);
-        byteBuffer.put(serialModelLen);
-        byteBuffer.put(serialModel);
-        byteBuffer.put(codeLen);
-        byteBuffer.put(code);
-        byteBuffer.put(delayTimeLen);
-        byteBuffer.put(delayTime);
-        byteBuffer.put(topicLen);
-        byteBuffer.put(topic);
-        byteBuffer.put(orderIdLen);
-        byteBuffer.put(orderId);
-        byteBuffer.put(bodyLen);
-        byteBuffer.put(body);
+        byteBuf.writeBytes(new byte[]{topicLen});
+        byteBuf.writeBytes(topic);
+        byteBuf.writeBytes(new byte[]{orderIdLen});
+        byteBuf.writeBytes(orderId);
+        byteBuf.writeBytes(bodyLen);
+        byteBuf.writeBytes(body);
+
+        byteBuf.writeBytes(new byte[]{idLen});
+        byteBuf.writeBytes(id);
+        byteBuf.writeBytes(new byte[]{languageLen});
+        byteBuf.writeBytes(language);
+        byteBuf.writeBytes(new byte[]{versionLen});
+        byteBuf.writeBytes(version);
+        byteBuf.writeBytes(new byte[]{serialModelLen});
+        byteBuf.writeBytes(serialModel);
+        byteBuf.writeBytes(new byte[]{codeLen});
+        byteBuf.writeBytes(new byte[]{code});
+        byteBuf.writeBytes(new byte[]{delayTimeLen});
+        byteBuf.writeBytes(new byte[]{delayTime});
+
         Set<Map.Entry> entrySet = properties.entrySet();
         Iterator iterator = entrySet.iterator();
 
@@ -211,8 +215,8 @@ public class EncodeAndDecode {
             byte[] keyByte = key.getBytes();
             byte keyLenByte = (byte) keyByte.length;
 
-            byteBuffer.put(keyLenByte);
-            byteBuffer.put(keyByte);
+            byteBuf.writeBytes(new byte[]{keyLenByte});
+            byteBuf.writeBytes(keyByte);
 
             int valueLen = valueByte.length;
             byte[] valueLenByte = new byte[2];
@@ -235,12 +239,12 @@ public class EncodeAndDecode {
                 valueLenByte[0] = 0;
                 valueLenByte[1] = (byte) valueLen;
             }
-            byteBuffer.put(valueLenByte);
-            byteBuffer.put(value.getBytes());
+            byteBuf.writeBytes(valueLenByte);
+            byteBuf.writeBytes(value.getBytes());
         }
 
 
-        return byteBuffer;
+        return byteBuf;
     }
 
     /**

@@ -47,6 +47,8 @@ public class NettyClient implements ConnectionHandler {
 
     private CountDownLatch countDownLatch = new CountDownLatch(1);
 
+    private CountDownLatch countDownLatchSendMessage = new CountDownLatch(1);
+
     private EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
 
     private Bootstrap bootstrap = null;
@@ -86,7 +88,8 @@ public class NettyClient implements ConnectionHandler {
                 @Override
                 protected void initChannel(SocketChannel socketChannel) throws Exception {
 
-                    socketChannel.pipeline().addLast(new NettyClientHandler());
+                    socketChannel.pipeline().addLast(new NettyClientHandler(new SendResult(),countDownLatchSendMessage));
+
                 }
             });
         ChannelFuture future = null;
@@ -111,22 +114,20 @@ public class NettyClient implements ConnectionHandler {
         return channel;
     }
 
-    public SendResult sendSycn(Channel channel,ByteBuffer byteBuffer){
-        ByteBuf byteBuf = Unpooled.wrappedBuffer(byteBuffer);
-        ChannelFuture channelFuture = channel.write(byteBuf);
-        SendResult sendResult = new SendResult();
+    public void sendSycn(Channel channel,ByteBuf byteBuf){
 
-        if (channelFuture.isSuccess()){
+        ChannelFuture channelFuture = channel.writeAndFlush(byteBuf);
 
-            String info = "向Broker发送成功";
-            logger.info(info);
-            sendResult.setInfo(info);
-            return sendResult;
 
+        try {
+            countDownLatchSendMessage.await();
+        } catch (InterruptedException e) {
+
+            e.printStackTrace();
+
+            logger.error(e.getMessage());
         }
-        String info = "向Broker发送失败";
-        sendResult.setInfo(info);
-        return sendResult;
+
     }
 
     //nameServer

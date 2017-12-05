@@ -17,6 +17,8 @@ public class Message {
         this.body = body;
     }
 
+
+
     public byte[] getBody() {
         return body;
     }
