@@ -8,16 +8,25 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.HashedWheelTimer;
+import io.netty.util.Timeout;
+import io.netty.util.Timer;
+import io.netty.util.TimerTask;
+import io.openmessaging.client.constant.ConstantClient;
 import io.openmessaging.client.producer.BrokerInfo;
 import io.openmessaging.client.producer.FactoryProducer;
 import io.openmessaging.client.producer.NameServerInfo;
+import io.openmessaging.client.producer.SendQueues;
 import io.openmessaging.client.table.ConnectionCacheNameServerTable;
 import io.openmessaging.client.table.ConnectionCacheTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.nio.ByteBuffer;
+import java.sql.Time;
 import java.util.Map;
+import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -196,6 +205,18 @@ public class NettyClient implements ConnectionHandler {
 
 
         return ;
+
+    }
+
+    public void start(SendQueues sendQueues){
+       java.util.Timer timer = new java.util.Timer();
+       timer.schedule(new java.util.TimerTask() {
+           @Override
+           public void run() {
+               sendQueues.updateListFromNameServer();
+           }
+
+       },0, ConstantClient.GET_LIST_TIMER_PERIOD);
 
     }
 

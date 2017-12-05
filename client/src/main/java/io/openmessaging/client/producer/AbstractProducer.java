@@ -22,13 +22,14 @@
 
         private Properties implProperties = null;
 
-        private KernelProducer kernelProducer = null;
+        private KernelProducer kernelProducer = new KernelProducer();
 
         private QueueSelectByHash queueSelectByHash = new QueueSelectByHash();
 
         private QueueSelectByRandom queueSelectByRandom = new QueueSelectByRandom();
 
         private SendQueues sendQueues = new SendQueues();
+
 
         public AbstractProducer() throws IOException {
 
@@ -44,9 +45,7 @@
 
         //开启定时任务
         public void start(){
-        //    kernelProducer.start(String.valueOf(
-        //            implProperties.getProperties("nameSvrAddress")
-        //    ));
+            kernelProducer.start(sendQueues);
 
         }
 
@@ -68,9 +67,9 @@
             List list = sendQueues.getList();
 
             if (shardingKey == null) {
-                sendQueue = new QueueSelectByRandom().select(list);
+                sendQueue = queueSelectByRandom.select(list);
             }else {
-                sendQueue = new QueueSelectByHash().select(list,shardingKey);
+                sendQueue = queueSelectByHash.select(list,shardingKey);
             }
 
 

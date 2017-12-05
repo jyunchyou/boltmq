@@ -33,6 +33,8 @@ public class ConstantClient {
 
     public static final int DELAY_TIME = 30000;//默认超时时间
 
+    public static final int GET_LIST_TIMER_PERIOD = 30000;//周期刷新路由信息的时间间隔
+
 
 
 }

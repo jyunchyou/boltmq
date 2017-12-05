@@ -54,4 +54,11 @@ public class KernelProducer {
 
         return sendResult;
     }
+
+    //开启定时任务
+    public void start(SendQueues sendQueues){
+
+        nettyClient.start(sendQueues);
+
+    }
 }

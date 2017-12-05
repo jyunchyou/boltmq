@@ -70,4 +70,23 @@ public class SendQueues {
         return messageQueues;
 
     }
+
+    public void updateListFromNameServer(){
+        Channel channel = nameServerConnectionCacheTable.get(nameServerInfo);
+        if (channel == null) {
+
+            channel = nettyClient.bind(nameServerInfo);
+
+        }
+
+        nettyClient.sendRouteRequest(channel);
+//            System.out.println("aaaa"+new String(routeByteBuffer.array()));
+
+
+        messageQueues = encodeAndDecode.decodeNameServerRoute(routeByteBuf,messageQueues);
+
+
+    }
+
+
 }

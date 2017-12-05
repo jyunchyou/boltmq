@@ -7,7 +7,6 @@ import io.openmessaging.client.producer.BrokerInfo;
 import io.openmessaging.client.producer.Message;
 import io.openmessaging.client.producer.Properties;
 import io.openmessaging.client.producer.SendQueue;
-import io.openmessaging.client.table.ConnectionCacheNameServerTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.nio.ByteBuffer;
@@ -56,6 +55,7 @@ import java.util.Set;
  *
  * }
  */
+
 public class EncodeAndDecode {
 
     Logger logger = LoggerFactory.getLogger(EncodeAndDecode.class);
