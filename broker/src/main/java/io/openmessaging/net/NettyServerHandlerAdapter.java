@@ -60,7 +60,11 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
         String topic = (String) set.iterator().next();
         String queueId = (String) map.get(set.iterator().next());
 
-        
+        System.out.println("topic:"+topic);
+        System.out.println("queueId:"+queueId);
+
+        processIn.input(data,topic,queueId);
+
 
 
         ByteBuf byteBuf = encodeAndDecode.encodeSendMessageBack();

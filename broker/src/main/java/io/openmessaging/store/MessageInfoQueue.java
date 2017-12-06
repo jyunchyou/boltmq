@@ -21,7 +21,9 @@ public class MessageInfoQueue {
 
     private String queueId;
 
-    private long fileIndex;//文件命名为offset 可通过offset直接得到文件名
+    private long messageIndex;//文件命名为offset,可通过offset直接得到文件名,每个文件(MessageInfoQueue)最大为上一个文件index+1073741824(1G);
+
+    private long previousMessageIndex = 0;//上一个文件的index, 方便创建新文件时给fileIndex命名;
 
     private File file;
 
@@ -54,11 +56,19 @@ public class MessageInfoQueue {
         return this.queue;
     }
 
-    public long getFileIndex() {
-        return fileIndex;
+    public long getMessageIndex() {
+        return messageIndex;
     }
 
-    public void setFileIndex(long fileIndex) {
-        this.fileIndex = fileIndex;
+    public void setMessageIndex(long fileIndex) {
+        this.messageIndex = fileIndex;
+    }
+
+    public long getPreviousMessageIndex() {
+        return previousMessageIndex;
+    }
+
+    public void setPreviousMessageIndex(long previousMessageIndex) {
+        this.previousMessageIndex = previousMessageIndex;
     }
 }

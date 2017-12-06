@@ -19,4 +19,7 @@ public class BrokerConstant
     public static final int BUFFER_SEND_SIZE = 3000;
     
     public static final String FILE_ROOT_PATH = "/storage/emulated/0/AppProjects/MQBroker";
+
+
+
 }
