@@ -28,7 +28,7 @@ public class MessageStore {
 
 
 
-    public void input(ByteBuf byteBuf,boolean newFile,String queueAddress,long fileAddress) throws IOException {
+    public void input(byte[] byteBuf,boolean newFile,String queueAddress,long fileAddress) throws IOException {
 
         File file = new File(ConstantBroker.ROOT_PATH+queueAddress+"/"+fileAddress);
 
@@ -50,7 +50,8 @@ public class MessageStore {
            fileOutputStream = new FileOutputStream(file,true);
            fileChannel = fileOutputStream.getChannel();
 
-           ByteBuffer byteBuffer = byteBuf.nioBuffer();
+           ByteBuffer byteBuffer = ByteBuffer.allocate(byteBuf.length);
+           byteBuffer.put(byteBuf);
            fileChannel.write(byteBuffer);
 
            if (newFile) {

@@ -8,6 +8,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.openmessaging.processor.ProcessorIn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -53,17 +55,24 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
         SendQueues.routeByteBuffer = byteBuffer;
 */
 
-        Map map = encodeAndDecode.decode(data);
+        List<Map> list = encodeAndDecode.decode(data);
 
-        Set set = map.keySet();
 
-        String topic = (String) set.iterator().next();
-        String queueId = (String) map.get(set.iterator().next());
+        if (list.size() > 0) {
 
-        System.out.println("topic:"+topic);
-        System.out.println("queueId:"+queueId);
 
-        processIn.input(data,topic,queueId);
+
+
+            for (Map map:list) {
+                String topic = (String) map.get("topic");
+                String queueId = (String) map.get("queueId");
+                byte[] d = (byte[]) map.get("data");
+
+
+                  processIn.input(d,topic,queueId);
+
+            }
+            }
 
 
 
@@ -75,6 +84,7 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
         }else{
             System.out.println("返回失败");
         }
+
 
 
 

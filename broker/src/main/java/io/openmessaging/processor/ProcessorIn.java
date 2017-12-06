@@ -24,7 +24,7 @@ public class ProcessorIn {
     private MessageInfoQueues messageInfoQueues = new MessageInfoQueues();
 
     //寻找queue
-    public void input(ByteBuf byteBuf,String topic,String queueId){
+    public void input(byte[] byteBuf,String topic,String queueId){
 
         Set<Map.Entry> set = MessageInfoQueues.concurrentHashMap.entrySet();
 
@@ -47,7 +47,7 @@ public class ProcessorIn {
     }
 
     //保存topic,设置index,判断是否需要new新文件
-    public void input(ByteBuf byteBuf,String topic,MessageInfoQueue messageInfoQueue){
+    public void input(byte[] byteBuf,String topic,MessageInfoQueue messageInfoQueue){
 
         List list = messageInfoQueue.getList();
         MessageInfo fileInfo = new MessageInfo();
@@ -56,12 +56,12 @@ public class ProcessorIn {
 
         long index = messageInfoQueue.getMessageIndex();
         long previousIndex = messageInfoQueue.getPreviousMessageIndex();
-        long byteBufLen = byteBuf.readableBytes();
+        long byteBufLen = byteBuf.length;
         boolean newFile = false;
 
         long newPreviousIndex = previousIndex + ConstantBroker.FILE_SIZE;
         long newMessageIndex = index + byteBufLen;
-        
+
         if (newMessageIndex > (newPreviousIndex)) {
             newFile = true;
 

@@ -26,7 +26,7 @@ public class NettyServerTest{
 
         nettyServer.bind(8080);
 
-        Thread.sleep(300000);
+        Thread.sleep(1000000);
 
 
      /*   Executor executor = Executors.newFixedThreadPool(1);
