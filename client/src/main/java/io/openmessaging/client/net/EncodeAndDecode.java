@@ -131,13 +131,14 @@ public class EncodeAndDecode {
 
 
         //开始putByteBuffer
-        int byteBufferLen = 4 +
+        int byteBufferLen =
                 idLen+languageLen+versionLen+serialModelLen+2+6+//20
 
                 allLength+(properties.getSize()*(2+1))+//51
 
         topicLen+orderIdLen+body.length+(1+1+4);//35
 
+        System.out.println(byteBufferLen);
 
         ByteBuf byteBuf = Unpooled.buffer(byteBufferLen);
 

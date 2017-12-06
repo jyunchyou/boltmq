@@ -57,16 +57,17 @@ public class AbstractProducerTest {
 
 
 
-        Message message = new Message("TOPIC_1","1","发送成功！".getBytes());
+        for (int indexNum = 0;indexNum < 1000000000;indexNum++) {
+            Message message = new Message("TOPIC_1", "1", "发送成功！".getBytes());
+
+            abstractProducer.send(message);
+        }
 
 
 
-
-
-        abstractProducer.send(message);
 
         try {
-            Thread.sleep(17000);
+            Thread.sleep(1000000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
