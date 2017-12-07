@@ -1,10 +1,14 @@
 package io.openmessaging.net;
 
 import io.openmessaging.constant.ConstantNameServer;
+import io.openmessaging.producer.BrokerInfo;
+import io.openmessaging.table.BrokerTopicTable;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
 
 public class NettyServerTest {
 
@@ -24,8 +28,31 @@ public class NettyServerTest {
 
 
         nettyServer.bind(ConstantNameServer.NAMESERVER_PORT);
+        BrokerInfo brokerInfo = new BrokerInfo();
+        brokerInfo.setIp("127.0.0.1");
+        brokerInfo.setPort(8080);
 
-        Thread.sleep(300000);
+
+        HashMap topicQueueMap = new HashMap(1);
+        topicQueueMap.put("TOPIC_01","10000");
+        topicQueueMap.put("TOPIC_01","20000");
+        topicQueueMap.put("TOPIC_01","30000");
+        topicQueueMap.put("TOPIC_01","40000");
+        topicQueueMap.put("TOPIC_01","50000");
+        topicQueueMap.put("TOPIC_01","60000");
+        topicQueueMap.put("TOPIC_01","70000");
+        topicQueueMap.put("TOPIC_01","80000");
+        topicQueueMap.put("TOPIC_01","90000");
+        topicQueueMap.put("TOPIC_01","00000");
+
+
+
+
+
+
+        BrokerTopicTable.brokerTopicTable.put(brokerInfo,topicQueueMap);
+
+        Thread.sleep(1000000);
 
 
      /*   Executor executor = Executors.newFixedThreadPool(1);

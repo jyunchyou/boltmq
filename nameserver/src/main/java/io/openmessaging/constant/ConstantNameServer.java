@@ -11,4 +11,6 @@ public class ConstantNameServer {
 
     public static final int NAMESERVER_PORT = 8090;
 
+    public static final int RECEIVE_FROM_BROKER_PORT = 8088;
+
 }
