@@ -1,0 +1,15 @@
+package io.openmessaging.consumer.constant;
+
+/**
+ * Created by fbhw on 17-12-7.
+ */
+public class ConstantConsumer {
+
+
+    public static final String NAMESERVER_IP = "127.0.0.1";
+
+    public static final int NAMESERVER_PORT = 8090;
+
+    public static final int GET_TABLE_TIMER_PERIOD = 30;
+
+}
