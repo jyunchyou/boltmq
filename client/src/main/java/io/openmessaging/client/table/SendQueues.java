@@ -1,14 +1,13 @@
-package io.openmessaging.client.producer;
+package io.openmessaging.client.table;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
-import io.netty.util.Constant;
 import io.openmessaging.client.constant.ConstantClient;
 import io.openmessaging.client.net.EncodeAndDecode;
 import io.openmessaging.client.net.NettyClient;
-import io.openmessaging.client.table.ConnectionCacheNameServerTable;
+import io.openmessaging.client.producer.NameServerInfo;
+
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,7 @@ public class SendQueues {
 
    private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
 
-   private NameServerInfo nameServerInfo = new NameServerInfo();
+   private NameServerInfo nameServerInfo = new NameServerInfo();//先默认一台
 
    private Map<NameServerInfo,Channel> nameServerConnectionCacheTable = ConnectionCacheNameServerTable.getConnectionCacheNameServerTable();
 

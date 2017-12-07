@@ -36,9 +36,12 @@ public class BrokerTableTest {
         }
 
 
-        MessageInfoQueue messageInfoQueue = (MessageInfoQueue) MessageInfoQueues.concurrentHashMap.get(0);
+        System.out.println(MessageInfoQueues.concurrentHashMap);
+        MessageInfoQueue messageInfoQueue = (MessageInfoQueue) MessageInfoQueues.concurrentHashMap.get("1");
+
 
         MessageInfo messageInfo = (MessageInfo) messageInfoQueue.getList().get(0);
+
 
         System.out.println("---"+messageInfo.getLen());
         System.out.println("---"+messageInfo.getOffset());

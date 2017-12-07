@@ -6,8 +6,6 @@ package io.openmessaging.store;
 
 import io.openmessaging.Constant.ConstantBroker;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -16,19 +14,24 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MessageInfoQueues {
 
-    public static ConcurrentHashMap concurrentHashMap = new ConcurrentHashMap();
+    public static ConcurrentHashMap<String,MessageInfoQueue> concurrentHashMap = new ConcurrentHashMap();
 
-    public MessageInfoQueues(){
-        init(ConstantBroker.QUEUE_NUM);
+    private MessageInfoQueues(){
+        /*init(ConstantBroker.QUEUE_NUM);*/
     }
-    public void init(int queueNum){
+    public static void init(int queueNum){
         for (int checkNum = 0;checkNum < queueNum;checkNum++) {
             MessageInfoQueue fileInfoQueue = new MessageInfoQueue(checkNum);
-            List<MessageInfo> list = new ArrayList();
-            concurrentHashMap.put(fileInfoQueue,list);
+
+            concurrentHashMap.put(checkNum + "",fileInfoQueue);
 
         }
 
+    }
+
+
+    public static ConcurrentHashMap<String, MessageInfoQueue> get(){
+        return concurrentHashMap;
     }
 
 }

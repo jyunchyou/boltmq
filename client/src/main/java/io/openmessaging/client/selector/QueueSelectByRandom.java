@@ -1,6 +1,6 @@
 package io.openmessaging.client.selector;
 
-import io.openmessaging.client.producer.SendQueue;
+import io.openmessaging.client.table.SendQueue;
 
 import java.util.List;
 import java.util.Random;

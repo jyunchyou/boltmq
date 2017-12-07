@@ -1,14 +1,18 @@
 package io.openmessaging.net;
 
+import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.openmessaging.nameserver.NameServerInfo;
+import io.openmessaging.store.ConnectionCacheNameServerTable;
+
+import javax.naming.Name;
+import java.util.Map;
 
 /**
  * Created by fbhw on 17-12-3.
@@ -18,6 +22,10 @@ public class NettyServer {
     private EventLoopGroup work = new NioEventLoopGroup();
 
     private EventLoopGroup boss = new NioEventLoopGroup();
+
+    private Map<NameServerInfo,Channel> nameServerConnectionCacheTable = ConnectionCacheNameServerTable.getConnectionCacheNameServerTable();
+
+    private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
 
     public void bind(int port){
         ServerBootstrap bootstrap = new ServerBootstrap();
@@ -47,6 +55,61 @@ public class NettyServer {
 
         }
 
+
+    }
+
+
+    public Channel bind(NameServerInfo nameServerInfo){
+        System.out.println("bind");
+        Bootstrap bootstrap = new Bootstrap();
+        bootstrap.group(work);
+
+        bootstrap.channel(NioSocketChannel.class);
+        bootstrap.option(ChannelOption.SO_KEEPALIVE,true);
+        bootstrap.handler(new ChannelInitializer<SocketChannel>() {
+            @Override
+            protected void initChannel(SocketChannel socketChannel) throws Exception {
+                socketChannel.pipeline().addLast(new NettyServerHandlerAdapter());
+            }
+        });
+        ChannelFuture channelFuture = null;
+
+        try {
+            channelFuture = bootstrap.connect(nameServerInfo.getIp(),nameServerInfo.getPort()).sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            work.shutdownGracefully();
+        }
+        if (channelFuture.isSuccess()) {
+            System.out.println("nameServer connect success");
+
+
+        }
+       return  channelFuture.channel();
+
+
+    }
+
+
+    public void sendTableToNameServer(NameServerInfo nameServerInfo){
+
+        Channel channel = nameServerConnectionCacheTable.get(nameServerInfo);
+        if (channel == null) {
+
+            channel = bind(nameServerInfo);
+            nameServerConnectionCacheTable.put(nameServerInfo,channel);
+
+        }
+
+
+//            System.out.println("aaaa"+new String(routeByteBuffer.array()));
+
+
+
+        ByteBuf byteBuf = encodeAndDecode.encodeToNameServer();
+
+
+        channel.writeAndFlush(byteBuf);
 
     }
 

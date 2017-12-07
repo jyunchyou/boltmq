@@ -21,17 +21,17 @@ public class ProcessorIn {
 
     private MessageStore messageStore = MessageStore.getMessageStore();
 
-    private MessageInfoQueues messageInfoQueues = new MessageInfoQueues();
+
 
     //寻找queue
     public void input(byte[] byteBuf,String topic,String queueId){
 
-        Set<Map.Entry> set = MessageInfoQueues.concurrentHashMap.entrySet();
+        Set<Map.Entry<String, MessageInfoQueue>> set = MessageInfoQueues.concurrentHashMap.entrySet();
 
         MessageInfoQueue messageInfoQueue = null;
         for (Map.Entry entry : set) {
-            messageInfoQueue = (MessageInfoQueue) entry.getKey();
-            String q = messageInfoQueue.getQueueId();
+            messageInfoQueue = (MessageInfoQueue) entry.getValue();
+            String q = (String) entry.getKey();
 
             if (q.equals(queueId)) {
 
@@ -41,13 +41,13 @@ public class ProcessorIn {
 
 
         }
-        this.input(byteBuf,topic,messageInfoQueue);
+        this.input(byteBuf,topic,queueId,messageInfoQueue);
 
 
     }
 
     //保存topic,设置index,判断是否需要new新文件
-    public void input(byte[] byteBuf,String topic,MessageInfoQueue messageInfoQueue){
+    public void input(byte[] byteBuf,String topic,String queueId,MessageInfoQueue messageInfoQueue){
 
         List list = messageInfoQueue.getList();
         MessageInfo fileInfo = new MessageInfo();
@@ -71,7 +71,7 @@ public class ProcessorIn {
 
 
         try {
-            messageStore.input(byteBuf,newFile,messageInfoQueue.getQueueId(),previousIndex);
+            messageStore.input(byteBuf,newFile,queueId,previousIndex);
         } catch (IOException e) {
             e.printStackTrace();
         }

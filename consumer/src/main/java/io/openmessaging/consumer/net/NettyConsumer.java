@@ -89,8 +89,8 @@ public class NettyConsumer {
 
     }
 
-    public void sendRouteRequest(Channel channel){
-        ByteBuf byteBuf = Unpooled.wrappedBuffer("getTable".getBytes());
+    public void sendRouteRequest(Channel channel,String topic){
+        ByteBuf byteBuf = Unpooled.wrappedBuffer(topic.getBytes());
         ChannelFuture channelFuture = channel.writeAndFlush(byteBuf);
 
 

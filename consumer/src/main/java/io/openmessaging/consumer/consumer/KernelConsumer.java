@@ -19,14 +19,14 @@ public class KernelConsumer {
 
     }
 
-    public void start(final ReceiveMessageTable receiveMessageTable){
+    public void start(final ReceiveMessageTable receiveMessageTable, final String topic){
 
 
             java.util.Timer timer = new java.util.Timer();
             timer.schedule(new java.util.TimerTask() {
                 @Override
                 public void run() {
-                    receiveMessageTable.updateReceiveTableFromNameServer();
+                    receiveMessageTable.updateReceiveTableFromNameServer(topic);
                 }
 
             },0, ConstantConsumer.GET_TABLE_TIMER_PERIOD);

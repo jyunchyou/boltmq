@@ -35,7 +35,7 @@ public class ReceiveMessageTable {
     }
 
 
-    public void updateReceiveTableFromNameServer(){
+    public void updateReceiveTableFromNameServer(String topic){
         Channel channel = ConnectionCacheNameServerTable.connectionCacheNameServerTable.get(nameServerInfo);
         if (channel == null) {
 
@@ -43,7 +43,7 @@ public class ReceiveMessageTable {
 
         }
 
-        nettyConsumer.sendRouteRequest(channel);
+        nettyConsumer.sendRouteRequest(channel,topic);
 //            System.out.println("aaaa"+new String(routeByteBuffer.array()));
 
 

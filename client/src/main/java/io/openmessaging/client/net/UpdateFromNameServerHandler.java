@@ -2,22 +2,14 @@ package io.openmessaging.client.net;
 
 import com.aliyuncs.exceptions.ClientException;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelOutboundBuffer;
-import io.netty.channel.ChannelPromise;
-import io.openmessaging.client.producer.SendQueue;
-import io.openmessaging.client.producer.SendQueues;
+import io.openmessaging.client.table.SendQueues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.SocketAddress;
-import java.nio.ByteBuffer;
-import java.util.Collections;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
 
 /**
  * Created by fbhw on 17-12-2.

@@ -17,9 +17,7 @@ public class MessageInfoQueue {
 
     Logger logger = LoggerFactory.getLogger(MessageInfoQueue.class);
 
-    public  List queue = new ArrayList<MessageInfo>();
-
-    private String queueId;
+    private   List queue = new ArrayList<MessageInfo>();
 
     private long messageIndex;//文件命名为offset,可通过offset直接得到文件名,每个文件(MessageInfoQueue)最大为上一个文件index+1073741824(1G);
 
@@ -29,8 +27,6 @@ public class MessageInfoQueue {
 
     public MessageInfoQueue(int name){
 
-        this.queueId = name + "";
-
         this.file = new File(ConstantBroker.ROOT_PATH+name);
         if (!file.exists()){
 
@@ -39,13 +35,7 @@ public class MessageInfoQueue {
 
     }
 
-    public String getQueueId() {
-        return queueId;
-    }
 
-    public void setQueueId(String queueId) {
-        this.queueId = queueId;
-    }
 
     public void setList(List list){
         this.queue = list;

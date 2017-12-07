@@ -2,12 +2,13 @@ package io.openmessaging.net;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.openmessaging.Constant.ConstantBroker;
+import io.openmessaging.store.MessageInfo;
+import io.openmessaging.store.MessageInfoQueue;
+import io.openmessaging.store.MessageInfoQueues;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by fbhw on 17-12-5.
@@ -24,6 +25,9 @@ public class EncodeAndDecode {
 
     private int index = 0;
 
+
+
+
     //TODO queueId,topic和总数据(返回List,因为粘包可能有多个)一起返回
         public List decode(ByteBuf byteBuf){
 
@@ -36,8 +40,6 @@ public class EncodeAndDecode {
                 if (cacheBytes != null) {
 
                     byte[] arrayBuffer = new byte[byteBuf.readableBytes()];
-                    System.out.println("cacheBytes.length" + cacheBytes.length);
-                    System.out.println("byteBuf.readableBytes()" + byteBuf.readableBytes());
                     byteBuf.readBytes(arrayBuffer);
                     int newLen = cacheBytes.length + byteBuf.readableBytes();
                     byteBuf = Unpooled.buffer(newLen);
@@ -240,11 +242,61 @@ public class EncodeAndDecode {
             return byteBuf;
         }
 
-    public boolean isDiscard() {
-        return discard;
-    }
 
-    public void setDiscard(boolean discard) {
-        this.discard = discard;
-    }
-}
+
+   /*queueId,topic,offset,len*/
+    public ByteBuf encodeToNameServer() {
+
+
+        ByteBuf byteBuf = Unpooled.buffer(ConstantBroker.BUFFER_ROUTE_SIZE);
+
+            Set<String> set = MessageInfoQueues.concurrentHashMap.keySet();
+            for (String queueId : set){
+
+                MessageInfoQueue e = MessageInfoQueues.concurrentHashMap.get(queueId);
+                //
+
+                byte[] queueIdByte = queueId.getBytes();
+
+                byte queueIdByteLen = (byte) queueIdByte.length;
+                MessageInfoQueue messageInfoQueue= e;
+
+                List<MessageInfo> list = messageInfoQueue.getList();
+                for (MessageInfo messageInfo : list) {
+                    System.out.println(messageInfo);
+
+                    //
+                    String topic = messageInfo.getTopic();
+
+                    byte[] topicByte = topic.getBytes();
+                    byte topicByteLen = (byte) topicByte.length;
+
+                    long offset = messageInfo.getOffset();
+
+
+                    long len = messageInfo.getLen();
+
+                    System.out.println(queueIdByteLen);
+                    System.out.println(queueId);
+                    System.out.println(topicByteLen);
+                    System.out.println(topic);
+                    System.out.println(offset);
+                    System.out.println(len);
+                    byteBuf.writeBytes(new byte[]{queueIdByteLen});
+                    byteBuf.writeBytes(queueIdByte);
+                    byteBuf.writeBytes(new byte[]{topicByteLen});
+                    byteBuf.writeBytes(topicByte);
+                    byteBuf.writeLong(offset);
+                    byteBuf.writeLong(len);
+
+
+                }
+
+            }
+            return byteBuf;
+        }
+
+        }
+
+
+

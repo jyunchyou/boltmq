@@ -23,7 +23,7 @@ public class TestReceiveMessageTable {
 
     @Test
     public void testUpdateReceiveTableFromNameServer(){
-        receiveMessageTable.updateReceiveTableFromNameServer();
+        receiveMessageTable.updateReceiveTableFromNameServer("TOPIC_01");
 
     }
 

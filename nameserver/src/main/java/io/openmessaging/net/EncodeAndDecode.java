@@ -246,11 +246,13 @@ public class EncodeAndDecode {
                 MessageInfoQueues.concurrentHashMap.put(queueId, messageInfoQueue);
 
                 List list = messageInfoQueue.getList();
+
                 MessageInfo messageInfo = new MessageInfo();
                 messageInfo.setLen(len);
                 messageInfo.setOffset(offset);
                 messageInfo.setTopic(topic);
                 list.add(messageInfo);
+                System.out.println(list);
             }
 
         }

@@ -7,7 +7,9 @@ import io.openmessaging.client.exception.OutOfBodyLengthException;
 import io.openmessaging.client.exception.OutOfByteBufferException;
 import io.openmessaging.client.net.*;
 import io.openmessaging.client.table.ConnectionCacheTable;
-import java.nio.ByteBuffer;
+import io.openmessaging.client.table.SendQueue;
+import io.openmessaging.client.table.SendQueues;
+
 import java.util.Map;
 
 /**

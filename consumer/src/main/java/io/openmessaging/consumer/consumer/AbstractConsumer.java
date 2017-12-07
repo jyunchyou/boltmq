@@ -19,6 +19,8 @@ public class AbstractConsumer {
 
     private ReceiveMessageTable receiveMessageTable = new ReceiveMessageTable();
 
+    private String topic = null;
+
     public AbstractConsumer(){
 
     }
@@ -31,8 +33,19 @@ public class AbstractConsumer {
     //开启定时任务
     public void start(){
 
-        kernelConsumer.start(receiveMessageTable);
+        if (topic == null) {
+            throw new NullPointerException();
+
+        }
+        kernelConsumer.start(receiveMessageTable,topic);
     }
 
 
+    public Properties getImplProperties() {
+        return implProperties;
+    }
+
+    public void setImplProperties(Properties implProperties) {
+        this.implProperties = implProperties;
+    }
 }

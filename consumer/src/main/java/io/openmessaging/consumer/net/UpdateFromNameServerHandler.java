@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
+import io.openmessaging.consumer.table.ReceiveMessageTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,16 +21,11 @@ public class UpdateFromNameServerHandler extends ChannelHandlerAdapter {
 
     private CountDownLatch countDownLatch = null;
 
-    private Condition condition = null;
+    private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
 
     public UpdateFromNameServerHandler(CountDownLatch countDownLatch){
 
         this.countDownLatch = countDownLatch;
-
-    }
-
-    public UpdateFromNameServerHandler(Condition condition){
-        this.condition = condition;
 
     }
 
@@ -49,18 +45,8 @@ public class UpdateFromNameServerHandler extends ChannelHandlerAdapter {
 
         System.out.println("update success");
 
+        encodeAndDecode.decodeReceiveTable(byteBuf);
 
-//        logger.info("Server端返回消息:"+ new String(bb.array()));
-
-/*
-
-        ByteBuffer byteBuffer = (ByteBuffer) msg;
-
-        SendQueues.routeByteBuffer = byteBuffer;
-*/
-
-
-      //  SendQueues.routeByteBuf = byteBuf;
 
 
 

@@ -1,6 +1,7 @@
 package io.openmessaging.client.producer;
 
-import org.junit.Assert;
+import io.openmessaging.client.table.SendQueue;
+import io.openmessaging.client.table.SendQueues;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;

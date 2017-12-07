@@ -7,10 +7,10 @@ import io.openmessaging.client.exception.OutOfByteBufferException;
 import io.openmessaging.client.producer.BrokerInfo;
 import io.openmessaging.client.producer.Message;
 import io.openmessaging.client.producer.Properties;
-import io.openmessaging.client.producer.SendQueue;
+import io.openmessaging.client.table.SendQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.nio.ByteBuffer;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;

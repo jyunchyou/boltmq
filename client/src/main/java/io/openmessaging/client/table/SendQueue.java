@@ -1,4 +1,6 @@
-package io.openmessaging.client.producer;
+package io.openmessaging.client.table;
+
+import io.openmessaging.client.producer.BrokerInfo;
 
 import java.io.Serializable;
 

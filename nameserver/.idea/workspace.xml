@@ -42,8 +42,8 @@
       <file leaf-file-name="BrokerTableTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/io/openmessaging/net/BrokerTableTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="118">
-              <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+            <state relative-caret-position="840">
+              <caret line="42" column="80" lean-forward="false" selection-start-line="42" selection-start-column="80" selection-end-line="42" selection-end-column="80" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -73,11 +73,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="EncodeAndDecode.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="EncodeAndDecode.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/net/EncodeAndDecode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-580">
-              <caret line="205" column="35" lean-forward="false" selection-start-line="205" selection-start-column="35" selection-end-line="205" selection-end-column="35" />
+            <state relative-caret-position="248">
+              <caret line="254" column="41" lean-forward="false" selection-start-line="254" selection-start-column="41" selection-end-line="254" selection-end-column="41" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -85,7 +85,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BrokerTopicTable.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="BrokerTopicTable.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/table/BrokerTopicTable.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="266">
@@ -98,8 +98,8 @@
       <file leaf-file-name="MessageInfoQueue.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/table/MessageInfoQueue.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-460">
-              <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+            <state relative-caret-position="238">
+              <caret line="21" column="27" lean-forward="true" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -140,6 +140,7 @@
     <findStrings>
       <find>c</find>
       <find>成功</find>
+      <find>syste</find>
     </findStrings>
   </component>
   <component name="GradleLocalSettings">
@@ -713,34 +714,34 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="junit - 2017.12.07 at 23h 23m 23s.xml">
+    <history-entry file="junit - 2017.12.08 at 00h 03m 02s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="junit - 2017.12.07 at 23h 24m 48s.xml">
+    <history-entry file="junit - 2017.12.08 at 00h 05m 02s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="junit - 2017.12.07 at 23h 32m 59s.xml">
+    <history-entry file="junit - 2017.12.08 at 00h 07m 04s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="junit - 2017.12.07 at 23h 35m 44s.xml">
+    <history-entry file="junit - 2017.12.08 at 00h 08m 00s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="junit - 2017.12.07 at 23h 37m 47s.xml">
+    <history-entry file="junit - 2017.12.08 at 00h 08m 27s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="junit - 2017.12.07 at 23h 44m 53s.xml">
+    <history-entry file="junit - 2017.12.08 at 00h 10m 35s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="junit - 2017.12.07 at 23h 45m 09s.xml">
+    <history-entry file="junit - 2017.12.08 at 00h 12m 24s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="junit - 2017.12.07 at 23h 51m 07s.xml">
+    <history-entry file="junit - 2017.12.08 at 00h 13m 16s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="junit - 2017.12.07 at 23h 51m 47s.xml">
+    <history-entry file="junit - 2017.12.08 at 00h 14m 14s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="junit - 2017.12.07 at 23h 54m 46s.xml">
+    <history-entry file="junit - 2017.12.08 at 00h 14m 46s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
   </component>
@@ -755,6 +756,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="75" y="24" width="1301" height="744" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32923076" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -771,7 +773,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27720413" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27720413" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1145,19 +1147,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/net/NettyServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-180">
-          <caret line="55" column="25" lean-forward="true" selection-start-line="55" selection-start-column="25" selection-end-line="55" selection-end-column="25" />
-          <folding>
-            <element signature="e#914#1171#0" expanded="true" />
-            <element signature="e#1170#1171#0" expanded="true" />
-            <element signature="e#1943#2200#0" expanded="true" />
-            <element signature="e#2199#2200#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/net/NettyServerHandlerAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="199">
@@ -1170,14 +1159,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="140">
           <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/table/BrokerTopicTable.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="20" column="0" lean-forward="true" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1204,9 +1185,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/table/MessageInfoQueue.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-460">
-          <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+        <state relative-caret-position="238">
+          <caret line="21" column="27" lean-forward="true" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="27" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/net/NettyServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-180">
+          <caret line="55" column="25" lean-forward="true" selection-start-line="55" selection-start-column="25" selection-end-line="55" selection-end-column="25" />
+          <folding>
+            <element signature="e#914#1171#0" expanded="true" />
+            <element signature="e#1170#1171#0" expanded="true" />
+            <element signature="e#1943#2200#0" expanded="true" />
+            <element signature="e#2199#2200#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1218,23 +1212,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/io/openmessaging/net/BrokerTableTest.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/net/EncodeAndDecode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="118">
-          <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+        <state relative-caret-position="248">
+          <caret line="254" column="41" lean-forward="false" selection-start-line="254" selection-start-column="41" selection-end-line="254" selection-end-column="41" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/net/EncodeAndDecode.java">
+    <entry file="file://$PROJECT_DIR$/src/test/java/io/openmessaging/net/BrokerTableTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-580">
-          <caret line="205" column="35" lean-forward="false" selection-start-line="205" selection-start-column="35" selection-end-line="205" selection-end-column="35" />
+        <state relative-caret-position="840">
+          <caret line="42" column="80" lean-forward="false" selection-start-line="42" selection-start-column="80" selection-end-line="42" selection-end-column="80" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/table/BrokerTopicTable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="20" column="0" lean-forward="true" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

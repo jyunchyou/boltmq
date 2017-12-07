@@ -7,6 +7,8 @@
     import io.openmessaging.client.selector.QueueSelectByHash;
     import io.openmessaging.client.selector.QueueSelectByRandom;
     import io.openmessaging.client.selector.QueueSelector;
+    import io.openmessaging.client.table.SendQueue;
+    import io.openmessaging.client.table.SendQueues;
     import org.slf4j.Logger;
     import org.slf4j.LoggerFactory;
 
