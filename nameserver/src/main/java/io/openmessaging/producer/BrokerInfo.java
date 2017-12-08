@@ -55,4 +55,38 @@ public class BrokerInfo {
     public void setWriteQueue(int writeQueue) {
         this.writeQueue = writeQueue;
     }
+
+
+    @Override
+    public boolean equals(Object o){
+
+        System.out.println("调用了");
+        if (o.getClass() != this.getClass()) {
+
+
+            return false;
+        }
+        BrokerInfo brokerInfo = (BrokerInfo) o;
+        String ip = brokerInfo.getIp();
+        int port = brokerInfo.getPort();
+        if (!getIp().equals(ip)) {
+            return false;
+        }
+        if (getPort() != port) {
+
+            return false;
+        }
+
+        return true;
+
+
+
+    }
+
+    @Override
+    public int hashCode(){
+
+        return this.getIp().hashCode()+this.port;
+    }
+
 }

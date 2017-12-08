@@ -16,6 +16,9 @@ public class MessageInfoQueues {
 
     public static ConcurrentHashMap<String,MessageInfoQueue> concurrentHashMap = new ConcurrentHashMap();
 
+
+
+
     private MessageInfoQueues(){
         /*init(ConstantBroker.QUEUE_NUM);*/
     }

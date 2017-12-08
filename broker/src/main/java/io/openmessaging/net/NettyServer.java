@@ -106,7 +106,7 @@ public class NettyServer {
 
 
 
-        ByteBuf byteBuf = encodeAndDecode.encodeToNameServer();
+        ByteBuf byteBuf = encodeAndDecode.encodeToNameServer(nameServerInfo);
 
 
         channel.writeAndFlush(byteBuf);

@@ -1,6 +1,8 @@
 package io.openmessaging.net;
 
 import io.openmessaging.constant.ConstantNameServer;
+import io.openmessaging.producer.BrokerInfo;
+import io.openmessaging.table.BrokerInfoTable;
 import io.openmessaging.table.MessageInfo;
 import io.openmessaging.table.MessageInfoQueue;
 import io.openmessaging.table.MessageInfoQueues;
@@ -36,8 +38,13 @@ public class BrokerTableTest {
         }
 
 
-        System.out.println(MessageInfoQueues.concurrentHashMap);
-        MessageInfoQueue messageInfoQueue = (MessageInfoQueue) MessageInfoQueues.concurrentHashMap.get("1");
+        BrokerInfo brokerInfo = new BrokerInfo();
+        brokerInfo.setIp("127.0.0.1");
+        brokerInfo.setPort(8088);
+        MessageInfoQueues messageInfoQueues = (MessageInfoQueues) BrokerInfoTable.map.get(brokerInfo);
+
+        System.out.println(messageInfoQueues);
+        MessageInfoQueue messageInfoQueue = (MessageInfoQueue) messageInfoQueues.getConcurrentHashMap().get("1");
 
 
         MessageInfo messageInfo = (MessageInfo) messageInfoQueue.getList().get(0);

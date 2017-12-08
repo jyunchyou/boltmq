@@ -11,17 +11,24 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 数据结构
- * map{queueId-FileInfoQueue}
+ * map{queueId-InfoQueue}
  */
 public class MessageInfoQueues {
 
-    public static ConcurrentHashMap concurrentHashMap = new ConcurrentHashMap();
+    private  ConcurrentHashMap concurrentHashMap = new ConcurrentHashMap();
 
     public MessageInfoQueues(){
 
     }
 
 
+    public ConcurrentHashMap getConcurrentHashMap() {
+        return concurrentHashMap;
     }
+
+    public void setConcurrentHashMap(ConcurrentHashMap concurrentHashMap) {
+        this.concurrentHashMap = concurrentHashMap;
+    }
+}
 
 

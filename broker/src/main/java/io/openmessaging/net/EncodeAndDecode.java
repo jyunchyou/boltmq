@@ -3,6 +3,7 @@ package io.openmessaging.net;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.openmessaging.Constant.ConstantBroker;
+import io.openmessaging.nameserver.NameServerInfo;
 import io.openmessaging.store.MessageInfo;
 import io.openmessaging.store.MessageInfoQueue;
 import io.openmessaging.store.MessageInfoQueues;
@@ -245,7 +246,7 @@ public class EncodeAndDecode {
 
 
    /*queueId,topic,offset,len*/
-    public ByteBuf encodeToNameServer() {
+    public ByteBuf encodeToNameServer(NameServerInfo nameServerInfo) {
 
 
         ByteBuf byteBuf = Unpooled.buffer(ConstantBroker.BUFFER_ROUTE_SIZE);
@@ -267,27 +268,50 @@ public class EncodeAndDecode {
 
                     //
                     String topic = messageInfo.getTopic();
-
                     byte[] topicByte = topic.getBytes();
                     byte topicByteLen = (byte) topicByte.length;
-
                     long offset = messageInfo.getOffset();
 
 
                     long len = messageInfo.getLen();
 
+
+
+                    String ip = nameServerInfo.getIp();
+                    String port = nameServerInfo.getPort() + "";
+
+                    byte[] ipByte = ip.getBytes();
+                    byte[] portByte = port.getBytes();
+                    int ipIntLen = ipByte.length;
+                    int portIntLen = portByte.length;
+                    byte[] ipByteLen = new byte[1];
+                    byte[] portByteLen = new byte[1];
+                    ipByteLen[0] = (byte) ipIntLen;
+                    portByteLen[0] = (byte) portIntLen;
+
+
+
+
+                    System.out.println(ip);
+                    System.out.println(port);
                     System.out.println(queueIdByteLen);
                     System.out.println(queueId);
                     System.out.println(topicByteLen);
                     System.out.println(topic);
                     System.out.println(offset);
                     System.out.println(len);
+
+                    byteBuf.writeBytes(ipByteLen);
+                    byteBuf.writeBytes(ipByte);
+                    byteBuf.writeBytes(portByteLen);
+                    byteBuf.writeBytes(portByte);
                     byteBuf.writeBytes(new byte[]{queueIdByteLen});
                     byteBuf.writeBytes(queueIdByte);
                     byteBuf.writeBytes(new byte[]{topicByteLen});
                     byteBuf.writeBytes(topicByte);
                     byteBuf.writeLong(offset);
                     byteBuf.writeLong(len);
+
 
 
                 }

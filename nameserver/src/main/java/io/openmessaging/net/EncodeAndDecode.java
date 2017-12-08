@@ -4,10 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.openmessaging.constant.ConstantNameServer;
 import io.openmessaging.producer.BrokerInfo;
-import io.openmessaging.table.BrokerTopicTable;
-import io.openmessaging.table.MessageInfo;
-import io.openmessaging.table.MessageInfoQueue;
-import io.openmessaging.table.MessageInfoQueues;
+import io.openmessaging.table.*;
 
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -17,8 +14,7 @@ import java.util.*;
  */
 public class EncodeAndDecode {
 
-    private MessageInfoQueues messageInfoQueues = new MessageInfoQueues();
-
+    private BrokerInfoTable brokerInfoTable = new BrokerInfoTable();
     /**
      *nameServerRouteTable协议格式
      *
@@ -204,6 +200,28 @@ public class EncodeAndDecode {
 
 
         while (byteBuf.isReadable()) {
+
+
+
+            byte[] ipByteLen = new byte[1];
+            byteBuf.readBytes(ipByteLen);
+            int ipIntLen = ipByteLen[0];
+            System.out.println("ipIntLen:" + ipByteLen);
+            byte[] ipByte = new byte[ipIntLen];
+            byteBuf.readBytes(ipByte);
+            String ip = new String(ipByte);
+
+            byte[] portByteLen = new byte[1];
+            byteBuf.readBytes(portByteLen);
+            int portIntLen = portByteLen[0];
+            System.out.println("portIntLen:" + portByteLen);
+            byte[] portByte = new byte[portIntLen];
+            byteBuf.readBytes(portByte);
+            String port = new String(portByte);
+
+
+
+
             byte[] queueIdByteLen = new byte[1];
             byteBuf.readBytes(queueIdByteLen);
             int queueIdIntLen = queueIdByteLen[0];
@@ -225,38 +243,75 @@ public class EncodeAndDecode {
             long len = byteBuf.readLong();
 
 
+            System.out.println(ip);
+            System.out.println(port);
             System.out.println(queueId);
             System.out.println(topic);
             System.out.println(offset);
             System.out.println(len);
-            if (MessageInfoQueues.concurrentHashMap.containsKey(queueId)) {
-                MessageInfoQueue messageInfoQueue = (MessageInfoQueue) MessageInfoQueues.concurrentHashMap.get(queueId);
-
-                List list = messageInfoQueue.getList();
-                MessageInfo messageInfo = new MessageInfo();
-                messageInfo.setLen(len);
-                messageInfo.setOffset(offset);
-                messageInfo.setTopic(topic);
-                list.add(messageInfo);
 
 
-            } else {
 
-                MessageInfoQueue messageInfoQueue = new MessageInfoQueue();
-                MessageInfoQueues.concurrentHashMap.put(queueId, messageInfoQueue);
+            BrokerInfo brokerInfo = new BrokerInfo();
+            brokerInfo.setIp(ip);
+            brokerInfo.setPort(Integer.parseInt(port));
 
-                List list = messageInfoQueue.getList();
+            MessageInfoQueues messageInfoQueues = null;
+            if (brokerInfoTable.map.containsKey(brokerInfo)){
 
-                MessageInfo messageInfo = new MessageInfo();
-                messageInfo.setLen(len);
-                messageInfo.setOffset(offset);
-                messageInfo.setTopic(topic);
-                list.add(messageInfo);
-                System.out.println(list);
+                messageInfoQueues = (MessageInfoQueues) brokerInfoTable.map.get(brokerInfo);
+
+            }else {
+
+                messageInfoQueues = new MessageInfoQueues();
+
+                brokerInfoTable.map.put(brokerInfo, messageInfoQueues);
+
+            }
+                Map map = messageInfoQueues.getConcurrentHashMap();
+
+
+
+
+                if (map.containsKey(queueId)) {
+
+                    MessageInfoQueue messageInfoQueue = (MessageInfoQueue) map.get(queueId);
+                    List list = messageInfoQueue.getList();
+                    MessageInfo messageInfo = new MessageInfo();
+                    messageInfo.setLen(len);
+                    messageInfo.setOffset(offset);
+                    messageInfo.setTopic(topic);
+                    list.add(messageInfo);
+
+
+                } else {
+
+                    MessageInfoQueue messageInfoQueue = new MessageInfoQueue();
+                    map.put(queueId, messageInfoQueue);
+
+                    List list = messageInfoQueue.getList();
+
+                    MessageInfo messageInfo = new MessageInfo();
+                    messageInfo.setLen(len);
+                    messageInfo.setOffset(offset);
+                    messageInfo.setTopic(topic);
+                    list.add(messageInfo);
+                    System.out.println(list);
+                }
+
+
+
+
             }
 
+
+
+
         }
-        }
+
+
+
+
 
     }
 
