@@ -27,6 +27,7 @@ public class AbstractConsumer {
 
     public void subscribe(String topic, ListenerMessage listenerMessage){
 
+        this.topic = topic;
         kernelConsumer.subscribe(topic,listenerMessage);
 
     }

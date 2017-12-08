@@ -8,6 +8,7 @@ import io.openmessaging.client.producer.BrokerInfo;
 import io.openmessaging.client.producer.Message;
 import io.openmessaging.client.producer.Properties;
 import io.openmessaging.client.table.SendQueue;
+import io.openmessaging.client.table.SendQueues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -267,70 +268,77 @@ public class EncodeAndDecode {
      *
      *
      */
-    public List<SendQueue> decodeNameServerRoute(ByteBuf byteBuf, List<SendQueue> list){
+    public List<SendQueue> decodeNameServerRoute(ByteBuf byteBuf, List<SendQueue> list) {
+
+
+
 
         list.clear();
         while (byteBuf.isReadable()) {
-            SendQueue sendQueue = new SendQueue();
-            BrokerInfo brokerInfo = new BrokerInfo();
-
-            //topicName
-            byte[] topicNameLength = new byte[1];
-            byteBuf.readBytes(topicNameLength);
-            int topicNameLengthInt = topicNameLength[0];
-
-            byte[] topicNameByte = new byte[topicNameLengthInt];
-            byteBuf.readBytes(topicNameByte);
-            String topicName = new String(topicNameByte);
-
-            sendQueue.setTopicName(topicName);
-            //queueId
-            byte[] queueIdLength = new byte[1];
-            byteBuf.readBytes(queueIdLength);
-            int queueIdLengthInt = queueIdLength[0];
-
-            byte[] queueIdByte = new byte[queueIdLengthInt];
-            byteBuf.readBytes(queueIdByte);
-            String queueId = new String(queueIdByte);
 
 
 
-            sendQueue.setQueueId(queueId);
+            int brokerNum = byteBuf.readInt();
 
-            //ip
-            byte[] ipLength = new byte[1];
-            byteBuf.readBytes(ipLength);
-            int ipLengthInt = ipLength[0];
-
-            byte[] ipByte = new byte[ipLengthInt];
-            byteBuf.readBytes(ipByte);
-            String ip = new String(ipByte);
-            brokerInfo.setIp(ip);
-            //port
-            byte[] portLength = new byte[1];
-            byteBuf.readBytes(portLength);
-            int portLengthInt = portLength[0];
-            byte[] portByte = new byte[portLengthInt];
-            byteBuf.readBytes(portByte);
-
-            String port = new String(portByte);
-
-            int portInteger = Integer.parseInt(port);
+            for (int indexNum = 0;indexNum < brokerNum;indexNum++) {
 
 
 
-            brokerInfo.setPort(portInteger);
 
 
 
-            sendQueue.setBrokerInfo(brokerInfo);
-            System.out.println(topicName);
-            System.out.println(portInteger);
-            System.out.println(queueId);
-            System.out.println(ip);
+                BrokerInfo brokerInfo = new BrokerInfo();
 
-            list.add(sendQueue);
+
+                //ip
+                byte[] ipLength = new byte[1];
+                byteBuf.readBytes(ipLength);
+                int ipLengthInt = ipLength[0];
+
+                byte[] ipByte = new byte[ipLengthInt];
+                byteBuf.readBytes(ipByte);
+                String ip = new String(ipByte);
+                brokerInfo.setIp(ip);
+                //port
+                byte[] portLength = new byte[1];
+                byteBuf.readBytes(portLength);
+                int portLengthInt = portLength[0];
+                byte[] portByte = new byte[portLengthInt];
+                byteBuf.readBytes(portByte);
+                String port = new String(portByte);
+                int portInteger = Integer.parseInt(port);
+                brokerInfo.setPort(portInteger);
+
+
+
+                byte[] queueNumByte = new byte[1];
+
+                int queueNum =  byteBuf.readInt();
+
+                for (int checkNum = 0;checkNum < queueNum;checkNum++) {
+
+
+                SendQueue sendQueue = new SendQueue();
+                //queueId
+                byte[] queueIdLength = new byte[1];
+                byteBuf.readBytes(queueIdLength);
+                int queueIdLengthInt = queueIdLength[0];
+
+                byte[] queueIdByte = new byte[queueIdLengthInt];
+                byteBuf.readBytes(queueIdByte);
+                String queueId = new String(queueIdByte);
+
+
+                sendQueue.setQueueId(queueId);
+
+                sendQueue.setBrokerInfo(brokerInfo);
+
+                list.add(sendQueue);
+
+                }
+        }
         }
         return list;
+
     }
 }

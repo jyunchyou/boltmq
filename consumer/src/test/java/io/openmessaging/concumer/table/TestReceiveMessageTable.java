@@ -1,5 +1,10 @@
 package io.openmessaging.concumer.table;
 
+import io.openmessaging.consumer.consumer.AbstractConsumer;
+import io.openmessaging.consumer.consumer.FactoryConsumer;
+import io.openmessaging.consumer.consumer.Message;
+import io.openmessaging.consumer.consumer.Properties;
+import io.openmessaging.consumer.listener.ListenerMessage;
 import io.openmessaging.consumer.table.ReceiveMessageTable;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,15 +20,26 @@ public class TestReceiveMessageTable {
 
     private ReceiveMessageTable receiveMessageTable = null;
 
+    private AbstractConsumer abstractConsumer = null;
+
     @Before
     public void init(){
+
+        abstractConsumer = FactoryConsumer.createProducer(new Properties());
+
 
         receiveMessageTable = new ReceiveMessageTable();
     }
 
     @Test
-    public void testUpdateReceiveTableFromNameServer(){
-        receiveMessageTable.updateReceiveTableFromNameServer("TOPIC_01");
+    public void testUpdateReceiveTableFromNameServer() throws InterruptedException {
+        abstractConsumer.subscribe("TOPIC_01", new ListenerMessage() {
+            public void listener(Message message) {
+
+            }
+        });
+        abstractConsumer.start();
+        Thread.sleep(1000000);
 
     }
 

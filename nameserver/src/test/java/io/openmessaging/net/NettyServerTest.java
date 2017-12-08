@@ -2,7 +2,7 @@ package io.openmessaging.net;
 
 import io.openmessaging.constant.ConstantNameServer;
 import io.openmessaging.producer.BrokerInfo;
-import io.openmessaging.table.BrokerTopicTable;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -50,7 +50,7 @@ public class NettyServerTest {
 
 
 
-        BrokerTopicTable.brokerTopicTable.put(brokerInfo,topicQueueMap);
+        //BrokerTopicTable.brokerTopicTable.put(brokerInfo,topicQueueMap);
 
         Thread.sleep(1000000);
 

@@ -60,7 +60,7 @@ public class BrokerInfo {
     @Override
     public boolean equals(Object o){
 
-        System.out.println("调用了");
+
         if (o.getClass() != this.getClass()) {
 
 

@@ -12,7 +12,7 @@ public class FactoryConsumer {
 
     Logger logger = LoggerFactory.getLogger(FactoryConsumer.class);
 
-    public AbstractConsumer createProducer(Properties implProperties){
+    public static AbstractConsumer createProducer(Properties implProperties){
 
 
         AbstractConsumer mqProducer = null;

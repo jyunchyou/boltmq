@@ -3,7 +3,8 @@ package io.openmessaging.net;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-import io.openmessaging.table.BrokerTopicTable;
+
+import io.openmessaging.table.TopicBrokerTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +29,7 @@ public class BrokerTableHandlerAdapter extends ChannelHandlerAdapter {
 
         ByteBuf byteBuf = (ByteBuf) msg;
         encodeAndDecode.decode(byteBuf);
+        System.out.println(TopicBrokerTable.concurrentHashMap.get("TOPIC_01"));
 
 
     }

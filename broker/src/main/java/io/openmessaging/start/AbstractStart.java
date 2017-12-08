@@ -15,6 +15,8 @@ public class AbstractStart {
     public void start(NameServerInfo nameServerInfo){
 
 
+        nettyServer.bind(8080);
+
         java.util.Timer timer = new java.util.Timer();
         timer.schedule(new java.util.TimerTask() {
             @Override

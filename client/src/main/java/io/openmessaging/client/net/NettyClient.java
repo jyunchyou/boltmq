@@ -107,6 +107,8 @@ public class NettyClient implements ConnectionHandler {
 
     public void sendSycn(Channel channel,ByteBuf byteBuf){
 
+
+        System.out.println("准备发送");
         ChannelFuture channelFuture = channel.writeAndFlush(byteBuf);
 
 

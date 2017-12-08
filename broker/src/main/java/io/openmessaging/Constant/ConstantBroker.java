@@ -16,4 +16,9 @@ public class ConstantBroker {
 
     public static final int SEND_TABLE_TIMER_PERIOD = 20000;//将表信息定时发送到nameServer的时间间隔
 
+
+    public static final String BROKER_MESSAGE_IP = "127.0.0.1";
+
+    public static final int  BROKER_MESSAGE_PORT = 8080;
+
 }

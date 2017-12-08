@@ -6,7 +6,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.openmessaging.producer.BrokerInfo;
-import io.openmessaging.table.BrokerTopicTable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.HashMap;
@@ -43,9 +43,13 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
         //test
         if ("getList".equals(result)) {
 
+            System.out.println("成功获取getList");
             ByteBuf byteBuf = encodeAndDecode.encodeSendList();
 
 
+           /* byte[] d = new byte[byteBuf.readableBytes()];
+            byteBuf.readBytes(d);
+            System.out.println(new String(d));*/
             channelHandlerContext.writeAndFlush(byteBuf);
 
 
@@ -56,6 +60,9 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
             ByteBuf byteBuf = encodeAndDecode.encodeReceiveTable(result);
 
 
+            if (byteBuf == null) {
+                return ;
+            }
             ChannelFuture channelFuture = channelHandlerContext.writeAndFlush(byteBuf);
 
             if (channelFuture.isSuccess()) {

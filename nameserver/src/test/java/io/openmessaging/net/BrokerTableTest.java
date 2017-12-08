@@ -30,6 +30,7 @@ public class BrokerTableTest {
 
         nettyServer.bindBroker(ConstantNameServer.RECEIVE_FROM_BROKER_PORT);
 
+        nettyServer.bind(8090);
 
         try {
             Thread.sleep(10000);
@@ -38,21 +39,19 @@ public class BrokerTableTest {
         }
 
 
-        BrokerInfo brokerInfo = new BrokerInfo();
+       /* BrokerInfo brokerInfo = new BrokerInfo();
         brokerInfo.setIp("127.0.0.1");
         brokerInfo.setPort(8088);
         MessageInfoQueues messageInfoQueues = (MessageInfoQueues) BrokerInfoTable.map.get(brokerInfo);
 
-        System.out.println(messageInfoQueues);
+
         MessageInfoQueue messageInfoQueue = (MessageInfoQueue) messageInfoQueues.getConcurrentHashMap().get("1");
 
 
         MessageInfo messageInfo = (MessageInfo) messageInfoQueue.getList().get(0);
 
+*/
 
-        System.out.println("---"+messageInfo.getLen());
-        System.out.println("---"+messageInfo.getOffset());
-        System.out.println("---"+messageInfo.getTopic());
         try {
             Thread.sleep(1000000);
         } catch (InterruptedException e) {

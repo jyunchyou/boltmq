@@ -1,4 +1,4 @@
-package io.openmessaging.client.producer;
+package io.openmessaging.broker;
 
 /**
  * Created by fbhw on 17-11-6.

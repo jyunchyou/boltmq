@@ -8,6 +8,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.openmessaging.Constant.ConstantBroker;
+import io.openmessaging.broker.BrokerInfo;
 import io.openmessaging.nameserver.NameServerInfo;
 import io.openmessaging.store.ConnectionCacheNameServerTable;
 
@@ -106,7 +108,10 @@ public class NettyServer {
 
 
 
-        ByteBuf byteBuf = encodeAndDecode.encodeToNameServer(nameServerInfo);
+        BrokerInfo brokerInfo = new BrokerInfo();
+        brokerInfo.setIp(ConstantBroker.BROKER_MESSAGE_IP);
+        brokerInfo.setPort(ConstantBroker.BROKER_MESSAGE_PORT);
+        ByteBuf byteBuf = encodeAndDecode.encodeToNameServer(brokerInfo);
 
 
         channel.writeAndFlush(byteBuf);

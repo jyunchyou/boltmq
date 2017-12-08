@@ -3,6 +3,7 @@ package io.openmessaging.net;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.openmessaging.Constant.ConstantBroker;
+import io.openmessaging.broker.BrokerInfo;
 import io.openmessaging.nameserver.NameServerInfo;
 import io.openmessaging.store.MessageInfo;
 import io.openmessaging.store.MessageInfoQueue;
@@ -246,7 +247,7 @@ public class EncodeAndDecode {
 
 
    /*queueId,topic,offset,len*/
-    public ByteBuf encodeToNameServer(NameServerInfo nameServerInfo) {
+    public ByteBuf encodeToNameServer(BrokerInfo brokerInfo) {
 
 
         ByteBuf byteBuf = Unpooled.buffer(ConstantBroker.BUFFER_ROUTE_SIZE);
@@ -277,8 +278,8 @@ public class EncodeAndDecode {
 
 
 
-                    String ip = nameServerInfo.getIp();
-                    String port = nameServerInfo.getPort() + "";
+                    String ip = brokerInfo.getIp();
+                    String port = brokerInfo.getPort() + "";
 
                     byte[] ipByte = ip.getBytes();
                     byte[] portByte = port.getBytes();

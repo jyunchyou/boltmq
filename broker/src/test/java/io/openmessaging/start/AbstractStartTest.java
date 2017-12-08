@@ -50,7 +50,7 @@ public class AbstractStartTest {
 
         list.add(messageInfo);
 
-        System.out.println(list);
+       // System.out.println(list);
 
 
         MessageInfoQueue messageInfoQueue1 = (MessageInfoQueue) concurrentHashMap.get("1");
@@ -60,7 +60,7 @@ public class AbstractStartTest {
         messageInfo1.setLen(123);
         messageInfo1.setOffset(1234567);
         list1.add(messageInfo1);
-        System.out.println(list1);
+       // System.out.println(list1);
 
 
         MessageInfoQueue messageInfoQueue2 = (MessageInfoQueue) concurrentHashMap.get("2");
@@ -70,7 +70,7 @@ public class AbstractStartTest {
         messageInfo2.setLen(123);
         messageInfo2.setOffset(1234567);
         list2.add(messageInfo2);
-        System.out.println(list2);
+       // System.out.println(list2);
 
 
         MessageInfoQueue messageInfoQueue3 = (MessageInfoQueue) concurrentHashMap.get("3");
@@ -80,7 +80,7 @@ public class AbstractStartTest {
         messageInfo3.setLen(123);
         messageInfo3.setOffset(1234567);
         list3.add(messageInfo3);
-        System.out.println(((MessageInfoQueue) concurrentHashMap.get("3")).getList());
+        /*System.out.println(((MessageInfoQueue) concurrentHashMap.get("3")).getList());
 
         System.out.println(messageInfoQueue);
         System.out.println(messageInfoQueue1);
@@ -91,7 +91,7 @@ public class AbstractStartTest {
 
 
         System.out.println(MessageInfoQueues.concurrentHashMap.hashCode());
-
+*/
         NameServerInfo nameServerInfo = new NameServerInfo();
         nameServerInfo.setIp("127.0.0.1");
         nameServerInfo.setPort(8088);

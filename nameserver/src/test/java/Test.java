@@ -28,7 +28,6 @@ public class Test {
 
         map.put(brokerInfo,"getSuccess");
 
-        System.out.println(map.get(brokerInfo2));
 
 
     /*    Set<BrokerInfo> set = map.keySet();

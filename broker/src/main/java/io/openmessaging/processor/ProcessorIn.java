@@ -2,6 +2,7 @@ package io.openmessaging.processor;
 
 import io.netty.buffer.ByteBuf;
 import io.openmessaging.Constant.ConstantBroker;
+import io.openmessaging.broker.BrokerInfo;
 import io.openmessaging.store.MessageInfo;
 import io.openmessaging.store.MessageInfoQueue;
 import io.openmessaging.store.MessageInfoQueues;
@@ -25,6 +26,8 @@ public class ProcessorIn {
 
     //寻找queue
     public void input(byte[] byteBuf,String topic,String queueId){
+
+
 
         Set<Map.Entry<String, MessageInfoQueue>> set = MessageInfoQueues.concurrentHashMap.entrySet();
 

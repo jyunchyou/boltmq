@@ -6,6 +6,7 @@ import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
 import io.openmessaging.consumer.table.ReceiveMessageTable;
+import io.openmessaging.consumer.table.TopicBrokerTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +50,7 @@ public class UpdateFromNameServerHandler extends ChannelHandlerAdapter {
 
 
 
+        System.out.println(TopicBrokerTable.concurrentHashMap);
 
 
         countDownLatch.countDown();
