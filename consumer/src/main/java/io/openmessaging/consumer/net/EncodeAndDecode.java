@@ -2,6 +2,7 @@ package io.openmessaging.consumer.net;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.openmessaging.consumer.constant.ConstantConsumer;
 import io.openmessaging.consumer.consumer.BrokerInfo;
 import io.openmessaging.consumer.table.ReceiveMessageTable;
 import io.openmessaging.consumer.table.TopicBrokerTable;
@@ -266,4 +267,21 @@ public class EncodeAndDecode {
         }
 
 
-    }}
+    }
+
+    /**
+     * 协议格式
+     * byte 批量拉取条数
+     *
+     */
+
+    public ByteBuf encodePull(){
+
+        ByteBuf byteBuf = Unpooled.buffer(ConstantConsumer.PULL_BUFFER_SIZE);
+        byteBuf.writeInt(1);
+
+        return byteBuf;
+
+    }
+
+}

@@ -12,4 +12,5 @@ public class ConstantConsumer {
 
     public static final int GET_TABLE_TIMER_PERIOD = 30000;
 
+    public static final int PULL_BUFFER_SIZE = 1;
 }

@@ -1,6 +1,5 @@
 package io.openmessaging.consumer.consumer;
 
-
 import io.openmessaging.consumer.listener.ListenerMessage;
 import io.openmessaging.consumer.table.ReceiveMessageTable;
 import org.slf4j.Logger;

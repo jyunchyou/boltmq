@@ -112,4 +112,10 @@ public class NettyConsumer {
 
     }
 
+
+    public Channel bind(BrokerInfo brokerInfo){
+
+        return null;
+    }
+
 }
