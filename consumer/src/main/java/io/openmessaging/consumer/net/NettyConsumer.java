@@ -115,7 +115,55 @@ public class NettyConsumer {
 
     public Channel bind(BrokerInfo brokerInfo){
 
-        return null;
+
+        String ip = brokerInfo.getIp();
+        int port = brokerInfo.getPort();
+        Channel channel = null;
+
+        if (bootstrap == null) {
+
+            try {
+                bootstrap = new Bootstrap();
+                bootstrap.group(eventLoopGroup);
+                bootstrap.channel(NioSocketChannel.class);
+                bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
+                //bootstrap.remoteAddress(ip,port);
+            }catch (Exception e){
+
+                eventLoopGroup.shutdownGracefully();
+
+            }
+
+        }
+        bootstrap.handler(new ChannelInitializer<SocketChannel>() {
+            @Override
+            protected void initChannel(SocketChannel socketChannel) throws Exception {
+
+                socketChannel.pipeline().addLast(new ReceiveMessageHandlerAdapter());
+            }
+        });
+        ChannelFuture future = null;
+        try {
+            future = bootstrap.connect(ip,port).sync();
+           /* future.channel().close().sync();*/
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (future.isSuccess()) {
+
+
+           channel = (SocketChannel) future.channel();
+
+            logger.info("client connect server success");
+
+        }else {
+            logger.info("client connect server fail");
+        }
+        return channel;
+
+
+
     }
 
 }

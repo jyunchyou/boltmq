@@ -9,6 +9,8 @@ import io.openmessaging.consumer.net.NettyConsumer;
 import io.openmessaging.consumer.table.ConnectionCacheBrokerTabel;
 import io.openmessaging.consumer.table.ReceiveMessageTable;
 import io.openmessaging.consumer.table.TopicBrokerTable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,8 @@ import java.util.Map;
 public class KernelConsumer {
 
 
+
+    Logger logger = LoggerFactory.getLogger(KernelConsumer.class);
 
     private NettyConsumer nettyConsumer = new NettyConsumer();
 
@@ -32,11 +36,20 @@ public class KernelConsumer {
 
     }
 
-    public void start(ReceiveMessageTable receiveMessageTable,String topic){
+    public void start(final ReceiveMessageTable receiveMessageTable, final String topic){
+
+
+        new Thread(new Runnable() {
+            public void run() {
+
+                pull(topic);
+
+
+            }
+        }).start();
+
 
         startTable(receiveMessageTable,topic);
-
-        pull(topic);
 
 
         }
@@ -62,8 +75,12 @@ public class KernelConsumer {
 
     public void pull(String topic){
 
-        while (TopicBrokerTable.concurrentHashMap.size() == 0) {
-            continue;
+        while (TopicBrokerTable.concurrentHashMap.isEmpty()) {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
         }
 
@@ -79,18 +96,27 @@ public class KernelConsumer {
             BrokerInfo brokerInfo= (BrokerInfo) map.keySet().iterator().next();
 
             Channel channel = ConnectionCacheBrokerTabel.connectionCacheBrokerTable.get(brokerInfo);
-
+            System.out.println("yijinfasong");
 
             if (channel != null) {
                 channel.writeAndFlush(byteBuf);
+
             } else {
 
 
                 Channel c = nettyConsumer.bind(brokerInfo);
 
+                if (c == null) {
+
+                    logger.info("连接失败,取消pull");
+
+                    return ;
+                }
+
                 ConnectionCacheBrokerTabel.connectionCacheBrokerTable.put(brokerInfo,c);
 
                 c.writeAndFlush(byteBuf);
+
 
             }
             }

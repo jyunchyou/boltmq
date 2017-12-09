@@ -231,7 +231,7 @@ public class MessageStore {
     public static void main (String[] args) {
         MessageStore main = new MessageStore();
         DefaultBytesMessage defaultBytesMessage = new DefaultBytesMessage("hello".getBytes());
-        defaultBytesMessage.putHeaders("topic","TOPIC_1");
+        defaultBytesMessage.putHeaders("topic","TOPIC_01");
         defaultBytesMessage.putProperties("ppp","kkk");
         defaultBytesMessage.putProperties("STORE_PATH","/home/fbhw/race");
 

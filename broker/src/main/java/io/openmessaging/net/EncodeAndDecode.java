@@ -119,6 +119,8 @@ public class EncodeAndDecode {
 
                     String topic = new String(topicByte);
 
+
+                    System.out.println(topic+"----------------------------");
                     byte[] queueIdByteLen = new byte[1];
 
                     byteBuf.readBytes(queueIdByteLen);
@@ -167,6 +169,7 @@ public class EncodeAndDecode {
 
                     String topic = new String(topicByte);
 
+                    System.out.println(topic+"----------------------------");
                     byte[] queueIdByteLen = new byte[1];
 
                     byteBuf.readBytes(queueIdByteLen);

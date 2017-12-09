@@ -48,8 +48,7 @@ public class SendQueues {
 
     public List getList(){
         if (messageQueues.size() == 0) {
-            System.out.println("--------------------------------------------------------------------------------------");
-            //TODO get byteBuffer and channel  from nameServer
+          //TODO get byteBuffer and channel  from nameServer
 
 
             Channel channel = nameServerConnectionCacheTable.get(nameServerInfo);

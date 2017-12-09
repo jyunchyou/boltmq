@@ -134,10 +134,13 @@ public class EncodeAndDecode {
         }
         //
         byte[] topicByte = topic.getBytes();
+
         byte topicByteLen = (byte) topicByte.length;
         heapBuffer.writeBytes(new byte[]{topicByteLen});
         heapBuffer.writeBytes(topicByte);
         int mapSize = topicBrokerTable.concurrentHashMap.size();
+        System.out.println("topicByteLen:"+topicByte.length);
+        System.out.println("mapSize:"+mapSize);
         byte mapSizeByte = (byte) mapSize;
         heapBuffer.writeBytes(new byte[]{mapSizeByte});
         for (Map map : list) {
@@ -152,7 +155,8 @@ public class EncodeAndDecode {
                 String port = brokerInfo.getPort() + "";
                 byte[] portByte = port.getBytes();
                 byte portByteLen = (byte) portByte.length;
-                heapBuffer.writeBytes(new byte[]{ipByteLen});
+
+                heapBuffer.writeInt(ipByte.length);
                 heapBuffer.writeBytes(ipByte);
                 heapBuffer.writeBytes(new byte[]{portByteLen});
                 heapBuffer.writeBytes(portByte);
@@ -179,11 +183,12 @@ public class EncodeAndDecode {
                 }
             }
         }
+
         return heapBuffer;
     }
 
     /*queueId,topic,offset,len*/
-    public void decode(ByteBuf byteBuf){
+    public  void decode(ByteBuf byteBuf){
 
 
 //        byte[] data = new byte[byteBuf.readableBytes()];
@@ -227,6 +232,8 @@ public class EncodeAndDecode {
             byteBuf.readBytes(topicByte);
             String topic = new String(topicByte);
 
+
+            System.out.println(topic + "-------------------------------------");
             long offset = byteBuf.readLong();
             long len = byteBuf.readLong();
 
@@ -286,7 +293,7 @@ public class EncodeAndDecode {
             }
         }
 
-        public void putTopicBrokerTable(String topic,String ip,String port,String queueId) {
+        public synchronized void putTopicBrokerTable(String topic,String ip,String port,String queueId) {
 
             System.out.println(topic + ip + port + queueId);
             List<Map<BrokerInfo, List<String>>> list = null;

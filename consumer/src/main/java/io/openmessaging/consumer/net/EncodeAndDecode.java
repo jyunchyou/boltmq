@@ -33,56 +33,61 @@ public class EncodeAndDecode {
 
 
 
-        byte[] topicByteLen = new byte[1];
-        heapBuffer.readBytes(topicByteLen);
-        int topicByteLenInt = topicByteLen[0];
-        byte[] topicByte = new byte[topicByteLenInt];
-        heapBuffer.readBytes(topicByte);
-        String topic = new String(topicByte);
-        byte[] mapSizeByte = new byte[1];
-        heapBuffer.readBytes(mapSizeByte);
-        int mapSize = mapSizeByte[0];
-
-        for (int indexNum = 0;indexNum < mapSize;indexNum++) {
-
-            byte[] ipByteLen = new byte[1];
-            heapBuffer.readBytes(ipByteLen);
-            int ipByteLenInt = ipByteLen[0];
-            byte[] ipByte = new byte[ipByteLenInt];
-            heapBuffer.readBytes(ipByte);
-            String ip = new String(ipByte);
-
-            byte[] portByteLen = new byte[1];
-            heapBuffer.readBytes(portByteLen);
-            int portByteLenInt = portByteLen[0];
-            byte[] portByte = new byte[portByteLenInt];
-            heapBuffer.readBytes(portByte);
-            String port = new String(portByte);
-
-            byte[] queueSizeByte = new byte[1];
-            heapBuffer.readBytes(queueSizeByte);
-            int queueSize = queueSizeByte[0];
-            System.out.println(queueSize);
-
-            for (int checkNum = 0;checkNum < queueSize;checkNum++) {
 
 
-                byte[] queueIdByteLen = new byte[1];
-                heapBuffer.readBytes(queueIdByteLen);
-                int queueIdByteLenInt = queueIdByteLen[0];
-                byte[] queueIdByte = new byte[queueIdByteLenInt];
-                heapBuffer.readBytes(queueIdByte);
-                String queueId = new String(queueIdByte);
+            byte[] topicByteLen = new byte[1];
+            heapBuffer.readBytes(topicByteLen);
+            int topicByteLenInt = topicByteLen[0];
 
-                putTopicBrokerTable(topic,ip,port,queueId);
+            byte[] topicByte = new byte[topicByteLenInt];
+            heapBuffer.readBytes(topicByte);
+            String topic = new String(topicByte);
+            byte[] mapSizeByte = new byte[1];
+            heapBuffer.readBytes(mapSizeByte);
+            int mapSize = mapSizeByte[0];
+        System.out.println("topicByteLen:"+topicByte.length);
+        System.out.println("mapSize:"+mapSize);
+            for (int indexNum = 0; indexNum < mapSize; indexNum++) {
 
+                byte[] ipByteLen = new byte[1];
+
+                int ipByteLenInt = heapBuffer.readInt();
+                byte[] ipByte = new byte[ipByteLenInt];
+                heapBuffer.readBytes(ipByte);
+                String ip = new String(ipByte);
+
+                byte[] portByteLen = new byte[1];
+                heapBuffer.readBytes(portByteLen);
+                int portByteLenInt = portByteLen[0];
+                byte[] portByte = new byte[portByteLenInt];
+                heapBuffer.readBytes(portByte);
+                String port = new String(portByte);
+
+                byte[] queueSizeByte = new byte[1];
+                heapBuffer.readBytes(queueSizeByte);
+                int queueSize = queueSizeByte[0];
+                System.out.println(queueSize);
+
+                for (int checkNum = 0; checkNum < queueSize; checkNum++) {
+
+
+                    byte[] queueIdByteLen = new byte[1];
+                    heapBuffer.readBytes(queueIdByteLen);
+                    int queueIdByteLenInt = queueIdByteLen[0];
+                    byte[] queueIdByte = new byte[queueIdByteLenInt];
+                    heapBuffer.readBytes(queueIdByte);
+                    String queueId = new String(queueIdByte);
+
+                    putTopicBrokerTable(topic, ip, port, queueId);
+
+
+                }
 
             }
 
+
+
         }
-
-
-
 
 
 
@@ -210,7 +215,7 @@ public class EncodeAndDecode {
 
 */
 
-    }
+
 
     public void putTopicBrokerTable(String topic,String ip,String port,String queueId) {
 

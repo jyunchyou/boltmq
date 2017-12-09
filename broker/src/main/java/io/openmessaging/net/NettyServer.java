@@ -60,6 +60,38 @@ public class NettyServer {
 
     }
 
+    public void bindPullPort(int port){
+
+
+        ServerBootstrap bootstrap = new ServerBootstrap();
+        bootstrap.group(boss,work);
+
+        bootstrap.channel(NioServerSocketChannel.class);
+        bootstrap.option(ChannelOption.TCP_NODELAY,true);
+        bootstrap.childOption(ChannelOption.SO_KEEPALIVE,true);
+        bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
+            @Override
+            protected void initChannel(SocketChannel socketChannel) throws Exception {
+                socketChannel.pipeline().addLast(new PullHandlerAdapter());
+            }
+        });
+        ChannelFuture channelFuture = null;
+
+        try {
+            channelFuture = bootstrap.bind(port).sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            work.shutdownGracefully();
+            boss.shutdownGracefully();
+        }
+        if (channelFuture.isSuccess()) {
+            System.out.println("producer connect success");
+
+
+        }
+
+    }
+
 
     public Channel bind(NameServerInfo nameServerInfo){
         System.out.println("bind");

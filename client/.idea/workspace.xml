@@ -31,11 +31,9 @@
       <file leaf-file-name="SendQueues.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/client/table/SendQueues.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="580">
-              <caret line="39" column="52" lean-forward="false" selection-start-line="39" selection-start-column="52" selection-end-line="39" selection-end-column="52" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
+            <state relative-caret-position="78">
+              <caret line="50" column="1" lean-forward="false" selection-start-line="50" selection-start-column="1" selection-end-line="50" selection-end-column="1" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -62,14 +60,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AbstractProducerTest.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="AbstractProducerTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/io/openmessaging/client/producer/AbstractProducerTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="640">
-              <caret line="37" column="29" lean-forward="false" selection-start-line="37" selection-start-column="29" selection-end-line="37" selection-end-column="29" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
+            <state relative-caret-position="198">
+              <caret line="65" column="46" lean-forward="true" selection-start-line="65" selection-start-column="46" selection-end-line="65" selection-end-column="46" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -77,8 +73,8 @@
       <file leaf-file-name="NettyClient.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/client/net/NettyClient.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3800">
-              <caret line="209" column="34" lean-forward="false" selection-start-line="209" selection-start-column="34" selection-end-line="209" selection-end-column="34" />
+            <state relative-caret-position="98">
+              <caret line="110" column="28" lean-forward="false" selection-start-line="110" selection-start-column="28" selection-end-line="110" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -118,18 +114,27 @@
             <state relative-caret-position="540">
               <caret line="37" column="22" lean-forward="false" selection-start-line="37" selection-start-column="22" selection-end-line="37" selection-end-column="22" />
               <folding>
-                <element signature="e#731#732#0" expanded="true" />
-                <element signature="e#764#765#0" expanded="true" />
+                <element signature="imports" expanded="false" />
+                <element signature="e#417#418#0" expanded="false" />
+                <element signature="e#449#450#0" expanded="false" />
+                <element signature="e#499#500#0" expanded="false" />
+                <element signature="e#541#542#0" expanded="false" />
+                <element signature="e#575#576#0" expanded="false" />
+                <element signature="e#605#606#0" expanded="false" />
+                <element signature="e#651#652#0" expanded="false" />
+                <element signature="e#689#690#0" expanded="false" />
+                <element signature="e#820#821#0" expanded="false" />
+                <element signature="e#864#865#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="KernelProducer.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="KernelProducer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/client/producer/KernelProducer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="353">
-              <caret line="63" column="22" lean-forward="false" selection-start-line="63" selection-start-column="22" selection-end-line="63" selection-end-column="22" />
+            <state relative-caret-position="193">
+              <caret line="67" column="0" lean-forward="true" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -147,27 +152,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>System.out.</find>
-      <find>System.out.p</find>
-      <find>System.out.prin</find>
-      <find>System.out.println()</find>
-      <find>System.out.println</find>
-      <find>System.out.println(</find>
-      <find>xiao</find>
-      <find>xia</find>
-      <find>xi</find>
-      <find>x</find>
-      <find>消息fas</find>
-      <find>消息fa</find>
-      <find>消息f</find>
-      <find>消息</find>
-      <find>消息发送</find>
-      <find>T</find>
-      <find>TIm</find>
-      <find>TIme</find>
-      <find>TImer</find>
-      <find>S</find>
-      <find>Sy</find>
       <find>Sys</find>
       <find>Syst</find>
       <find>Syste</find>
@@ -177,6 +161,27 @@
       <find>System.ou</find>
       <find>System.out</find>
       <find>update success</find>
+      <find>z</find>
+      <find>准备</find>
+      <find>-</find>
+      <find>----</find>
+      <find>--------</find>
+      <find>----------</find>
+      <find>------------</find>
+      <find>-------------</find>
+      <find>--------------</find>
+      <find>---------------</find>
+      <find>----------------</find>
+      <find>-----------------</find>
+      <find>-------------------------------------------</find>
+      <find>--------------------------------------------</find>
+      <find>---------------------------------------------</find>
+      <find>T</find>
+      <find>TO</find>
+      <find>TOP</find>
+      <find>TOPI</find>
+      <find>TOPIC</find>
+      <find>TOPIC_</find>
     </findStrings>
   </component>
   <component name="GradleLocalSettings">
@@ -231,12 +236,12 @@
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/client/producer/SendQueues.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/client/net/NettyClientHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/client/table/SendQueue.java" />
-        <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/client/table/SendQueues.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/client/constant/ConstantClient.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/client/producer/BrokerInfo.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/client/net/EncodeAndDecode.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/client/net/UpdateFromNameServerHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/client/net/NettyClient.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/client/table/SendQueues.java" />
         <option value="$PROJECT_DIR$/src/test/java/io/openmessaging/client/producer/AbstractProducerTest.java" />
       </list>
     </option>
@@ -254,8 +259,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="65" />
-    <option name="y" value="24" />
+    <option name="x" value="-268" />
+    <option name="y" value="28" />
     <option name="width" value="1301" />
     <option name="height" value="744" />
   </component>
@@ -1012,34 +1017,34 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="junit - 2017.12.08 at 18h 26m 37s.xml">
+    <history-entry file="junit - 2017.12.09 at 12h 41m 53s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="junit - 2017.12.08 at 18h 34m 34s.xml">
+    <history-entry file="junit - 2017.12.09 at 12h 43m 08s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="junit - 2017.12.08 at 18h 36m 00s.xml">
+    <history-entry file="junit - 2017.12.09 at 12h 53m 44s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="junit - 2017.12.08 at 18h 37m 54s.xml">
+    <history-entry file="junit - 2017.12.09 at 13h 03m 16s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="junit - 2017.12.08 at 18h 43m 38s.xml">
+    <history-entry file="junit - 2017.12.09 at 13h 04m 32s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="junit - 2017.12.08 at 18h 54m 47s.xml">
+    <history-entry file="junit - 2017.12.09 at 13h 11m 28s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="junit - 2017.12.08 at 18h 57m 03s.xml">
+    <history-entry file="junit - 2017.12.09 at 13h 15m 25s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="junit - 2017.12.08 at 19h 07m 11s.xml">
+    <history-entry file="junit - 2017.12.09 at 13h 17m 26s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="junit - 2017.12.08 at 19h 09m 05s.xml">
+    <history-entry file="junit - 2017.12.09 at 13h 24m 42s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="junit - 2017.12.08 at 19h 12m 51s.xml">
+    <history-entry file="junit - 2017.12.09 at 13h 32m 53s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
   </component>
@@ -1053,24 +1058,25 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="24" width="1301" height="744" extended-state="0" />
-    <editor active="true" />
+    <frame x="-268" y="28" width="1301" height="744" extended-state="0" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32923076" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32615384" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3430769" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43569133" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.43569133" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32923076" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39475775" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329582" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1082,10 +1088,8 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Dynamic Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32615384" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32962668" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329582" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1437,18 +1441,17 @@
         <state relative-caret-position="540">
           <caret line="37" column="22" lean-forward="false" selection-start-line="37" selection-start-column="22" selection-end-line="37" selection-end-column="22" />
           <folding>
-            <element signature="e#731#732#0" expanded="true" />
-            <element signature="e#764#765#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/io/openmessaging/client/producer/AbstractProducerTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="640">
-          <caret line="37" column="29" lean-forward="false" selection-start-line="37" selection-start-column="29" selection-end-line="37" selection-end-column="29" />
-          <folding>
             <element signature="imports" expanded="false" />
+            <element signature="e#417#418#0" expanded="false" />
+            <element signature="e#449#450#0" expanded="false" />
+            <element signature="e#499#500#0" expanded="false" />
+            <element signature="e#541#542#0" expanded="false" />
+            <element signature="e#575#576#0" expanded="false" />
+            <element signature="e#605#606#0" expanded="false" />
+            <element signature="e#651#652#0" expanded="false" />
+            <element signature="e#689#690#0" expanded="false" />
+            <element signature="e#820#821#0" expanded="false" />
+            <element signature="e#864#865#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1463,24 +1466,6 @@
             <element signature="e#3176#3177#0" expanded="false" />
             <element signature="e#3244#3245#0" expanded="false" />
             <element signature="e#3304#3305#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/client/net/NettyClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3800">
-          <caret line="209" column="34" lean-forward="false" selection-start-line="209" selection-start-column="34" selection-end-line="209" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/client/table/SendQueues.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="580">
-          <caret line="39" column="52" lean-forward="false" selection-start-line="39" selection-start-column="52" selection-end-line="39" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1501,10 +1486,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/client/net/NettyClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="98">
+          <caret line="110" column="28" lean-forward="false" selection-start-line="110" selection-start-column="28" selection-end-line="110" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/client/table/SendQueues.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="78">
+          <caret line="50" column="1" lean-forward="false" selection-start-line="50" selection-start-column="1" selection-end-line="50" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/client/producer/KernelProducer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="63" column="22" lean-forward="false" selection-start-line="63" selection-start-column="22" selection-end-line="63" selection-end-column="22" />
+        <state relative-caret-position="193">
+          <caret line="67" column="0" lean-forward="true" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/io/openmessaging/client/producer/AbstractProducerTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="65" column="46" lean-forward="true" selection-start-line="65" selection-start-column="46" selection-end-line="65" selection-end-column="46" />
           <folding />
         </state>
       </provider>
