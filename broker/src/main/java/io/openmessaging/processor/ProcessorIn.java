@@ -53,24 +53,32 @@ public class ProcessorIn {
     public void input(byte[] byteBuf,String topic,String queueId,MessageInfoQueue messageInfoQueue){
 
         List list = messageInfoQueue.getList();
-        MessageInfo fileInfo = new MessageInfo();
-        fileInfo.setTopic(topic);
-        list.add(fileInfo);
 
-        long index = messageInfoQueue.getMessageIndex();
+        List<MessageInfo> l = messageInfoQueue.getList();
+
+        MessageInfo lastMessageInfo = l.get((l.size() - 1));
+        long index = lastMessageInfo.getOffset() + lastMessageInfo.getLen();
         long previousIndex = messageInfoQueue.getPreviousMessageIndex();
         long byteBufLen = byteBuf.length;
         boolean newFile = false;
 
         long newPreviousIndex = previousIndex + ConstantBroker.FILE_SIZE;
-        long newMessageIndex = index + byteBufLen;
+        long newMessageIndex = index;
 
-        if (newMessageIndex > (newPreviousIndex)) {
+
+        MessageInfo m = new MessageInfo();
+        m.setTopic(topic);
+        m.setOffset(index);
+        m.setLen(byteBuf.length);
+
+        list.add(m);
+
+        if ((newMessageIndex + byteBuf.length)> (newPreviousIndex)) {
             newFile = true;
 
-            messageInfoQueue.setPreviousMessageIndex(newPreviousIndex);
+            messageInfoQueue.setPreviousMessageIndex((newMessageIndex + byteBuf.length));
         }
-        messageInfoQueue.setMessageIndex(newMessageIndex);
+
 
 
         try {

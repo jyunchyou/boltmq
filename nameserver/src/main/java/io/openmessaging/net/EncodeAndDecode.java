@@ -138,10 +138,10 @@ public class EncodeAndDecode {
         byte topicByteLen = (byte) topicByte.length;
         heapBuffer.writeBytes(new byte[]{topicByteLen});
         heapBuffer.writeBytes(topicByte);
-        int mapSize = topicBrokerTable.concurrentHashMap.size();
+        int listSize = list.size();
         System.out.println("topicByteLen:"+topicByte.length);
-        System.out.println("mapSize:"+mapSize);
-        byte mapSizeByte = (byte) mapSize;
+        System.out.println("mapSize:"+listSize);
+        byte mapSizeByte = (byte) listSize;
         heapBuffer.writeBytes(new byte[]{mapSizeByte});
         for (Map map : list) {
 

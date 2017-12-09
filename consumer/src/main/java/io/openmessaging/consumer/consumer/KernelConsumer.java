@@ -27,7 +27,7 @@ public class KernelConsumer {
     private NettyConsumer nettyConsumer = new NettyConsumer();
 
     private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
-    public void subscribe(String topic, ListenerMessage listenerMessage){
+    public void subscribe(String topic, ListenerMessage listenerMessage,int num){
 
         //TODO get路由from nameServer
         //TODO 建立netty连接
@@ -84,7 +84,7 @@ public class KernelConsumer {
 
         }
 
-        ByteBuf byteBuf = encodeAndDecode.encodePull();
+        ByteBuf byteBuf = encodeAndDecode.encodePull(ConstantConsumer.PULL_BUFFER_SIZE);
 
         /**
          * 表结构 topic-List{BrokerInfo-List{queueId}}

@@ -249,7 +249,7 @@ public class EncodeAndDecode {
 
 
 
-   /*queueId,topic,offset,len*/
+   /*ip,port,queueId,topic,offset,len*/
     public ByteBuf encodeToNameServer(BrokerInfo brokerInfo) {
 
 

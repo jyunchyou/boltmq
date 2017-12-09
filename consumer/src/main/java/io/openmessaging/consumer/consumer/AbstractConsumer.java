@@ -1,5 +1,6 @@
 package io.openmessaging.consumer.consumer;
 
+import io.openmessaging.consumer.constant.ConstantConsumer;
 import io.openmessaging.consumer.listener.ListenerMessage;
 import io.openmessaging.consumer.table.ReceiveMessageTable;
 import org.slf4j.Logger;
@@ -24,10 +25,17 @@ public class AbstractConsumer {
 
     }
 
+
+
     public void subscribe(String topic, ListenerMessage listenerMessage){
 
+        subscribe(topic,listenerMessage, ConstantConsumer.PULL_BUFFER_SIZE);
+
+    }
+
+    public void subscribe(String topic, ListenerMessage listenerMessage,int num){
         this.topic = topic;
-        kernelConsumer.subscribe(topic,listenerMessage);
+        kernelConsumer.subscribe(topic,listenerMessage,num);
 
     }
     //开启定时任务

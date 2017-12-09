@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.openmessaging.processor.ProcessorIn;
+import io.openmessaging.processor.ProcessorOut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +18,8 @@ public class PullHandlerAdapter extends ChannelHandlerAdapter {
 
     private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
 
+    private ProcessorOut processorOut = new ProcessorOut();
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
 
@@ -27,11 +30,21 @@ public class PullHandlerAdapter extends ChannelHandlerAdapter {
     public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg) {
         ByteBuf byteBuf = (ByteBuf) msg;
 
-        byte[] pullRequest = new byte[byteBuf.readableBytes()];
 
 
-        byteBuf.readBytes(pullRequest);
 
-        System.out.println(new String(pullRequest)+"_______________________________________________________");
+        byte[] topicByteLen = new byte[1];
+        byteBuf.readBytes(topicByteLen);
+        int topicByteLenInt = topicByteLen[0];
+        byte[] topicByte = new byte[topicByteLenInt];
+        byteBuf.readBytes(topicByte);
+
+        String topic = new String(topicByte);
+        int pullNum = byteBuf.readInt();
+
+        processorOut.out(topic,pullNum);
+
+
+
     }
 }

@@ -277,13 +277,20 @@ public class EncodeAndDecode {
     /**
      * 协议格式
      * byte 批量拉取条数
-     *
+     * topicByteLen
+     * topicByte
      */
 
-    public ByteBuf encodePull(){
+    public ByteBuf encodePull(String topic,int num){
 
-        ByteBuf byteBuf = Unpooled.buffer(ConstantConsumer.PULL_BUFFER_SIZE);
-        byteBuf.writeInt(1);
+        ByteBuf byteBuf = Unpooled.buffer();
+
+        byte[] topicByte = topic.getBytes();
+        byte topicByteLen = (byte) topicByte.length;
+
+        byteBuf.writeBytes(new byte[]{topicByteLen});
+        byteBuf.writeBytes(topicByte);
+        byteBuf.writeInt(num);
 
         return byteBuf;
 
