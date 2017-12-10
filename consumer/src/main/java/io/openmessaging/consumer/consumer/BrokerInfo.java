@@ -9,7 +9,11 @@ public class BrokerInfo {
 
     private String ip;
 
-    private int port;
+    private int producerPort;
+
+    private int nameServerPort;
+
+    private int consumerPort;
 
     public String getAddress() {
         return address;
@@ -27,14 +31,6 @@ public class BrokerInfo {
         this.ip = ip;
     }
 
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
 
     @Override
     public boolean equals(Object o){
@@ -47,16 +43,24 @@ public class BrokerInfo {
         }
         BrokerInfo brokerInfo = (BrokerInfo) o;
         String ip = brokerInfo.getIp();
-        int port = brokerInfo.getPort();
+        int producerPort = brokerInfo.getProducerPort();
+        int nameServerPort = brokerInfo.getNameServerPort();
+        int consumerPort = brokerInfo.getConsumerPort();
         if (!getIp().equals(ip)) {
             return false;
         }
-        if (getPort() != port) {
+        if (getProducerPort() == producerPort) {
 
-            return false;
+            return true;
+        }
+        if (getNameServerPort() == nameServerPort) {
+            return true;
         }
 
-        return true;
+        if (getConsumerPort() == consumerPort) {
+            return true;
+        }
+        return false;
 
 
 
@@ -65,7 +69,31 @@ public class BrokerInfo {
     @Override
     public int hashCode(){
 
-        return this.getIp().hashCode()+this.port;
+        return this.getIp().hashCode();
     }
 
+
+    public int getProducerPort() {
+        return producerPort;
+    }
+
+    public void setProducerPort(int producerPort) {
+        this.producerPort = producerPort;
+    }
+
+    public int getNameServerPort() {
+        return nameServerPort;
+    }
+
+    public void setNameServerPort(int nameServerPort) {
+        this.nameServerPort = nameServerPort;
+    }
+
+    public int getConsumerPort() {
+        return consumerPort;
+    }
+
+    public void setConsumerPort(int consumerPort) {
+        this.consumerPort = consumerPort;
+    }
 }

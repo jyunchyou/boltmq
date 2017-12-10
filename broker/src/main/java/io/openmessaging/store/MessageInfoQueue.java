@@ -27,7 +27,7 @@ public class MessageInfoQueue {
 
     private File file;
 
-    public MessageInfoQueue(int name){
+    public MessageInfoQueue(String name){
 
         this.file = new File(ConstantBroker.ROOT_PATH+name);
         if (!file.exists()){

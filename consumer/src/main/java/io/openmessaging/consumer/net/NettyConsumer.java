@@ -117,7 +117,7 @@ public class NettyConsumer {
 
 
         String ip = brokerInfo.getIp();
-        int port = brokerInfo.getPort();
+        int port = brokerInfo.getConsumerPort();
         Channel channel = null;
         Bootstrap bootstrap = new Bootstrap();
                 bootstrap.group(eventLoopGroup);

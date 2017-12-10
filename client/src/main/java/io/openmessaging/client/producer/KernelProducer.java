@@ -37,6 +37,7 @@ public class KernelProducer {
         requestDto.setSerialModel(ConstantClient.JSON);
         requestDto.setVersion(ConstantClient.VERSION);
         requestDto.setDelayTime(delayTime);
+        requestDto.setQueueId(sendQueue.getQueueId());
 
 
         ByteBuf byteBuf = null;

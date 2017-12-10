@@ -60,7 +60,7 @@ public class NettyClient implements ConnectionHandler {
 
 
         String ip = brokerInfo.getIp();
-        int port = brokerInfo.getPort();
+        int port = brokerInfo.getProducerPort();
 
         if (bootstrap == null) {
 

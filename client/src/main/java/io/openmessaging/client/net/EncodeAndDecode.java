@@ -66,6 +66,7 @@ public class EncodeAndDecode {
 
 
         //requestDto byte
+        byte[] queueId = requestDto.getQueueId().getBytes();
         byte[] id = requestDto.getId().getBytes();
         byte[] language = requestDto.getLanguage().getBytes();
         byte[] version = requestDto.getVersion().getBytes();
@@ -74,6 +75,7 @@ public class EncodeAndDecode {
         byte delayTime = (byte) requestDto.getDelayTime();
 
         //requestDto length
+        byte queueIdByteLen = (byte) queueId.length;
         byte idLen = (byte) id.length;
         byte languageLen = (byte) language.length;
         byte versionLen = (byte) version.length;
@@ -133,7 +135,7 @@ public class EncodeAndDecode {
 
         //开始putByteBuffer
         int byteBufferLen =
-                idLen+languageLen+versionLen+serialModelLen+2+6+//20
+                queueIdByteLen+idLen+languageLen+versionLen+serialModelLen+2+7+//20
 
                 allLength+(properties.getSize()*(2+1))+//51
 
@@ -183,13 +185,17 @@ public class EncodeAndDecode {
         byteBuf.writeBytes(allLengthByte);
 
 
+
         byteBuf.writeBytes(new byte[]{topicLen});
         byteBuf.writeBytes(topic);
-        byteBuf.writeBytes(new byte[]{orderIdLen});
-        byteBuf.writeBytes(orderId);
+        byteBuf.writeBytes(new byte[]{queueIdByteLen});
+        byteBuf.writeBytes(queueId);
         byteBuf.writeBytes(bodyLen);
         byteBuf.writeBytes(body);
 
+
+        byteBuf.writeBytes(new byte[]{orderIdLen});
+        byteBuf.writeBytes(orderId);
         byteBuf.writeBytes(new byte[]{idLen});
         byteBuf.writeBytes(id);
         byteBuf.writeBytes(new byte[]{languageLen});
@@ -307,7 +313,7 @@ public class EncodeAndDecode {
                 byteBuf.readBytes(portByte);
                 String port = new String(portByte);
                 int portInteger = Integer.parseInt(port);
-                brokerInfo.setPort(portInteger);
+                brokerInfo.setProducerPort(portInteger);
 
 
 

@@ -230,7 +230,7 @@ public class EncodeAndDecode {
             Map map = new HashMap<BrokerInfo, List<String>>();
             BrokerInfo brokerInfo = new BrokerInfo();
             brokerInfo.setIp(ip);
-            brokerInfo.setPort(Integer.parseInt(port));
+            brokerInfo.setConsumerPort(Integer.parseInt(port));
 
 
             List queueIds = new ArrayList();
@@ -243,7 +243,7 @@ public class EncodeAndDecode {
 
                 BrokerInfo brokerInfo = new BrokerInfo();
                 brokerInfo.setIp(ip);
-                brokerInfo.setPort(Integer.parseInt(port));
+                brokerInfo.setConsumerPort(Integer.parseInt(port));
 
                 List queueIds = null;
 
@@ -283,15 +283,20 @@ public class EncodeAndDecode {
 
     public ByteBuf encodePull(String topic, int num, List<String> queueIds){
 
-        ByteBuf byteBuf = Unpooled.buffer();
+
+        System.out.println(topic);
 
         byte[] topicByte = topic.getBytes();
         byte topicByteLen = (byte) topicByte.length;
 
+        byte numByte = (byte) num;
+
+        ByteBuf byteBuf = Unpooled.buffer(topicByteLen + 1);
+
         byteBuf.writeBytes(new byte[]{topicByteLen});
         byteBuf.writeBytes(topicByte);
-        byteBuf.writeInt(num);
-        byteBuf.writeInt(queueIds.size());
+
+        byteBuf.writeBytes(new byte[]{numByte});
 
 
 //        for (String queueId : queueIds) {

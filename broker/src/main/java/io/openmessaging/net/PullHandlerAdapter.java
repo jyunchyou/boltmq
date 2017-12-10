@@ -41,8 +41,10 @@ public class PullHandlerAdapter extends ChannelHandlerAdapter {
         byteBuf.readBytes(topicByte);
 
         String topic = new String(topicByte);
-        int pullNum = byteBuf.readInt();
+        byte[] pullNumByte = new byte[1];
+        byteBuf.readBytes(pullNumByte);
 
+        int pullNum = pullNumByte[0];
 
 
         processorOut.out(topic,pullNum);

@@ -23,12 +23,7 @@ public class MessageInfoQueues {
         /*init(ConstantBroker.QUEUE_NUM);*/
     }
     public static void init(int queueNum){
-        for (int checkNum = 0;checkNum < queueNum;checkNum++) {
-            MessageInfoQueue fileInfoQueue = new MessageInfoQueue(checkNum);
 
-            concurrentHashMap.put("TOPIC_0"+checkNum,fileInfoQueue);
-
-        }
 
     }
 

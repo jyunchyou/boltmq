@@ -21,7 +21,7 @@ public class BrokerTableTest {
 
     @Before
     public void init(){
-        nettyServer = new NettyServer();
+        nettyServer = NettyServer.getNettyServer();
 
     }
 
@@ -30,6 +30,8 @@ public class BrokerTableTest {
 
         nettyServer.bindBroker(ConstantNameServer.RECEIVE_FROM_BROKER_PORT);
 
+
+
         nettyServer.bind(8090);
 
         try {
@@ -37,6 +39,8 @@ public class BrokerTableTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+
 
 
        /* BrokerInfo brokerInfo = new BrokerInfo();

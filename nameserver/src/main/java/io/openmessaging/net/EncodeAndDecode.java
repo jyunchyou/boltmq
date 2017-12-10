@@ -53,7 +53,7 @@ public class EncodeAndDecode {
             byte[] ipByteLen = new byte[1];
             ipByteLen[0] = (byte) ipByte.length;
 
-            String port = brokerInfo.getPort() + "";
+            String port = brokerInfo.getProducerPort() + "";
             byte[] portByte = port.getBytes();
             byte[] portByteLen = new byte[1];
             portByteLen[0] = (byte) portByte.length;
@@ -69,6 +69,8 @@ public class EncodeAndDecode {
             ConcurrentHashMap concurrentHashMap = messageInfoQueues.getConcurrentHashMap();
             //
             int queueNum = messageInfoQueues.getConcurrentHashMap().size();
+
+            System.out.println("---------------------queueNum--------------------"+queueNum);
             byte queueNumByte = (byte) queueNum;
             heapBuffer.writeInt(queueNum);
             Set<Map.Entry> s = concurrentHashMap.entrySet();
@@ -152,7 +154,7 @@ public class EncodeAndDecode {
                 //
                 byte[] ipByte = brokerInfo.getIp().getBytes();
                 byte ipByteLen = (byte) ipByte.length;
-                String port = brokerInfo.getPort() + "";
+                String port = brokerInfo.getConsumerPort() + "";
                 byte[] portByte = port.getBytes();
                 byte portByteLen = (byte) portByte.length;
 
@@ -209,13 +211,38 @@ public class EncodeAndDecode {
             byteBuf.readBytes(ipByte);
             String ip = new String(ipByte);
 
-            byte[] portByteLen = new byte[1];
-            byteBuf.readBytes(portByteLen);
-            int portIntLen = portByteLen[0];
+            byte[] producerPortByteLen = new byte[1];
+            byteBuf.readBytes(producerPortByteLen);
+            int producerPortIntLen = producerPortByteLen[0];
 
-            byte[] portByte = new byte[portIntLen];
-            byteBuf.readBytes(portByte);
-            String port = new String(portByte);
+            byte[] producerPortByte = new byte[producerPortIntLen];
+            byteBuf.readBytes(producerPortByte);
+            String producerPort = new String(producerPortByte);
+
+            byte[] nameServerPortByteLen = new byte[1];
+            byteBuf.readBytes(nameServerPortByteLen);
+            int nameServerPortIntLen = nameServerPortByteLen[0];
+
+            byte[] nameServerPortByte = new byte[nameServerPortIntLen];
+            byteBuf.readBytes(nameServerPortByte);
+            String nameServerPort = new String(nameServerPortByte);
+
+
+            byte[] consumerPortByteLen = new byte[1];
+            byteBuf.readBytes(consumerPortByteLen);
+            int consumerPortIntLen = consumerPortByteLen[0];
+
+            byte[] consumerPortByte = new byte[consumerPortIntLen];
+            byteBuf.readBytes(consumerPortByte);
+            String consumerPort = new String(consumerPortByte);
+
+
+            if (!byteBuf.isReadable()) {
+
+                putBroker(ip,producerPort,nameServerPort,consumerPort);
+                return ;
+
+            }
 
             byte[] topicByteLen = new byte[1];
             byteBuf.readBytes(topicByteLen);
@@ -235,20 +262,26 @@ public class EncodeAndDecode {
 
 
             System.out.println(topic + "-------------------------------------");
-            long offset = byteBuf.readLong();
-            long len = byteBuf.readLong();
+
+            long offset = 0;
+            long len = 0;
+            if (byteBuf.isReadable()) {
+
+                 offset = byteBuf.readLong();
+                 len = byteBuf.readLong();
+            }
 
 
 
 
 
-
-            putTopicBrokerTable(topic,ip,port,queueId);
+            putTopicBrokerTable(topic,ip,producerPort,nameServerPort,consumerPort,queueId);
 
             BrokerInfo brokerInfo = new BrokerInfo();
             brokerInfo.setIp(ip);
-            brokerInfo.setPort(Integer.parseInt(port));
-
+            brokerInfo.setProducerPort(Integer.parseInt(producerPort));
+            brokerInfo.setNameServerPort(Integer.parseInt(nameServerPort));
+            brokerInfo.setConsumerPort(Integer.parseInt(consumerPort));
             MessageInfoQueues messageInfoQueues = null;
             if (brokerInfoTable.map.containsKey(brokerInfo)){
 
@@ -275,6 +308,7 @@ public class EncodeAndDecode {
                     messageInfo.setLen(len);
                     messageInfo.setOffset(offset);
                     list.add(messageInfo);
+                    System.out.println("----list size is not 0--------"+list.size()+"-------");
 
 
                 } else {
@@ -289,17 +323,31 @@ public class EncodeAndDecode {
                     messageInfo.setLen(len);
                     messageInfo.setOffset(offset);
                     list.add(messageInfo);
+                    System.out.println("----list size is not 0--------"+list.size()+"-------");
 
                 }
             }
         }
 
-        public synchronized void putTopicBrokerTable(String topic,String ip,String port,String queueId) {
 
-            System.out.println(topic + ip + port + queueId);
+        public void putBroker(String ip,String producerPort,String nameServerPort,String consumerPort){
+
+
+        BrokerInfo brokerInfo = new BrokerInfo();
+        brokerInfo.setIp(ip);
+        brokerInfo.setProducerPort(Integer.parseInt(producerPort));
+        brokerInfo.setNameServerPort(Integer.parseInt(nameServerPort));
+        brokerInfo.setConsumerPort(Integer.parseInt(consumerPort));
+        BrokerInfoTable.map.put(brokerInfo,new MessageInfoQueues());
+        }
+
+        public synchronized void putTopicBrokerTable(String topic,String ip,String producerPort,String nameServerPort,String consumerPort,String queueId) {
+
+            System.out.println(topic + ip + producerPort + nameServerPort + consumerPort + queueId);
             List<Map<BrokerInfo, List<String>>> list = null;
 
             list = topicBrokerTable.concurrentHashMap.get(topic);
+
 
             if (list == null) {
 
@@ -309,7 +357,9 @@ public class EncodeAndDecode {
                 Map map = new HashMap<BrokerInfo, List<String>>();
                 BrokerInfo brokerInfo = new BrokerInfo();
                 brokerInfo.setIp(ip);
-                brokerInfo.setPort(Integer.parseInt(port));
+                brokerInfo.setProducerPort(Integer.parseInt(producerPort));
+                brokerInfo.setNameServerPort(Integer.parseInt(nameServerPort));
+                brokerInfo.setConsumerPort(Integer.parseInt(consumerPort));
 
 
                 List queueIds = new ArrayList();
@@ -322,8 +372,9 @@ public class EncodeAndDecode {
 
                     BrokerInfo brokerInfo = new BrokerInfo();
                     brokerInfo.setIp(ip);
-                    brokerInfo.setPort(Integer.parseInt(port));
-
+                    brokerInfo.setProducerPort(Integer.parseInt(producerPort));
+                    brokerInfo.setNameServerPort(Integer.parseInt(nameServerPort));
+                    brokerInfo.setConsumerPort(Integer.parseInt(consumerPort));
                     List queueIds = null;
 
                     queueIds = (List) map.get(brokerInfo);

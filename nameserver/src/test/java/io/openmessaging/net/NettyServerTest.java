@@ -17,7 +17,7 @@ public class NettyServerTest {
 
     @Before
     public void init(){
-         nettyServer = new NettyServer();
+         nettyServer = NettyServer.getNettyServer();
 
     }
 
@@ -30,7 +30,7 @@ public class NettyServerTest {
         nettyServer.bind(ConstantNameServer.NAMESERVER_PORT);
         BrokerInfo brokerInfo = new BrokerInfo();
         brokerInfo.setIp("127.0.0.1");
-        brokerInfo.setPort(8080);
+
 
 
         HashMap topicQueueMap = new HashMap(1);

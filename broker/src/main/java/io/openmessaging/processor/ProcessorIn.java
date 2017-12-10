@@ -46,8 +46,15 @@ public class ProcessorIn {
 
         List<MessageInfo> l = messageInfoQueue.getList();
 
-        MessageInfo lastMessageInfo = l.get((l.size() - 1));
-        long index = lastMessageInfo.getOffset() + lastMessageInfo.getLen();
+        long index;
+        if (l.size() == 0) {
+        index = 0;
+        }else {
+            MessageInfo lastMessageInfo = l.get((l.size() - 1));
+            index = lastMessageInfo.getOffset() + lastMessageInfo.getLen();
+        }
+
+
         long previousIndex = messageInfoQueue.getPreviousMessageIndex();
         long byteBufLen = byteBuf.length;
         boolean newFile = false;
@@ -68,6 +75,7 @@ public class ProcessorIn {
 
             messageInfoQueue.setPreviousMessageIndex((newMessageIndex + byteBuf.length));
         }
+
 
 
 

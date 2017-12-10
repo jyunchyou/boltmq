@@ -70,7 +70,8 @@ public class ProcessorOut {
 
             public void pull(List<byte[]> messagesByte,int bufferSize){
 
-        System.out.println("-----------------------"+messagesByte);
+
+        System.out.println(messagesByte);
 
 
             }

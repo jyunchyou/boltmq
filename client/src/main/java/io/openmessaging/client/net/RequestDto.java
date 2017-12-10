@@ -22,6 +22,8 @@ public class RequestDto {
 
     private int delayTime = ConstantClient.DELAY_TIME;//规定允许的超时时间
 
+    private String queueId = null; //broker上的索引地址
+
     //private transient CommandCustomHeader customHeader; 包含String topic
 
     public String getId() {
@@ -77,5 +79,13 @@ public class RequestDto {
 
     public void setDelayTime(int delayTime) {
         this.delayTime = delayTime;
+    }
+
+    public String getQueueId() {
+        return queueId;
+    }
+
+    public void setQueueId(String queueId) {
+        this.queueId = queueId;
     }
 }

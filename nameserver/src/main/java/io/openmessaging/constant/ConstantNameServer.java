@@ -13,4 +13,8 @@ public class ConstantNameServer {
 
     public static final int RECEIVE_FROM_BROKER_PORT = 8088;
 
+    public static final int UPDATE_TOPIC_PORT = 8899;
+
+
+
 }

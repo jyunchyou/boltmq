@@ -1,22 +1,40 @@
 package io.openmessaging.net;
 
+import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
+import io.openmessaging.producer.BrokerInfo;
+import io.openmessaging.table.BrokerConnectionCacheTable;
+
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by fbhw on 17-12-3.
  */
 public class NettyServer {
 
+    private static NettyServer nettyServer = new NettyServer();
+
     private EventLoopGroup work = new NioEventLoopGroup();
 
     private EventLoopGroup boss = new NioEventLoopGroup();
+
+    private NettyServer(){
+
+    }
+
+    public static NettyServer getNettyServer() {
+        return nettyServer;
+    }
+
+    public static void setNettyServer(NettyServer nettyServer) {
+        NettyServer.nettyServer = nettyServer;
+    }
 
     public void bind(int port){
         ServerBootstrap bootstrap = new ServerBootstrap();
@@ -82,6 +100,60 @@ public class NettyServer {
 
 
         }
+
+
+    }
+
+    public Channel bind(BrokerInfo brokerInfo, final CountDownLatch countDownLatch){
+
+        Bootstrap bootstrap = new Bootstrap();
+        bootstrap.group(work);
+
+        bootstrap.channel(NioSocketChannel.class);
+        bootstrap.option(ChannelOption.SO_KEEPALIVE,true);
+        bootstrap.handler(new ChannelInitializer<SocketChannel>() {
+            @Override
+            protected void initChannel(SocketChannel socketChannel) throws Exception {
+                socketChannel.pipeline().addLast(new UpdateTopicHandlerAdapter(countDownLatch));
+            }
+        });
+        ChannelFuture channelFuture = null;
+
+        try {
+            channelFuture = bootstrap.connect(brokerInfo.getIp(),brokerInfo.getNameServerPort()).sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            work.shutdownGracefully();
+        }
+        if (channelFuture.isSuccess()) {
+            System.out.println("nameServer connect success");
+
+
+        }
+        return  channelFuture.channel();
+
+
+    }
+
+
+    public void notifyBroker(BrokerInfo brokerInfo , ByteBuf byteBuf , CountDownLatch countDownLatch){
+
+        Channel channel = (Channel) BrokerConnectionCacheTable.concurrentHashMap.get(brokerInfo);
+
+        if (channel == null) {
+        channel = bind(brokerInfo,countDownLatch);
+
+        }
+
+        if (channel == null) {
+            System.out.println("send to broker fail");
+            return;
+        }
+        channel.writeAndFlush(byteBuf);
+
+
+
+
 
 
     }

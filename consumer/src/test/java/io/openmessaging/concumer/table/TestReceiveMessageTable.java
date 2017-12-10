@@ -6,6 +6,7 @@ import io.openmessaging.consumer.consumer.Message;
 import io.openmessaging.consumer.consumer.Properties;
 import io.openmessaging.consumer.listener.ListenerMessage;
 import io.openmessaging.consumer.table.ReceiveMessageTable;
+import io.openmessaging.consumer.table.TopicBrokerTable;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -37,18 +38,23 @@ public class TestReceiveMessageTable {
         new Thread(new Runnable() {
             public void run() {
 
-        abstractConsumer.subscribe("TOPIC_01", new ListenerMessage() {
-            public void listener(Message message) {
 
-            }
-        });
+
+                abstractConsumer.subscribe("TOPIC_01", new ListenerMessage() {
+                    public void listener(Message message) {
+
+                    }
+                });
+
+
 
             }
         }).start();
 
-
         Thread.sleep(2000);
-                abstractConsumer.start();
+        abstractConsumer.start();
+
+
 
 
 

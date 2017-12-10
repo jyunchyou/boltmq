@@ -15,4 +15,5 @@ public class BrokerInfoTable {
     public static ConcurrentHashMap<BrokerInfo,MessageInfoQueues> map = new ConcurrentHashMap();
 
 
+
 }

@@ -5,11 +5,15 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.openmessaging.constant.ConstantNameServer;
 import io.openmessaging.producer.BrokerInfo;
 
+import io.openmessaging.table.BrokerInfoTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by fbhw on 17-12-3.
@@ -17,6 +21,8 @@ import java.util.HashMap;
 public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
 
     private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
+
+    CountDownLatch countDownLatch = new CountDownLatch(1);
 
     Logger logger = LoggerFactory.getLogger(NettyServerHandlerAdapter.class);
 
@@ -28,7 +34,6 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
     @Override
     public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg){
 
-        logger.info("method channelRead has executed");
 
         ByteBuf data = (ByteBuf) msg;
 
@@ -57,6 +62,15 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
         } else {
             System.out.println("成功获取getTable");
 
+
+            String topic = result;
+
+
+            this.notifyAllBroker(topic);
+
+
+
+
             ByteBuf byteBuf = encodeAndDecode.encodeReceiveTable(result);
 
 
@@ -80,5 +94,29 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
 */
 
     }
+
+
+    public void notifyAllBroker(String topic){
+    byte[] topicByte = topic.getBytes();
+
+    byte topicByteLen = (byte) topicByte.length;
+    //nitify all broker if that it has connected
+
+    NettyServer nettyServer = NettyServer.getNettyServer();
+
+
+    Set<BrokerInfo> set = BrokerInfoTable.map.keySet();
+
+    ByteBuf byteBuf = Unpooled.buffer(topicByte.length + 1);
+
+            byteBuf.writeBytes(new byte[]{topicByteLen});
+            byteBuf.writeBytes(topicByte);
+            for (BrokerInfo brokerInfo : set) {
+
+
+                nettyServer.notifyBroker(brokerInfo, byteBuf,countDownLatch);
+            }
+    }
+
 
 }

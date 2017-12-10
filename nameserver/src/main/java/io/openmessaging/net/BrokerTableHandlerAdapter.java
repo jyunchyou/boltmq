@@ -29,7 +29,8 @@ public class BrokerTableHandlerAdapter extends ChannelHandlerAdapter {
 
         ByteBuf byteBuf = (ByteBuf) msg;
         encodeAndDecode.decode(byteBuf);
-        System.out.println(TopicBrokerTable.concurrentHashMap.get("TOPIC_01"));
+        System.out.println("update broker data success!");
+
 
 
     }

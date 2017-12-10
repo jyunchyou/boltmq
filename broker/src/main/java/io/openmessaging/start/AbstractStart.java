@@ -15,7 +15,7 @@ public class AbstractStart {
     public void start(NameServerInfo nameServerInfo){
 
         //接收producer发来的消息
-        nettyServer.bind(8080);
+        nettyServer.bind(ConstantBroker.BROKER_MESSAGE_PORT);
         //发送表到nameServer
         java.util.Timer timer = new java.util.Timer();//
         timer.schedule(new java.util.TimerTask() {
@@ -27,8 +27,10 @@ public class AbstractStart {
 
         },0, ConstantBroker.SEND_TABLE_TIMER_PERIOD);
 
+        nettyServer.bindNameServerPort(ConstantBroker.NAMESERVER_PORT);
         //接收consumer发来的请求
         nettyServer.bindPullPort(ConstantBroker.PULL_PORT);
+
     }
 
 }

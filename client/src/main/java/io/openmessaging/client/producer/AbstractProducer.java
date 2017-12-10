@@ -68,6 +68,16 @@
 
             List list = sendQueues.getList();
 
+            while (list.size() == 0) {
+                System.out.println("wait queue is not 0......");
+                try {
+                    Thread.sleep(17000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
             if (shardingKey == null) {
                 sendQueue = queueSelectByRandom.select(list);
             }else {

@@ -19,12 +19,12 @@ public class Test {
 
         brokerInfo.setIp("127.0.0.1");
 
-        brokerInfo.setPort(8088);
+
 
 
         brokerInfo2.setIp("127.0.0.1");
 
-        brokerInfo2.setPort(8088);
+
 
         map.put(brokerInfo,"getSuccess");
 

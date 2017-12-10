@@ -23,5 +23,7 @@ public class ConstantBroker {
 
     public static final int PULL_PORT = 8099;
 
+    public static final int NAMESERVER_PORT = 9999;
+
     public static final int WAIT_TIME_MESSAGE = 10000;
 }

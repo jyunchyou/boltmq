@@ -30,6 +30,18 @@ public class KernelConsumer {
     private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
     public void subscribe(String topic, ListenerMessage listenerMessage,int num){
 
+
+        System.out.println("subscribe");
+
+        if (TopicBrokerTable.concurrentHashMap.isEmpty()) {
+            try {
+                Thread.sleep(15000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+
         //TODO get路由from nameServer
         //TODO 建立netty连接
         //TODO 将ListenerMessage 传入 ChannelHandlerAdapter执行消息处理,在这之前进行解码
@@ -76,6 +88,7 @@ public class KernelConsumer {
 
     public void pull(String topic,int num){
 
+
         while (TopicBrokerTable.concurrentHashMap.isEmpty()) {
             try {
                 Thread.sleep(3000);
@@ -94,6 +107,16 @@ public class KernelConsumer {
 
 
          System.out.println("preNum:1,Acture:"+list.size());
+
+         while (list == null || list.size() == 0) {
+
+             System.out.println("list == 0 || == null");
+             try {
+                 Thread.sleep(15000);
+             } catch (InterruptedException e) {
+                 e.printStackTrace();
+             }
+         }
         for (Map map : list) {
             BrokerInfo brokerInfo= (BrokerInfo) map.keySet().iterator().next();
 
