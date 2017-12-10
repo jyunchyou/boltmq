@@ -142,7 +142,7 @@ public class NettyServer {
 
         BrokerInfo brokerInfo = new BrokerInfo();
         brokerInfo.setIp(ConstantBroker.BROKER_MESSAGE_IP);
-        brokerInfo.setPort(ConstantBroker.BROKER_MESSAGE_PORT);
+        brokerInfo.setPort(ConstantBroker.PULL_PORT);
         ByteBuf byteBuf = encodeAndDecode.encodeToNameServer(brokerInfo);
 
 

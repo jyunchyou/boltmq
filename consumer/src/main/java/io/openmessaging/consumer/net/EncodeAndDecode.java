@@ -49,8 +49,6 @@ public class EncodeAndDecode {
         System.out.println("mapSize:"+mapSize);
             for (int indexNum = 0; indexNum < mapSize; indexNum++) {
 
-                byte[] ipByteLen = new byte[1];
-
                 int ipByteLenInt = heapBuffer.readInt();
                 byte[] ipByte = new byte[ipByteLenInt];
                 heapBuffer.readBytes(ipByte);
@@ -279,9 +277,11 @@ public class EncodeAndDecode {
      * byte 批量拉取条数
      * topicByteLen
      * topicByte
+     * queueIdByteLen
+     * queueIdByte
      */
 
-    public ByteBuf encodePull(String topic,int num){
+    public ByteBuf encodePull(String topic, int num, List<String> queueIds){
 
         ByteBuf byteBuf = Unpooled.buffer();
 
@@ -291,6 +291,19 @@ public class EncodeAndDecode {
         byteBuf.writeBytes(new byte[]{topicByteLen});
         byteBuf.writeBytes(topicByte);
         byteBuf.writeInt(num);
+        byteBuf.writeInt(queueIds.size());
+
+
+//        for (String queueId : queueIds) {
+//
+//            byte[] queueIdByte = queueId.getBytes();
+//            byte queueIdByteLen = (byte) queueIdByte.length;
+//
+//            byteBuf.writeBytes(new byte[]{queueIdByteLen});
+//            byteBuf.writeBytes(queueIdByte);
+//        }
+
+
 
         return byteBuf;
 

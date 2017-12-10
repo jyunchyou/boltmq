@@ -17,6 +17,8 @@ public class MessageInfoQueue {
 
     Logger logger = LoggerFactory.getLogger(MessageInfoQueue.class);
 
+    private String queueId = null;
+
     private   List queue = new ArrayList<MessageInfo>();
 
     private int index;//consumer list index
@@ -62,5 +64,13 @@ public class MessageInfoQueue {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public String getQueueId() {
+        return queueId;
+    }
+
+    public void setQueueId(String queueId) {
+        this.queueId = queueId;
     }
 }

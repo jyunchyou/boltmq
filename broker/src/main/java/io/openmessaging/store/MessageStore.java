@@ -4,10 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.openmessaging.Constant.ConstantBroker;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
@@ -96,6 +93,42 @@ public class MessageStore {
 
 
     }
+
+
+    public byte[] out(long offset,long len,String queueId){
+        //计算文件名
+        int fileNum = (int) (offset/ConstantBroker.FILE_SIZE);
+        String fileName = fileNum * ConstantBroker.FILE_SIZE + "";
+
+
+        File file = new File(ConstantBroker.ROOT_PATH+queueId+"/"+fileName);
+
+        byte[] messageByte = null;
+        RandomAccessFile randomAccessFile = null;
+        try {
+        randomAccessFile = new RandomAccessFile(file,"r");
+        randomAccessFile.seek(offset);
+
+        messageByte = new byte[(int) len];
+        randomAccessFile.read(messageByte);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                randomAccessFile.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        return messageByte;
+
+    }
+
 
     }
 

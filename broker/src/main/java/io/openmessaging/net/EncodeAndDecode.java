@@ -256,24 +256,26 @@ public class EncodeAndDecode {
         ByteBuf byteBuf = Unpooled.buffer(ConstantBroker.BUFFER_ROUTE_SIZE);
 
             Set<String> set = MessageInfoQueues.concurrentHashMap.keySet();
-            for (String queueId : set){
+            for (String topic : set){
 
-                MessageInfoQueue e = MessageInfoQueues.concurrentHashMap.get(queueId);
+                MessageInfoQueue e = MessageInfoQueues.concurrentHashMap.get(topic);
                 //
 
-                byte[] queueIdByte = queueId.getBytes();
+                byte[] topicByte = topic.getBytes();
 
-                byte queueIdByteLen = (byte) queueIdByte.length;
+                byte topicByteLen = (byte) topicByte.length;
                 MessageInfoQueue messageInfoQueue= e;
+
+                String queueId = messageInfoQueue.getQueueId();
+
+                byte[] queueIdByte = queueId.getBytes();
+                byte queueIdByteLen = (byte) queueIdByte.length;
 
                 List<MessageInfo> list = messageInfoQueue.getList();
                 for (MessageInfo messageInfo : list) {
                     System.out.println(messageInfo);
 
                     //
-                    String topic = messageInfo.getTopic();
-                    byte[] topicByte = topic.getBytes();
-                    byte topicByteLen = (byte) topicByte.length;
                     long offset = messageInfo.getOffset();
 
 
@@ -283,7 +285,6 @@ public class EncodeAndDecode {
 
                     String ip = brokerInfo.getIp();
                     String port = brokerInfo.getPort() + "";
-
                     byte[] ipByte = ip.getBytes();
                     byte[] portByte = port.getBytes();
                     int ipIntLen = ipByte.length;
@@ -298,10 +299,10 @@ public class EncodeAndDecode {
 
                     System.out.println(ip);
                     System.out.println(port);
+                    System.out.println(topic);
+                    System.out.println(topicByteLen);
                     System.out.println(queueIdByteLen);
                     System.out.println(queueId);
-                    System.out.println(topicByteLen);
-                    System.out.println(topic);
                     System.out.println(offset);
                     System.out.println(len);
 
@@ -309,10 +310,10 @@ public class EncodeAndDecode {
                     byteBuf.writeBytes(ipByte);
                     byteBuf.writeBytes(portByteLen);
                     byteBuf.writeBytes(portByte);
-                    byteBuf.writeBytes(new byte[]{queueIdByteLen});
-                    byteBuf.writeBytes(queueIdByte);
                     byteBuf.writeBytes(new byte[]{topicByteLen});
                     byteBuf.writeBytes(topicByte);
+                    byteBuf.writeBytes(new byte[]{queueIdByteLen});
+                    byteBuf.writeBytes(queueIdByte);
                     byteBuf.writeLong(offset);
                     byteBuf.writeLong(len);
 

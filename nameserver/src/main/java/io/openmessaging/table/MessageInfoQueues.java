@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 数据结构
- * map{queueId-InfoQueue}
+ * map{topic-InfoQueue}
  */
 public class MessageInfoQueues {
 

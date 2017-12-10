@@ -32,6 +32,7 @@ public class PullHandlerAdapter extends ChannelHandlerAdapter {
 
 
 
+        System.out.println("准备读取!!");
 
         byte[] topicByteLen = new byte[1];
         byteBuf.readBytes(topicByteLen);
@@ -41,6 +42,8 @@ public class PullHandlerAdapter extends ChannelHandlerAdapter {
 
         String topic = new String(topicByte);
         int pullNum = byteBuf.readInt();
+
+
 
         processorOut.out(topic,pullNum);
 

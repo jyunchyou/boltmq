@@ -2,6 +2,7 @@ package io.openmessaging.consumer.consumer;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
+import io.netty.util.concurrent.Future;
 import io.openmessaging.consumer.constant.ConstantConsumer;
 import io.openmessaging.consumer.listener.ListenerMessage;
 import io.openmessaging.consumer.net.EncodeAndDecode;
@@ -33,20 +34,20 @@ public class KernelConsumer {
         //TODO 建立netty连接
         //TODO 将ListenerMessage 传入 ChannelHandlerAdapter执行消息处理,在这之前进行解码
 
-
+        while (true) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            pull(topic, num);
+        }
     }
 
     public void start(final ReceiveMessageTable receiveMessageTable, final String topic){
 
 
-        new Thread(new Runnable() {
-            public void run() {
 
-                pull(topic);
-
-
-            }
-        }).start();
 
 
         startTable(receiveMessageTable,topic);
@@ -73,7 +74,7 @@ public class KernelConsumer {
 
 
 
-    public void pull(String topic){
+    public void pull(String topic,int num){
 
         while (TopicBrokerTable.concurrentHashMap.isEmpty()) {
             try {
@@ -84,7 +85,6 @@ public class KernelConsumer {
 
         }
 
-        ByteBuf byteBuf = encodeAndDecode.encodePull(ConstantConsumer.PULL_BUFFER_SIZE);
 
         /**
          * 表结构 topic-List{BrokerInfo-List{queueId}}
@@ -92,15 +92,21 @@ public class KernelConsumer {
          * */
          List<Map<BrokerInfo, List<String>>> list = TopicBrokerTable.concurrentHashMap.get(topic);
 
+
+         System.out.println("preNum:1,Acture:"+list.size());
         for (Map map : list) {
             BrokerInfo brokerInfo= (BrokerInfo) map.keySet().iterator().next();
 
+            List queueIds = (List) map.get(brokerInfo);
+            ByteBuf byteBuf = encodeAndDecode.encodePull(topic,num,queueIds);
+
             Channel channel = ConnectionCacheBrokerTabel.connectionCacheBrokerTable.get(brokerInfo);
-            System.out.println("yijinfasong");
+
 
             if (channel != null) {
                 channel.writeAndFlush(byteBuf);
 
+                System.out.println("yijinfasong");
             } else {
 
 
@@ -115,7 +121,13 @@ public class KernelConsumer {
 
                 ConnectionCacheBrokerTabel.connectionCacheBrokerTable.put(brokerInfo,c);
 
-                c.writeAndFlush(byteBuf);
+                Future future = c.writeAndFlush(byteBuf);
+                if (future.isSuccess()) {
+                    System.out.println("-------pull请求发送-----");
+
+                } else  {
+                    System.out.println("------pull shibai-----");
+                }
 
 
             }

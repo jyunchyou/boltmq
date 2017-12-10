@@ -40,10 +40,11 @@ public class AbstractStartTest {
 
         MessageInfoQueues.init(4);
         ConcurrentHashMap concurrentHashMap = MessageInfoQueues.concurrentHashMap;
-        MessageInfoQueue messageInfoQueue = (MessageInfoQueue) concurrentHashMap.get("0");
+        MessageInfoQueue messageInfoQueue = (MessageInfoQueue) concurrentHashMap.get("TOPIC_01");
+
+        messageInfoQueue.setQueueId(1 + "");
         List list = messageInfoQueue.getList();
         MessageInfo messageInfo = new MessageInfo();
-        messageInfo.setTopic("TOPIC_01");
         messageInfo.setLen(123);
         messageInfo.setOffset(1234567);
 
@@ -53,30 +54,33 @@ public class AbstractStartTest {
        // System.out.println(list);
 
 
-        MessageInfoQueue messageInfoQueue1 = (MessageInfoQueue) concurrentHashMap.get("1");
+        MessageInfoQueue messageInfoQueue1 = (MessageInfoQueue) concurrentHashMap.get("TOPIC_02");
+        messageInfoQueue1.setQueueId(2 + "");
         List list1 = messageInfoQueue1.getList();
         MessageInfo messageInfo1 = new MessageInfo();
-        messageInfo1.setTopic("TOPIC_01");
+
         messageInfo1.setLen(123);
         messageInfo1.setOffset(1234567);
         list1.add(messageInfo1);
        // System.out.println(list1);
 
 
-        MessageInfoQueue messageInfoQueue2 = (MessageInfoQueue) concurrentHashMap.get("2");
+        MessageInfoQueue messageInfoQueue2 = (MessageInfoQueue) concurrentHashMap.get("TOPIC_03");
+        messageInfoQueue2.setQueueId(3 + "");
         List list2 = messageInfoQueue2.getList();
         MessageInfo messageInfo2 = new MessageInfo();
-        messageInfo2.setTopic("TOPIC_01");
+
         messageInfo2.setLen(123);
         messageInfo2.setOffset(1234567);
         list2.add(messageInfo2);
        // System.out.println(list2);
 
 
-        MessageInfoQueue messageInfoQueue3 = (MessageInfoQueue) concurrentHashMap.get("3");
+        MessageInfoQueue messageInfoQueue3 = (MessageInfoQueue) concurrentHashMap.get("TOPIC_00");
+        messageInfoQueue3.setQueueId(0 + "");
         List list3 = messageInfoQueue3.getList();
         MessageInfo messageInfo3 = new MessageInfo();
-        messageInfo3.setTopic("TOPIC_01");
+
         messageInfo3.setLen(123);
         messageInfo3.setOffset(1234567);
         list3.add(messageInfo3);

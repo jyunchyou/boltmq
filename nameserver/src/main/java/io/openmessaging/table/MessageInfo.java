@@ -7,19 +7,9 @@ package io.openmessaging.table;
 //MessageInfo是Message的逻辑对象
 public class MessageInfo {
 
-    private String topic;
-
     private long offset;
 
     private long len;
-
-    public String getTopic() {
-        return topic;
-    }
-
-    public void setTopic(String topic) {
-        this.topic = topic;
-    }
 
     public long getOffset() {
         return offset;

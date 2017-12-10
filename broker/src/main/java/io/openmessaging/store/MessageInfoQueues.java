@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 数据结构
- * map{queueId-FileInfoQueue}
+ * map{topic-FileInfoQueue}
  */
 public class MessageInfoQueues {
 
@@ -26,7 +26,7 @@ public class MessageInfoQueues {
         for (int checkNum = 0;checkNum < queueNum;checkNum++) {
             MessageInfoQueue fileInfoQueue = new MessageInfoQueue(checkNum);
 
-            concurrentHashMap.put(checkNum + "",fileInfoQueue);
+            concurrentHashMap.put("TOPIC_0"+checkNum,fileInfoQueue);
 
         }
 

@@ -33,15 +33,32 @@ public class TestReceiveMessageTable {
 
     @Test
     public void testUpdateReceiveTableFromNameServer() throws InterruptedException {
+
+        new Thread(new Runnable() {
+            public void run() {
+
         abstractConsumer.subscribe("TOPIC_01", new ListenerMessage() {
             public void listener(Message message) {
 
             }
         });
-        abstractConsumer.start();
+
+            }
+        }).start();
+
+
+        Thread.sleep(2000);
+                abstractConsumer.start();
+
+
+
+
+
         Thread.sleep(1000000);
 
     }
+
+
 
 
 }

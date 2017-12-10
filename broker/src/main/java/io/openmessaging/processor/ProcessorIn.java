@@ -29,21 +29,10 @@ public class ProcessorIn {
 
 
 
-        Set<Map.Entry<String, MessageInfoQueue>> set = MessageInfoQueues.concurrentHashMap.entrySet();
-
-        MessageInfoQueue messageInfoQueue = null;
-        for (Map.Entry entry : set) {
-            messageInfoQueue = (MessageInfoQueue) entry.getValue();
-            String q = (String) entry.getKey();
-
-            if (q.equals(queueId)) {
-
-                break;
-
-            }
+        MessageInfoQueue messageInfoQueue = MessageInfoQueues.concurrentHashMap.get(topic);
 
 
-        }
+
         this.input(byteBuf,topic,queueId,messageInfoQueue);
 
 
@@ -51,6 +40,7 @@ public class ProcessorIn {
 
     //保存topic,设置index,判断是否需要new新文件
     public void input(byte[] byteBuf,String topic,String queueId,MessageInfoQueue messageInfoQueue){
+
 
         List list = messageInfoQueue.getList();
 

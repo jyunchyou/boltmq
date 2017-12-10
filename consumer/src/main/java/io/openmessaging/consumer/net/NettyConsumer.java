@@ -119,22 +119,11 @@ public class NettyConsumer {
         String ip = brokerInfo.getIp();
         int port = brokerInfo.getPort();
         Channel channel = null;
-
-        if (bootstrap == null) {
-
-            try {
-                bootstrap = new Bootstrap();
+        Bootstrap bootstrap = new Bootstrap();
                 bootstrap.group(eventLoopGroup);
                 bootstrap.channel(NioSocketChannel.class);
                 bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
                 //bootstrap.remoteAddress(ip,port);
-            }catch (Exception e){
-
-                eventLoopGroup.shutdownGracefully();
-
-            }
-
-        }
         bootstrap.handler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel socketChannel) throws Exception {

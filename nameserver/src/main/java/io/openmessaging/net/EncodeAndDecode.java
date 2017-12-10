@@ -200,6 +200,7 @@ public class EncodeAndDecode {
 
 
 
+
             byte[] ipByteLen = new byte[1];
             byteBuf.readBytes(ipByteLen);
             int ipIntLen = ipByteLen[0];
@@ -216,14 +217,6 @@ public class EncodeAndDecode {
             byteBuf.readBytes(portByte);
             String port = new String(portByte);
 
-            byte[] queueIdByteLen = new byte[1];
-            byteBuf.readBytes(queueIdByteLen);
-            int queueIdIntLen = queueIdByteLen[0];
-
-            byte[] queueIdByte = new byte[queueIdIntLen];
-            byteBuf.readBytes(queueIdByte);
-            String queueId = new String(queueIdByte);
-
             byte[] topicByteLen = new byte[1];
             byteBuf.readBytes(topicByteLen);
             int topicIntLen = topicByteLen[0];
@@ -231,6 +224,14 @@ public class EncodeAndDecode {
             byte[] topicByte = new byte[topicIntLen];
             byteBuf.readBytes(topicByte);
             String topic = new String(topicByte);
+
+            byte[] queueIdByteLen = new byte[1];
+            byteBuf.readBytes(queueIdByteLen);
+            int queueIdIntLen = queueIdByteLen[0];
+
+            byte[] queueIdByte = new byte[queueIdIntLen];
+            byteBuf.readBytes(queueIdByte);
+            String queueId = new String(queueIdByte);
 
 
             System.out.println(topic + "-------------------------------------");
@@ -265,28 +266,28 @@ public class EncodeAndDecode {
 
 
 
-                if (map.containsKey(queueId)) {
+                if (map.containsKey(topic)) {
 
-                    MessageInfoQueue messageInfoQueue = (MessageInfoQueue) map.get(queueId);
+                    MessageInfoQueue messageInfoQueue = (MessageInfoQueue) map.get(topic);
+                    messageInfoQueue.setQueueId(queueId);
                     List list = messageInfoQueue.getList();
                     MessageInfo messageInfo = new MessageInfo();
                     messageInfo.setLen(len);
                     messageInfo.setOffset(offset);
-                    messageInfo.setTopic(topic);
                     list.add(messageInfo);
 
 
                 } else {
 
                     MessageInfoQueue messageInfoQueue = new MessageInfoQueue();
-                    map.put(queueId, messageInfoQueue);
+                    map.put(topic, messageInfoQueue);
+                    messageInfoQueue.setQueueId(queueId);
 
                     List list = messageInfoQueue.getList();
 
                     MessageInfo messageInfo = new MessageInfo();
                     messageInfo.setLen(len);
                     messageInfo.setOffset(offset);
-                    messageInfo.setTopic(topic);
                     list.add(messageInfo);
 
                 }
