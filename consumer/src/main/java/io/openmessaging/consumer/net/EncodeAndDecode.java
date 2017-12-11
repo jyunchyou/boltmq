@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.openmessaging.consumer.constant.ConstantConsumer;
 import io.openmessaging.consumer.consumer.BrokerInfo;
+import io.openmessaging.consumer.consumer.Message;
 import io.openmessaging.consumer.table.ReceiveMessageTable;
 import io.openmessaging.consumer.table.TopicBrokerTable;
 
@@ -313,5 +314,293 @@ public class EncodeAndDecode {
         return byteBuf;
 
     }
+
+
+    /**
+     *
+     byteBuf.writeBytes(allLengthByte);
+
+     //byteBuf.writeBytes(new byte[]{topicLen});
+     //byteBuf.writeBytes(topic);
+     byteBuf.writeBytes(new byte[]{queueIdByteLen});
+     byteBuf.writeBytes(queueId);
+     //byteBuf.writeBytes(bodyLen);
+     //byteBuf.writeBytes(body);
+     //byteBuf.writeBytes(new byte[]{orderIdLen});
+     //byteBuf.writeBytes(orderId);
+     byteBuf.writeBytes(new byte[]{idLen});
+     byteBuf.writeBytes(id);
+     byteBuf.writeBytes(new byte[]{languageLen});
+     byteBuf.writeBytes(language);
+     byteBuf.writeBytes(new byte[]{versionLen});
+     byteBuf.writeBytes(version);
+     byteBuf.writeBytes(new byte[]{serialModelLen});
+     byteBuf.writeBytes(serialModel);
+     byteBuf.writeBytes(new byte[]{codeLen});
+     byteBuf.writeBytes(new byte[]{code});
+     byteBuf.writeBytes(new byte[]{delayTimeLen});
+     byteBuf.writeBytes(new byte[]{delayTime});
+     */
+    public List decodeMessage(ByteBuf byteBuf,int pullNum){
+
+
+
+        List list = new ArrayList(pullNum);
+
+        while (byteBuf.readableBytes() >= 4) {
+
+            if (cacheBytes != null) {
+
+
+                byte[] arrayBuffer = new byte[byteBuf.readableBytes()];
+                byteBuf.readBytes(arrayBuffer);
+                int newLen = cacheBytes.length + byteBuf.readableBytes();
+                byteBuf = Unpooled.buffer(newLen);
+                byteBuf.writeBytes(cacheBytes);
+                byteBuf.writeBytes(arrayBuffer);
+            }
+
+
+            //设置resetIndex标记
+            byteBuf.markReaderIndex();
+
+            byte[] allLength = new byte[4];
+            byteBuf.readBytes(allLength);
+
+            int allLenInt = 0;
+            if (allLength[0] != 0 && allLength[1] != 0 && allLength[2] != 0 && allLength[3] != 0) {
+                allLenInt = allLength[0] * allLength[1] * allLength[2] * allLength[3];
+
+
+            } else if (allLength[1] != 0 && allLength[2] != 0 && allLength[3] != 0) {
+
+                allLenInt = allLength[1] * allLength[2] * allLength[3];
+            } else if (allLength[2] != 0 && allLength[3] != 0) {
+
+                allLenInt = allLength[2] * allLength[3];
+            } else {
+                allLenInt = allLength[3];
+            }
+
+
+
+
+
+
+
+
+
+           /* if (allLenInt != 68) {
+
+                    Map map = new HashMap(1);
+
+                    String t = "被丢弃";
+
+                    String q = "discard";
+
+                    map.put(t,q);
+
+                    setDiscard(false);
+
+                    return map;
+
+
+
+            }*/
+
+
+            int remain = byteBuf.readableBytes();
+
+
+            System.out.println("alllenInt:" + allLenInt);
+            if (allLenInt == remain) {
+
+                System.out.println("==");
+
+//topic
+                byte[] topicByteLen = new byte[1];
+
+                byteBuf.readBytes(topicByteLen);
+
+                int topicIntLen = topicByteLen[0];
+
+                byte[] topicByte = new byte[topicIntLen];
+
+                byteBuf.readBytes(topicByte);
+
+                String topic = new String(topicByte);
+
+
+                System.out.println(topic+"----------------------------");
+                byte[] queueIdByteLen = new byte[1];
+
+                byteBuf.readBytes(queueIdByteLen);
+
+                int queueIdIntLen = queueIdByteLen[0];
+
+                byte[] queueIdByte = new byte[queueIdIntLen];
+
+                byteBuf.readBytes(queueIdByte);
+
+
+//body
+                byte[] bodyLength = new byte[4];
+                byteBuf.readBytes(bodyLength);
+
+                int bodyLenInt = 0;
+                if (bodyLength[0] != 0 && bodyLength[1] != 0 && bodyLength[2] != 0 && bodyLength[3] != 0) {
+                    bodyLenInt = bodyLength[0] * bodyLength[1] * bodyLength[2] * bodyLength[3];
+
+
+                } else if (bodyLength[1] != 0 && bodyLength[2] != 0 && bodyLength[3] != 0) {
+
+                    bodyLenInt = bodyLength[1] * bodyLength[2] * bodyLength[3];
+                } else if (bodyLength[2] != 0 && bodyLength[3] != 0) {
+
+                    bodyLenInt = bodyLength[2] * bodyLength[3];
+                } else {
+                    bodyLenInt = bodyLength[3];
+                }
+
+                byte[] body = new byte[bodyLenInt];
+                byteBuf.readBytes(body);
+//order
+                byte[] orderByteLen = new byte[1];
+
+                byteBuf.readBytes(orderByteLen);
+
+                int orderIntLen = orderByteLen[0];
+
+                byte[] orderByte = new byte[orderIntLen];
+
+                byteBuf.readBytes(orderByte);
+
+                String order = new String(orderByte);
+                Message message = new Message(topic,order,body);
+                list.add(message);
+                return  list;
+
+            } else if (allLenInt < remain) {
+
+
+                System.out.println("<");
+
+
+                byte[] topicByteLen = new byte[1];
+
+                byteBuf.readBytes(topicByteLen);
+
+                int topicIntLen = topicByteLen[0];
+
+                byte[] topicByte = new byte[topicIntLen];
+
+                byteBuf.readBytes(topicByte);
+
+                String topic = new String(topicByte);
+
+                System.out.println(topic+"----------------------------");
+                byte[] queueIdByteLen = new byte[1];
+
+                byteBuf.readBytes(queueIdByteLen);
+
+                int queueIdIntLen = queueIdByteLen[0];
+
+                byte[] queueIdByte = new byte[queueIdIntLen];
+
+                byteBuf.readBytes(queueIdByte);
+
+
+                String queueId = new String(queueIdByte);
+
+//order
+                byte[] orderByteLen = new byte[1];
+
+                byteBuf.readBytes(orderByteLen);
+
+                int orderIntLen = orderByteLen[0];
+
+                byte[] orderByte = new byte[orderIntLen];
+
+                byteBuf.readBytes(orderByte);
+
+                String order = new String(orderByte);
+//body
+                byte[] bodyLength = new byte[4];
+                byteBuf.readBytes(bodyLength);
+
+                int bodyLenInt = 0;
+                if (bodyLength[0] != 0 && bodyLength[1] != 0 && bodyLength[2] != 0 && bodyLength[3] != 0) {
+                    bodyLenInt = bodyLength[0] * bodyLength[1] * bodyLength[2] * bodyLength[3];
+
+
+                } else if (bodyLength[1] != 0 && bodyLength[2] != 0 && bodyLength[3] != 0) {
+
+                    bodyLenInt = bodyLength[1] * bodyLength[2] * bodyLength[3];
+                } else if (bodyLength[2] != 0 && bodyLength[3] != 0) {
+
+                    bodyLenInt = bodyLength[2] * bodyLength[3];
+                } else {
+                    bodyLenInt = bodyLength[3];
+                }
+
+                byte[] body = new byte[bodyLenInt];
+                byteBuf.readBytes(body);
+                Message message = new Message(topic,order,body);
+                list.add(message);
+
+                byteBuf.resetReaderIndex();
+
+                byteBuf.skipBytes(allLenInt + 4);
+
+
+
+                    /*cacheBytes = new byte[byteBuf.readableBytes()];*/
+
+
+                   /* byteBuf.readBytes(cacheBytes);*/
+
+
+                cacheBytes = null;
+
+               if (list.size() == pullNum) {
+
+                   cacheBytes = new byte[byteBuf.readableBytes()];
+                   byteBuf.readBytes(cacheBytes);
+
+                   return list;
+               }
+
+
+               /* ip长度 1字节
+                ip byte[]
+                port转String长度 1字节
+                port 转为byte[]*/
+
+
+            } else {
+
+
+                System.out.println(">");
+                cacheBytes = new byte[remain + 4];
+                byteBuf.resetReaderIndex();
+                byteBuf.readBytes(cacheBytes);
+
+                return list;
+
+
+            }
+
+
+        }
+
+        cacheBytes = new byte[byteBuf.readableBytes()];
+
+        byteBuf.readBytes(cacheBytes);
+
+        return list;
+
+
+    }
+
 
 }

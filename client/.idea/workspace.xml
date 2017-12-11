@@ -21,8 +21,8 @@
       <file leaf-file-name="EncodeAndDecode.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/client/net/EncodeAndDecode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="20">
-              <caret line="197" column="36" lean-forward="false" selection-start-line="197" selection-start-column="36" selection-end-line="197" selection-end-column="36" />
+            <state relative-caret-position="-1000">
+              <caret line="133" column="0" lean-forward="true" selection-start-line="133" selection-start-column="0" selection-end-line="133" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -55,35 +55,9 @@
       <file leaf-file-name="RequestDto.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/client/net/RequestDto.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#764#765#0" expanded="false" />
-                <element signature="e#789#790#0" expanded="false" />
-                <element signature="e#825#826#0" expanded="false" />
-                <element signature="e#853#854#0" expanded="false" />
-                <element signature="e#1104#1105#0" expanded="false" />
-                <element signature="e#1135#1136#0" expanded="false" />
-                <element signature="e#1183#1184#0" expanded="false" />
-                <element signature="e#1223#1224#0" expanded="false" />
-                <element signature="e#1257#1258#0" expanded="false" />
-                <element signature="e#1287#1288#0" expanded="false" />
-                <element signature="e#1333#1334#0" expanded="false" />
-                <element signature="e#1371#1372#0" expanded="false" />
-                <element signature="e#1409#1410#0" expanded="false" />
-                <element signature="e#1443#1444#0" expanded="false" />
-                <element signature="e#1497#1498#0" expanded="false" />
-                <element signature="e#1543#1544#0" expanded="false" />
-                <element signature="e#1570#1571#0" expanded="false" />
-                <element signature="e#1597#1598#0" expanded="false" />
-                <element signature="e#1633#1634#0" expanded="false" />
-                <element signature="e#1665#1666#0" expanded="false" />
-                <element signature="e#1699#1700#0" expanded="false" />
-                <element signature="e#1731#1732#0" expanded="false" />
-                <element signature="e#1778#1779#0" expanded="false" />
-                <element signature="e#1820#1821#0" expanded="false" />
-              </folding>
+            <state relative-caret-position="80">
+              <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -141,8 +115,17 @@
             <state relative-caret-position="540">
               <caret line="37" column="22" lean-forward="false" selection-start-line="37" selection-start-column="22" selection-end-line="37" selection-end-column="22" />
               <folding>
-                <element signature="e#731#732#0" expanded="true" />
-                <element signature="e#764#765#0" expanded="true" />
+                <element signature="imports" expanded="false" />
+                <element signature="e#417#418#0" expanded="false" />
+                <element signature="e#449#450#0" expanded="false" />
+                <element signature="e#499#500#0" expanded="false" />
+                <element signature="e#541#542#0" expanded="false" />
+                <element signature="e#575#576#0" expanded="false" />
+                <element signature="e#605#606#0" expanded="false" />
+                <element signature="e#651#652#0" expanded="false" />
+                <element signature="e#689#690#0" expanded="false" />
+                <element signature="e#820#821#0" expanded="false" />
+                <element signature="e#864#865#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -151,20 +134,18 @@
       <file leaf-file-name="KernelProducer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/client/producer/KernelProducer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="660">
-              <caret line="43" column="42" lean-forward="false" selection-start-line="43" selection-start-column="42" selection-end-line="43" selection-end-column="42" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
+            <state relative-caret-position="156">
+              <caret line="56" column="24" lean-forward="true" selection-start-line="56" selection-start-column="24" selection-end-line="56" selection-end-column="24" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BrokerInfo.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/client/producer/BrokerInfo.java">
+      <file leaf-file-name="NettyClient.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/client/net/NettyClient.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1580">
-              <caret line="99" column="0" lean-forward="false" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
+            <state relative-caret-position="82">
+              <caret line="196" column="0" lean-forward="false" selection-start-line="196" selection-start-column="0" selection-end-line="196" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -182,7 +163,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>System.ou</find>
       <find>System.out</find>
       <find>update success</find>
       <find>z</find>
@@ -212,6 +192,7 @@
       <find>selec</find>
       <find>select(</find>
       <find>select</find>
+      <find>sendSycn</find>
     </findStrings>
   </component>
   <component name="GradleLocalSettings">
@@ -267,12 +248,12 @@
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/client/net/UpdateFromNameServerHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/client/table/SendQueues.java" />
         <option value="$PROJECT_DIR$/src/test/java/io/openmessaging/client/producer/AbstractProducerTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/client/net/NettyClient.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/client/producer/AbstractProducer.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/client/producer/BrokerInfo.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/client/net/RequestDto.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/client/producer/KernelProducer.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/client/net/EncodeAndDecode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/client/net/NettyClient.java" />
       </list>
     </option>
   </component>
@@ -289,8 +270,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="65" />
-    <option name="y" value="30" />
+    <option name="x" value="17" />
+    <option name="y" value="65" />
     <option name="width" value="1301" />
     <option name="height" value="744" />
   </component>
@@ -1047,27 +1028,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="junit - 2017.12.10 at 19h 11m 29s.xml">
-      <configuration name="junit" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="junit - 2017.12.10 at 19h 18m 05s.xml">
-      <configuration name="junit" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="junit - 2017.12.10 at 19h 21m 58s.xml">
-      <configuration name="junit" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="junit - 2017.12.10 at 19h 27m 13s.xml">
-      <configuration name="junit" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="junit - 2017.12.10 at 19h 32m 08s.xml">
-      <configuration name="junit" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="junit - 2017.12.10 at 19h 39m 50s.xml">
-      <configuration name="junit" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="junit - 2017.12.10 at 19h 45m 41s.xml">
-      <configuration name="junit" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="junit - 2017.12.11 at 09h 28m 09s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
@@ -1075,6 +1035,27 @@
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
     <history-entry file="junit - 2017.12.11 at 09h 33m 00s.xml">
+      <configuration name="junit" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="junit - 2017.12.11 at 09h 52m 46s.xml">
+      <configuration name="junit" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="junit - 2017.12.11 at 10h 07m 32s.xml">
+      <configuration name="junit" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="junit - 2017.12.11 at 10h 10m 18s.xml">
+      <configuration name="junit" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="junit - 2017.12.11 at 10h 10m 53s.xml">
+      <configuration name="junit" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="junit - 2017.12.11 at 10h 11m 36s.xml">
+      <configuration name="junit" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="junit - 2017.12.11 at 10h 11m 47s.xml">
+      <configuration name="junit" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="junit - 2017.12.11 at 10h 14m 16s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
   </component>
@@ -1088,8 +1069,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="30" width="1301" height="744" extended-state="0" />
-    <editor active="true" />
+    <frame x="17" y="65" width="1301" height="744" extended-state="0" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32923076" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1100,13 +1080,14 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3430769" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.43569133" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.43569133" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32923076" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4138205" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329582" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1120,7 +1101,6 @@
       <window_info id="Dynamic Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32962668" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329582" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1407,6 +1387,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="460">
           <caret line="23" column="28" lean-forward="false" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="28" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1425,14 +1406,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/client/net/NettyClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-35">
-          <caret line="62" column="47" lean-forward="false" selection-start-line="62" selection-start-column="47" selection-end-line="62" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/client/selector/QueueSelectByRandom.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="218">
@@ -1445,6 +1418,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="138">
           <caret line="71" column="61" lean-forward="false" selection-start-line="71" selection-start-column="61" selection-end-line="71" selection-end-column="61" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1512,8 +1486,17 @@
         <state relative-caret-position="540">
           <caret line="37" column="22" lean-forward="false" selection-start-line="37" selection-start-column="22" selection-end-line="37" selection-end-column="22" />
           <folding>
-            <element signature="e#731#732#0" expanded="true" />
-            <element signature="e#764#765#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#417#418#0" expanded="false" />
+            <element signature="e#449#450#0" expanded="false" />
+            <element signature="e#499#500#0" expanded="false" />
+            <element signature="e#541#542#0" expanded="false" />
+            <element signature="e#575#576#0" expanded="false" />
+            <element signature="e#605#606#0" expanded="false" />
+            <element signature="e#651#652#0" expanded="false" />
+            <element signature="e#689#690#0" expanded="false" />
+            <element signature="e#820#821#0" expanded="false" />
+            <element signature="e#864#865#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1530,52 +1513,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/client/net/RequestDto.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#764#765#0" expanded="false" />
-            <element signature="e#789#790#0" expanded="false" />
-            <element signature="e#825#826#0" expanded="false" />
-            <element signature="e#853#854#0" expanded="false" />
-            <element signature="e#1104#1105#0" expanded="false" />
-            <element signature="e#1135#1136#0" expanded="false" />
-            <element signature="e#1183#1184#0" expanded="false" />
-            <element signature="e#1223#1224#0" expanded="false" />
-            <element signature="e#1257#1258#0" expanded="false" />
-            <element signature="e#1287#1288#0" expanded="false" />
-            <element signature="e#1333#1334#0" expanded="false" />
-            <element signature="e#1371#1372#0" expanded="false" />
-            <element signature="e#1409#1410#0" expanded="false" />
-            <element signature="e#1443#1444#0" expanded="false" />
-            <element signature="e#1497#1498#0" expanded="false" />
-            <element signature="e#1543#1544#0" expanded="false" />
-            <element signature="e#1570#1571#0" expanded="false" />
-            <element signature="e#1597#1598#0" expanded="false" />
-            <element signature="e#1633#1634#0" expanded="false" />
-            <element signature="e#1665#1666#0" expanded="false" />
-            <element signature="e#1699#1700#0" expanded="false" />
-            <element signature="e#1731#1732#0" expanded="false" />
-            <element signature="e#1778#1779#0" expanded="false" />
-            <element signature="e#1820#1821#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="80">
+          <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/client/producer/KernelProducer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="43" column="42" lean-forward="false" selection-start-line="43" selection-start-column="42" selection-end-line="43" selection-end-column="42" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
+        <state relative-caret-position="156">
+          <caret line="56" column="24" lean-forward="true" selection-start-line="56" selection-start-column="24" selection-end-line="56" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/client/net/NettyClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="82">
+          <caret line="196" column="0" lean-forward="false" selection-start-line="196" selection-start-column="0" selection-end-line="196" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/client/net/EncodeAndDecode.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="20">
-          <caret line="197" column="36" lean-forward="false" selection-start-line="197" selection-start-column="36" selection-end-line="197" selection-end-column="36" />
+        <state relative-caret-position="-1000">
+          <caret line="133" column="0" lean-forward="true" selection-start-line="133" selection-start-column="0" selection-end-line="133" selection-end-column="0" />
           <folding />
         </state>
       </provider>

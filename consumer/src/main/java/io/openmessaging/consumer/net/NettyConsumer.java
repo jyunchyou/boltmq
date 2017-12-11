@@ -7,12 +7,18 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.concurrent.Future;
 import io.openmessaging.consumer.consumer.BrokerInfo;
 import io.openmessaging.consumer.consumer.NameServerInfo;
+import io.openmessaging.consumer.listener.ListenerMessage;
+import io.openmessaging.consumer.table.ConnectionCacheBrokerTabel;
 import io.openmessaging.consumer.table.ConnectionCacheNameServerTable;
+import io.openmessaging.consumer.table.TopicBrokerTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
@@ -30,6 +36,8 @@ public class NettyConsumer {
     private Bootstrap bootstrap = null;
 
     private CountDownLatch countDownLatch = new CountDownLatch(1);
+
+    private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
 
     public NettyConsumer(){
 
@@ -113,7 +121,7 @@ public class NettyConsumer {
     }
 
 
-    public Channel bind(BrokerInfo brokerInfo){
+    public Channel bind(BrokerInfo brokerInfo, final int num, final ListenerMessage listenerMessage){
 
 
         String ip = brokerInfo.getIp();
@@ -128,7 +136,7 @@ public class NettyConsumer {
             @Override
             protected void initChannel(SocketChannel socketChannel) throws Exception {
 
-                socketChannel.pipeline().addLast(new ReceiveMessageHandlerAdapter());
+                socketChannel.pipeline().addLast(new ReceiveMessageHandlerAdapter(num,listenerMessage));
             }
         });
         ChannelFuture future = null;
@@ -154,5 +162,78 @@ public class NettyConsumer {
 
 
     }
+
+
+    public void pull(String topic, int num,ListenerMessage listenerMessage) {
+        while (TopicBrokerTable.concurrentHashMap.isEmpty()) {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+        /**
+         * 表结构 topic-List{BrokerInfo-List{queueId}}
+         *
+         * */
+        List<Map<BrokerInfo, List<String>>> list = TopicBrokerTable.concurrentHashMap.get(topic);
+
+
+        System.out.println("preNum:1,Acture:" + list.size());
+
+        while (list == null || list.size() == 0) {
+
+            System.out.println("list == 0 || == null");
+            try {
+                Thread.sleep(15000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        for (Map map : list) {
+            BrokerInfo brokerInfo = (BrokerInfo) map.keySet().iterator().next();
+
+            List queueIds = (List) map.get(brokerInfo);
+            ByteBuf byteBuf = encodeAndDecode.encodePull(topic, num, queueIds);
+
+            Channel channel = ConnectionCacheBrokerTabel.connectionCacheBrokerTable.get(brokerInfo);
+
+
+            if (channel != null) {
+                channel.writeAndFlush(byteBuf);
+
+                System.out.println("yijinfasong");
+            } else {
+
+
+                Channel c = this.bind(brokerInfo,num,listenerMessage);
+
+                if (c == null) {
+
+                    logger.info("连接失败,取消pull");
+
+                    return;
+                }
+
+                ConnectionCacheBrokerTabel.connectionCacheBrokerTable.put(brokerInfo, c);
+
+                Future future = c.writeAndFlush(byteBuf);
+                if (future.isSuccess()) {
+                    System.out.println("-------pull请求发送-----");
+
+                } else {
+                    System.out.println("------pull shibai-----");
+                }
+
+
+            }
+        }
+
+
+    }
+
 
 }

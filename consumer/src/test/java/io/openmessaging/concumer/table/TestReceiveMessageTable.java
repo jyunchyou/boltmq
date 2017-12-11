@@ -12,6 +12,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  * Created by fbhw on 17-12-7.
  */
@@ -43,6 +45,10 @@ public class TestReceiveMessageTable {
                 abstractConsumer.subscribe("TOPIC_01", new ListenerMessage() {
                     public void listener(Message message) {
 
+                    }
+
+                    public void listener(List<Message> list) {
+                        System.out.println(list);
                     }
                 });
 

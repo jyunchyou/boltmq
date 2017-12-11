@@ -184,8 +184,6 @@ public class EncodeAndDecode {
 
         byteBuf.writeBytes(allLengthByte);
 
-
-
         byteBuf.writeBytes(new byte[]{topicLen});
         byteBuf.writeBytes(topic);
         byteBuf.writeBytes(new byte[]{queueIdByteLen});

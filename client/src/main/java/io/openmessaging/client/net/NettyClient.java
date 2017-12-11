@@ -107,10 +107,9 @@ public class NettyClient implements ConnectionHandler {
 
     public void sendSycn(Channel channel,ByteBuf byteBuf){
 
-
         System.out.println("准备发送");
-        ChannelFuture channelFuture = channel.writeAndFlush(byteBuf);
 
+        ChannelFuture channelFuture = channel.writeAndFlush(byteBuf);
 
         try {
             countDownLatchSendMessage.await();
@@ -134,7 +133,6 @@ public class NettyClient implements ConnectionHandler {
 
         String ip = nameServerInfo.getIp();
         int port = nameServerInfo.getPort();
-
 
         if (bootstrap == null) {
 
@@ -197,9 +195,7 @@ public class NettyClient implements ConnectionHandler {
             e.printStackTrace();
         }
 
-
         return ;
-
     }
 
     public void start(SendQueues sendQueues){
@@ -211,12 +207,5 @@ public class NettyClient implements ConnectionHandler {
            }
 
        },0, ConstantClient.GET_LIST_TIMER_PERIOD);
-
     }
-
-
-
-
-
-
 }

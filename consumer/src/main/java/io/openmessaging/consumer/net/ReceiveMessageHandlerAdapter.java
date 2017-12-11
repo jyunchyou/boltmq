@@ -3,8 +3,14 @@ package io.openmessaging.consumer.net;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.openmessaging.consumer.consumer.KernelConsumer;
+import io.openmessaging.consumer.consumer.Message;
+import io.openmessaging.consumer.listener.ListenerMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by fbhw on 17-12-9.
@@ -12,6 +18,20 @@ import org.slf4j.LoggerFactory;
 public class ReceiveMessageHandlerAdapter extends ChannelHandlerAdapter {
 
     Logger logger = LoggerFactory.getLogger(ReceiveMessageHandlerAdapter.class);
+
+    private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
+
+    private List list = null;
+
+    private ListenerMessage listenerMessage = null;
+
+    private int num;
+
+    public ReceiveMessageHandlerAdapter(int num,ListenerMessage listenerMessage){
+
+        this.num = num;
+        this.listenerMessage = listenerMessage;
+    }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -24,12 +44,47 @@ public class ReceiveMessageHandlerAdapter extends ChannelHandlerAdapter {
 
         ByteBuf byteBuf = (ByteBuf) msg;
 
-        byte[] backMessage = new byte[byteBuf.readableBytes()];
+        if (list == null) {
 
-        byteBuf.readBytes(backMessage);
+             list = encodeAndDecode.decodeMessage(byteBuf,num);
+
+             if (list.size() != num) {
+                 return;
+
+             }
+             listenerMessage.listener(list);
+             list = null;
+
+
+        }else if (list != null) {
+            List l = encodeAndDecode.decodeMessage(byteBuf,num);
+            int size = l.size();
+            for (int indexNum = 0;indexNum < size;indexNum++) {
+
+                list.add(l.remove(indexNum));
+
+                if (list.size() == num) {
+
+                    listenerMessage.listener(list);
+                    if (indexNum >= size) {
+                        list = null;
+                    }else {
+                        list = new ArrayList(num);
+                    }
+
+                }
+
+            }
+
+        }
+
+
+
+
+
 
         logger.info("pull message success");
-        System.out.println("返回内容："+new String(backMessage));
+
 
     }
 }

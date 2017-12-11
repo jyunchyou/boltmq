@@ -32,12 +32,13 @@ public class KernelProducer {
 
         //构建Dto
         RequestDto requestDto = new RequestDto();
-        requestDto.setId(sendQueue.getQueueId());
+        requestDto.setId(sendQueue.getQueueId());//TODO 消息序号
         requestDto.setLanguage(ConstantClient.JAVA);
         requestDto.setSerialModel(ConstantClient.JSON);
         requestDto.setVersion(ConstantClient.VERSION);
         requestDto.setDelayTime(delayTime);
         requestDto.setQueueId(sendQueue.getQueueId());
+
 
 
         ByteBuf byteBuf = null;

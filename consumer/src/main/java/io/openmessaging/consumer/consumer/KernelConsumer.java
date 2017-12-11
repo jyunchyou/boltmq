@@ -22,6 +22,7 @@ import java.util.Map;
 public class KernelConsumer {
 
 
+    private int pullNum;
 
     Logger logger = LoggerFactory.getLogger(KernelConsumer.class);
 
@@ -29,6 +30,7 @@ public class KernelConsumer {
 
     private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
     public void subscribe(String topic, ListenerMessage listenerMessage,int num){
+
 
 
         System.out.println("subscribe");
@@ -52,7 +54,7 @@ public class KernelConsumer {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            pull(topic, num);
+            pull(topic, num,listenerMessage);
         }
     }
 
@@ -86,79 +88,11 @@ public class KernelConsumer {
 
 
 
-    public void pull(String topic,int num){
+    public void pull(String topic,int num,ListenerMessage listenerMessage){
 
-
-        while (TopicBrokerTable.concurrentHashMap.isEmpty()) {
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-
-        /**
-         * 表结构 topic-List{BrokerInfo-List{queueId}}
-         *
-         * */
-         List<Map<BrokerInfo, List<String>>> list = TopicBrokerTable.concurrentHashMap.get(topic);
-
-
-         System.out.println("preNum:1,Acture:"+list.size());
-
-         while (list == null || list.size() == 0) {
-
-             System.out.println("list == 0 || == null");
-             try {
-                 Thread.sleep(15000);
-             } catch (InterruptedException e) {
-                 e.printStackTrace();
-             }
-         }
-        for (Map map : list) {
-            BrokerInfo brokerInfo= (BrokerInfo) map.keySet().iterator().next();
-
-            List queueIds = (List) map.get(brokerInfo);
-            ByteBuf byteBuf = encodeAndDecode.encodePull(topic,num,queueIds);
-
-            Channel channel = ConnectionCacheBrokerTabel.connectionCacheBrokerTable.get(brokerInfo);
-
-
-            if (channel != null) {
-                channel.writeAndFlush(byteBuf);
-
-                System.out.println("yijinfasong");
-            } else {
-
-
-                Channel c = nettyConsumer.bind(brokerInfo);
-
-                if (c == null) {
-
-                    logger.info("连接失败,取消pull");
-
-                    return ;
-                }
-
-                ConnectionCacheBrokerTabel.connectionCacheBrokerTable.put(brokerInfo,c);
-
-                Future future = c.writeAndFlush(byteBuf);
-                if (future.isSuccess()) {
-                    System.out.println("-------pull请求发送-----");
-
-                } else  {
-                    System.out.println("------pull shibai-----");
-                }
-
-
-            }
-            }
-
-
-
+        nettyConsumer.pull(topic,num,listenerMessage);
 
 
     }
+
 }
