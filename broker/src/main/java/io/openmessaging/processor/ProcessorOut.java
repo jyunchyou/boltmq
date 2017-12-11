@@ -22,7 +22,7 @@ public class ProcessorOut {
 
     private MessageStore messageStore = MessageStore.getMessageStore();
 
-    public void out(String topic,int num){
+    public ByteBuf out(String topic,int num){
 
 
 
@@ -64,16 +64,20 @@ public class ProcessorOut {
 
             }
 
-            this.pull(messagesByte,bufferSize);
+            return this.converge(messagesByte,bufferSize);
             }
 
 
-            public void pull(List<byte[]> messagesByte,int bufferSize){
+            public ByteBuf converge(List<byte[]> messagesByte,int bufferSize){
+
+        ByteBuf byteBuf = Unpooled.buffer(bufferSize);
+        for (byte[] messageByte : messagesByte) {
+            byteBuf.writeBytes(messageByte);
+        }
 
 
-        System.out.println(messagesByte);
 
-
+        return byteBuf;
             }
 
 

@@ -1,5 +1,6 @@
 package io.openmessaging.consumer.net;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
@@ -21,6 +22,14 @@ public class ReceiveMessageHandlerAdapter extends ChannelHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg) {
 
+        ByteBuf byteBuf = (ByteBuf) msg;
+
+        byte[] backMessage = new byte[byteBuf.readableBytes()];
+
+        byteBuf.readBytes(backMessage);
+
+        logger.info("pull message success");
+        System.out.println("返回内容："+new String(backMessage));
 
     }
 }

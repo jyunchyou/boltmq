@@ -3,6 +3,7 @@ package io.openmessaging.net;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.concurrent.Future;
 import io.openmessaging.processor.ProcessorIn;
 import io.openmessaging.processor.ProcessorOut;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ public class PullHandlerAdapter extends ChannelHandlerAdapter {
 
 
 
-        System.out.println("准备读取!!");
+        System.out.println("准备读取...");
 
         byte[] topicByteLen = new byte[1];
         byteBuf.readBytes(topicByteLen);
@@ -47,8 +48,16 @@ public class PullHandlerAdapter extends ChannelHandlerAdapter {
         int pullNum = pullNumByte[0];
 
 
-        processorOut.out(topic,pullNum);
+        ByteBuf backByteBuf = processorOut.out(topic,pullNum);
 
+        Future pullBackFuture = channelHandlerContext.writeAndFlush(backByteBuf);
+
+        if (pullBackFuture.isSuccess()) {
+
+            logger.info("pull message back success");
+        }else {
+            logger.info("pull message back fail");
+        }
 
 
     }
