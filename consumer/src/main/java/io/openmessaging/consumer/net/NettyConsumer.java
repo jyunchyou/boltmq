@@ -27,6 +27,8 @@ import java.util.concurrent.CountDownLatch;
  */
 public class NettyConsumer {
 
+    private static  NettyConsumer nettyConsumer = new NettyConsumer();
+
     Logger logger = LoggerFactory.getLogger(NettyConsumer.class);
 
     private EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
@@ -39,8 +41,16 @@ public class NettyConsumer {
 
     private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
 
-    public NettyConsumer(){
+    private NettyConsumer(){
 
+    }
+
+    public static NettyConsumer getNettyConsumer() {
+        return nettyConsumer;
+    }
+
+    public static void setNettyConsumer(NettyConsumer nettyConsumer) {
+        NettyConsumer.nettyConsumer = nettyConsumer;
     }
 
     public Channel bind(NameServerInfo nameServerInfo){
@@ -121,7 +131,7 @@ public class NettyConsumer {
     }
 
 
-    public Channel bind(BrokerInfo brokerInfo, final int num, final ListenerMessage listenerMessage){
+    public Channel bind(BrokerInfo brokerInfo, final int num, final ListenerMessage listenerMessage, final CountDownLatch countDownLatch){
 
 
         String ip = brokerInfo.getIp();
@@ -136,7 +146,7 @@ public class NettyConsumer {
             @Override
             protected void initChannel(SocketChannel socketChannel) throws Exception {
 
-                socketChannel.pipeline().addLast(new ReceiveMessageHandlerAdapter(num,listenerMessage));
+                socketChannel.pipeline().addLast(new ReceiveMessageHandlerAdapter(num,listenerMessage,countDownLatch));
             }
         });
         ChannelFuture future = null;
@@ -164,7 +174,7 @@ public class NettyConsumer {
     }
 
 
-    public void pull(String topic, int num,ListenerMessage listenerMessage) {
+    public void pull(String topic, int num,ListenerMessage listenerMessage,CountDownLatch countDownLatch) {
         while (TopicBrokerTable.concurrentHashMap.isEmpty()) {
             try {
                 Thread.sleep(3000);
@@ -182,7 +192,6 @@ public class NettyConsumer {
         List<Map<BrokerInfo, List<String>>> list = TopicBrokerTable.concurrentHashMap.get(topic);
 
 
-        System.out.println("preNum:1,Acture:" + list.size());
 
         while (list == null || list.size() == 0) {
 
@@ -203,13 +212,26 @@ public class NettyConsumer {
 
 
             if (channel != null) {
-                channel.writeAndFlush(byteBuf);
+                Future future = channel.writeAndFlush(byteBuf);
 
-                System.out.println("yijinfasong");
+                if (future.isSuccess()) {
+                    logger.info("发送成功");
+                    try {
+                        countDownLatch.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }else {
+                    //logger.info("发送失败");
+
+
+                }
+
             } else {
 
 
-                Channel c = this.bind(brokerInfo,num,listenerMessage);
+                Channel c = this.bind(brokerInfo,num,listenerMessage,countDownLatch);
 
                 if (c == null) {
 
@@ -224,6 +246,11 @@ public class NettyConsumer {
                 if (future.isSuccess()) {
                     System.out.println("-------pull请求发送-----");
 
+                    try {
+                        countDownLatch.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     System.out.println("------pull shibai-----");
                 }

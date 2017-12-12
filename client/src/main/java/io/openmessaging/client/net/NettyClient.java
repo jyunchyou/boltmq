@@ -8,6 +8,7 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.openmessaging.client.common.SendCallBack;
 import io.openmessaging.client.constant.ConstantClient;
 import io.openmessaging.client.producer.BrokerInfo;
 import io.openmessaging.client.producer.FactoryProducer;
@@ -25,6 +26,8 @@ import java.util.concurrent.CountDownLatch;
  * Created by fbhw on 17-11-25.
  */
 public class NettyClient implements ConnectionHandler {
+
+    private static NettyClient nettyClient = new NettyClient();
 
     private Map<BrokerInfo,Channel> connectionCacheTable = ConnectionCacheTable.getConnectionCacheTable();
 
@@ -44,13 +47,21 @@ public class NettyClient implements ConnectionHandler {
 
     private Bootstrap bootstrap = null;
 
-    public NettyClient(){
+    private NettyClient(){
 
 
     }
 
+    public static NettyClient getNettyClient() {
+        return nettyClient;
+    }
 
-    public  Channel bind(BrokerInfo brokerInfo){
+    public static void setNettyClient(NettyClient nettyClient) {
+        NettyClient.nettyClient = nettyClient;
+    }
+
+
+    public  Channel bind(BrokerInfo brokerInfo,CountDownLatch countDownLatch){
         Channel channel = null;
         if (( channel = connectionCacheTable.get(brokerInfo)) != null) {
 
@@ -105,19 +116,31 @@ public class NettyClient implements ConnectionHandler {
         return channel;
     }
 
-    public void sendSycn(Channel channel,ByteBuf byteBuf){
+    public void send(Channel channel, ByteBuf byteBuf, int delayTime, SendCallBack sendCallBack,CountDownLatch countDownLatch){
+
 
         System.out.println("准备发送");
 
         ChannelFuture channelFuture = channel.writeAndFlush(byteBuf);
 
-        try {
-            countDownLatchSendMessage.await();
-        } catch (InterruptedException e) {
+        if (sendCallBack != null) {
 
-            e.printStackTrace();
+            try {
+                sendCallBack.call();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
-            logger.error(e.getMessage());
+        if (countDownLatchSendMessage != null) {
+            try {
+                countDownLatchSendMessage.await();
+            } catch (InterruptedException e) {
+
+                e.printStackTrace();
+
+                logger.error(e.getMessage());
+            }
         }
 
     }

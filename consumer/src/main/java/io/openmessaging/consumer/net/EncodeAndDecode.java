@@ -284,9 +284,6 @@ public class EncodeAndDecode {
 
     public ByteBuf encodePull(String topic, int num, List<String> queueIds){
 
-
-        System.out.println(topic);
-
         byte[] topicByte = topic.getBytes();
         byte topicByteLen = (byte) topicByte.length;
 
@@ -343,6 +340,8 @@ public class EncodeAndDecode {
      */
     public List decodeMessage(ByteBuf byteBuf,int pullNum){
 
+        int testByteBufLen = byteBuf.readableBytes();
+
 
 
         List list = new ArrayList(pullNum);
@@ -354,7 +353,7 @@ public class EncodeAndDecode {
 
                 byte[] arrayBuffer = new byte[byteBuf.readableBytes()];
                 byteBuf.readBytes(arrayBuffer);
-                int newLen = cacheBytes.length + byteBuf.readableBytes();
+                int newLen = cacheBytes.length + arrayBuffer.length;
                 byteBuf = Unpooled.buffer(newLen);
                 byteBuf.writeBytes(cacheBytes);
                 byteBuf.writeBytes(arrayBuffer);
@@ -367,6 +366,7 @@ public class EncodeAndDecode {
             byte[] allLength = new byte[4];
             byteBuf.readBytes(allLength);
 
+            System.out.println(new String(allLength));
             int allLenInt = 0;
             if (allLength[0] != 0 && allLength[1] != 0 && allLength[2] != 0 && allLength[3] != 0) {
                 allLenInt = allLength[0] * allLength[1] * allLength[2] * allLength[3];
@@ -413,8 +413,16 @@ public class EncodeAndDecode {
 
 
             System.out.println("alllenInt:" + allLenInt);
+
+
+                System.out.println("listSize:"+list.size());
+                System.out.println("remain"+remain);
+                System.out.println("bytebufLen:"+testByteBufLen);
+
+
             if (allLenInt == remain) {
 
+                cacheBytes = null;
                 System.out.println("==");
 
 //topic
@@ -510,20 +518,9 @@ public class EncodeAndDecode {
                 byteBuf.readBytes(queueIdByte);
 
 
-                String queueId = new String(queueIdByte);
 
-//order
-                byte[] orderByteLen = new byte[1];
 
-                byteBuf.readBytes(orderByteLen);
 
-                int orderIntLen = orderByteLen[0];
-
-                byte[] orderByte = new byte[orderIntLen];
-
-                byteBuf.readBytes(orderByte);
-
-                String order = new String(orderByte);
 //body
                 byte[] bodyLength = new byte[4];
                 byteBuf.readBytes(bodyLength);
@@ -545,6 +542,19 @@ public class EncodeAndDecode {
 
                 byte[] body = new byte[bodyLenInt];
                 byteBuf.readBytes(body);
+
+//order
+                byte[] orderByteLen = new byte[1];
+
+                byteBuf.readBytes(orderByteLen);
+
+                int orderIntLen = orderByteLen[0];
+
+                byte[] orderByte = new byte[orderIntLen];
+
+                byteBuf.readBytes(orderByte);
+
+                String order = new String(orderByte);
                 Message message = new Message(topic,order,body);
                 list.add(message);
 
@@ -562,13 +572,6 @@ public class EncodeAndDecode {
 
                 cacheBytes = null;
 
-               if (list.size() == pullNum) {
-
-                   cacheBytes = new byte[byteBuf.readableBytes()];
-                   byteBuf.readBytes(cacheBytes);
-
-                   return list;
-               }
 
 
                /* ip长度 1字节
@@ -581,6 +584,20 @@ public class EncodeAndDecode {
 
 
                 System.out.println(">");
+                if (cacheBytes != null) {
+
+                    ByteBuf b = Unpooled.buffer(remain + 4 + cacheBytes.length);
+                    b.writeBytes(cacheBytes);
+
+                    byte[] data = new byte[remain + 4];
+                    byteBuf.resetReaderIndex();
+                    byteBuf.readBytes(data);
+                    b.writeBytes(data);
+                    cacheBytes = new byte[remain + 4 + cacheBytes.length];
+                    b.readBytes(cacheBytes);
+
+
+                }
                 cacheBytes = new byte[remain + 4];
                 byteBuf.resetReaderIndex();
                 byteBuf.readBytes(cacheBytes);
@@ -590,6 +607,22 @@ public class EncodeAndDecode {
 
             }
 
+
+        }
+
+        if (cacheBytes != null) {
+
+            int remain = byteBuf.readableBytes();
+            ByteBuf b = Unpooled.buffer(remain + cacheBytes.length);
+            b.writeBytes(cacheBytes);
+
+            byte[] data = new byte[remain];
+
+            byteBuf.readBytes(data);
+            b.writeBytes(data);
+            cacheBytes = new byte[remain + cacheBytes.length];
+            b.readBytes(cacheBytes);
+            return list;
 
         }
 

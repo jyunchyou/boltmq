@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by fbhw on 17-12-9.
@@ -21,16 +22,20 @@ public class ReceiveMessageHandlerAdapter extends ChannelHandlerAdapter {
 
     private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
 
-    private List list = null;
+    private List list;
 
     private ListenerMessage listenerMessage = null;
 
     private int num;
 
-    public ReceiveMessageHandlerAdapter(int num,ListenerMessage listenerMessage){
+    private CountDownLatch countDownLatch = null;
+
+    public ReceiveMessageHandlerAdapter(int num, ListenerMessage listenerMessage, CountDownLatch countDownLatch){
 
         this.num = num;
         this.listenerMessage = listenerMessage;
+        this.countDownLatch = countDownLatch;
+        this.list = new ArrayList(num);
     }
 
     @Override
@@ -43,48 +48,27 @@ public class ReceiveMessageHandlerAdapter extends ChannelHandlerAdapter {
     public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg) {
 
         ByteBuf byteBuf = (ByteBuf) msg;
-
-        if (list == null) {
-
-             list = encodeAndDecode.decodeMessage(byteBuf,num);
-
-             if (list.size() != num) {
-                 return;
-
-             }
-             listenerMessage.listener(list);
-             list = null;
+//decode缓存byte[],为一级解析
+// channelhandleradapter缓存 list,为二级解析,只返回list 没有大小限制,可能小于pullNum
+// 也可能等于,也可能大于
 
 
-        }else if (list != null) {
-            List l = encodeAndDecode.decodeMessage(byteBuf,num);
-            int size = l.size();
-            for (int indexNum = 0;indexNum < size;indexNum++) {
+        List backList = encodeAndDecode.decodeMessage(byteBuf,num);
 
-                list.add(l.remove(indexNum));
+        if (backList.size() == 0) {
+            countDownLatch.countDown();
+            return;
+        }else {
+            for (int checkNum = 0;checkNum < backList.size();checkNum++) {
+
+                list.add(backList.remove(checkNum));
 
                 if (list.size() == num) {
-
                     listenerMessage.listener(list);
-                    if (indexNum >= size) {
-                        list = null;
-                    }else {
-                        list = new ArrayList(num);
-                    }
-
+                    list = new ArrayList(num);
                 }
-
             }
-
-        }
-
-
-
-
-
-
-        logger.info("pull message success");
-
-
+            countDownLatch.countDown();
+            }
     }
 }

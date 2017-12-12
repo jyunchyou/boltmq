@@ -66,8 +66,9 @@ public class NettyClientHandler extends ChannelHandlerAdapter {
         }
 
         //同步发送释放
-        countDownLatch.countDown();
-
+        if (countDownLatch != null) {
+            countDownLatch.countDown();
+        }
 
 
 

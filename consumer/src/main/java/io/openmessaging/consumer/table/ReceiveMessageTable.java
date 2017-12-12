@@ -23,7 +23,7 @@ public class ReceiveMessageTable {
 
     private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
 
-    private NettyConsumer nettyConsumer = new NettyConsumer();
+    private NettyConsumer nettyConsumer = NettyConsumer.getNettyConsumer();
 
     public ReceiveMessageTable(){
         init();

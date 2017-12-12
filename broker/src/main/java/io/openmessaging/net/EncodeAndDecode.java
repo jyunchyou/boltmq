@@ -43,7 +43,7 @@ public class EncodeAndDecode {
 
                     byte[] arrayBuffer = new byte[byteBuf.readableBytes()];
                     byteBuf.readBytes(arrayBuffer);
-                    int newLen = cacheBytes.length + byteBuf.readableBytes();
+                    int newLen = cacheBytes.length + arrayBuffer.length;
                     byteBuf = Unpooled.buffer(newLen);
                     byteBuf.writeBytes(cacheBytes);
                     byteBuf.writeBytes(arrayBuffer);
@@ -215,8 +215,20 @@ public class EncodeAndDecode {
 
                 } else {
 
+                    if (cacheBytes != null) {
 
-                    System.out.println(">");
+                        ByteBuf b = Unpooled.buffer(remain + 4 + cacheBytes.length);
+                        b.writeBytes(cacheBytes);
+
+                        byte[] data = new byte[remain + 4];
+                        byteBuf.resetReaderIndex();
+                        byteBuf.readBytes(data);
+                        b.writeBytes(data);
+                        cacheBytes = new byte[remain + 4 + cacheBytes.length];
+                        b.readBytes(cacheBytes);
+
+
+                    }
                     cacheBytes = new byte[remain + 4];
                     byteBuf.resetReaderIndex();
                     byteBuf.readBytes(cacheBytes);
@@ -226,6 +238,22 @@ public class EncodeAndDecode {
 
                 }
 
+
+            }
+
+            if (cacheBytes != null) {
+
+                int remain = byteBuf.readableBytes();
+                ByteBuf b = Unpooled.buffer(remain + cacheBytes.length);
+                b.writeBytes(cacheBytes);
+
+                byte[] data = new byte[remain];
+
+                byteBuf.readBytes(data);
+                b.writeBytes(data);
+                cacheBytes = new byte[remain + cacheBytes.length];
+                b.readBytes(cacheBytes);
+                return list;
 
             }
 

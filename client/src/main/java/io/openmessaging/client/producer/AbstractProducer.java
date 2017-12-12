@@ -1,6 +1,6 @@
     package io.openmessaging.client.producer;
 
-    import io.openmessaging.client.common.CallBack;
+    import io.openmessaging.client.common.SendCallBack;
     import io.openmessaging.client.exception.OutOfBodyLengthException;
     import io.openmessaging.client.exception.OutOfByteBufferException;
     import io.openmessaging.client.net.SendResult;
@@ -37,32 +37,40 @@
 
         }
 
-
         //同步发送
         public void send(Message message){
-
-           send(message,null);
-
+            this.send(message,0,null,null,false);
         }
-
-        //开启定时任务
-        public void start(){
-            kernelProducer.start(sendQueues);
-
-        }
-
+        //顺序消息
         public void send(Message message,Object shardingKey){
-
-             this.send(message,3,null);
-
+             this.send(message,0,shardingKey,null,false);
         }
-
+        //超时消息
         public void send(Message message, int delayTime){
-            this.send(message,delayTime,null);
+            this.send(message,delayTime,null,null,false);
+        }
+
+        //异步发送
+        public void send(Message message,SendCallBack sendCallBack){
+
+            this.send(message,0,null,sendCallBack,false);
+        }
+        //异步顺序发送
+        public void send(Message message, SendCallBack callBack , Object shardingKey ){
+
+            this.send(message,0,shardingKey,callBack,false);
 
         }
-        //delayTime支持固定时长,传入delay等级
-        public void send(Message message,int delayTime,Object shardingKey){
+        //单向发送
+        public void send(Message message,boolean oneway){
+
+            this.send(message,0,null,null,oneway);
+        }
+
+
+
+        //
+        public void send(Message message,int delayTime,Object shardingKey,SendCallBack sendCallBack,boolean oneWay){
 
             SendQueue sendQueue = null;
 
@@ -87,7 +95,7 @@
 
             SendResult sendResult = null;
             try {
-             kernelProducer.send(message,delayTime,sendQueue,implProperties);
+             kernelProducer.send(message,delayTime,sendQueue,implProperties,sendCallBack,oneWay);
             } catch (OutOfBodyLengthException e) {
 
                 e.printStackTrace();
@@ -100,28 +108,12 @@
 
         }
 
-
-
-        //异步发送
-        public void asyncSend(Message message, CallBack callBack){
-
-            this.asyncSend(message,callBack,null);
-        }
-
-        public void asyncSend(Message message, CallBack callBack, QueueSelector queueSelector){
-
-        }
-        //单向发送
-        public void onewaySend(Message message){
-
-            this.onewaySend(message,null);
+        //开启定时任务
+        public void start(){
+            kernelProducer.start(sendQueues);
 
         }
 
-        public void onewaySend(Message message, QueueSelector queueSelector){
-
-
-        }
 
 
         public Properties getImplProperties() {

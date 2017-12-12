@@ -6,6 +6,8 @@ import io.openmessaging.consumer.table.ReceiveMessageTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.CountDownLatch;
+
 /**
  * Created by fbhw on 17-12-7.
  */
@@ -15,11 +17,13 @@ public class AbstractConsumer {
 
     private Properties implProperties = null;
 
-    private KernelConsumer kernelConsumer = new KernelConsumer();
+    private KernelConsumer kernelConsumer = KernelConsumer.getKernelConsumer();
 
     private ReceiveMessageTable receiveMessageTable = new ReceiveMessageTable();
 
     private String topic = null;
+
+    private CountDownLatch countDownLatch = new CountDownLatch(1);
 
     public AbstractConsumer(){
 
@@ -35,7 +39,7 @@ public class AbstractConsumer {
 
     public void subscribe(String topic, ListenerMessage listenerMessage,int num){
         this.topic = topic;
-        kernelConsumer.subscribe(topic,listenerMessage,num);
+        kernelConsumer.subscribe(topic,listenerMessage,num,countDownLatch);
 
     }
     //开启定时任务

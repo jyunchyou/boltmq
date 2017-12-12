@@ -15,21 +15,35 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by fbhw on 17-12-7.
  */
 public class KernelConsumer {
 
-
-    private int pullNum;
+    private static KernelConsumer kernelConsumer = new KernelConsumer();
 
     Logger logger = LoggerFactory.getLogger(KernelConsumer.class);
 
-    private NettyConsumer nettyConsumer = new NettyConsumer();
+    private NettyConsumer nettyConsumer = NettyConsumer.getNettyConsumer();
 
     private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
-    public void subscribe(String topic, ListenerMessage listenerMessage,int num){
+
+    private KernelConsumer(){
+
+    }
+
+    public static KernelConsumer getKernelConsumer() {
+        return kernelConsumer;
+    }
+
+    public static void setKernelConsumer(KernelConsumer kernelConsumer) {
+        KernelConsumer.kernelConsumer = kernelConsumer;
+    }
+
+    public void subscribe(String topic, ListenerMessage listenerMessage,int num,CountDownLatch countDownLatch){
+
 
 
 
@@ -49,12 +63,9 @@ public class KernelConsumer {
         //TODO 将ListenerMessage 传入 ChannelHandlerAdapter执行消息处理,在这之前进行解码
 
         while (true) {
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            pull(topic, num,listenerMessage);
+
+            pull(topic, num,listenerMessage,countDownLatch);
+
         }
     }
 
@@ -88,9 +99,10 @@ public class KernelConsumer {
 
 
 
-    public void pull(String topic,int num,ListenerMessage listenerMessage){
+    public void pull(String topic,int num,ListenerMessage listenerMessage,CountDownLatch countDownLatch){
 
-        nettyConsumer.pull(topic,num,listenerMessage);
+        nettyConsumer.pull(topic,num,listenerMessage,countDownLatch);
+
 
 
     }
