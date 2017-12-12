@@ -41,11 +41,13 @@
         public void send(Message message){
             this.send(message,0,null,null,false);
         }
+
         //顺序消息
         public void send(Message message,Object shardingKey){
              this.send(message,0,shardingKey,null,false);
         }
-        //超时消息
+
+        //TODO 延时消息
         public void send(Message message, int delayTime){
             this.send(message,delayTime,null,null,false);
         }
@@ -55,12 +57,14 @@
 
             this.send(message,0,null,sendCallBack,false);
         }
+
         //异步顺序发送
         public void send(Message message, SendCallBack callBack , Object shardingKey ){
 
             this.send(message,0,shardingKey,callBack,false);
 
         }
+
         //单向发送
         public void send(Message message,boolean oneway){
 

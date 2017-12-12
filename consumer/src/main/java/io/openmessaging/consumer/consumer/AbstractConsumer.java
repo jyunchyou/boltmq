@@ -1,11 +1,14 @@
 package io.openmessaging.consumer.consumer;
 
 import io.openmessaging.consumer.constant.ConstantConsumer;
+import io.openmessaging.consumer.constant.ConsumeModel;
 import io.openmessaging.consumer.listener.ListenerMessage;
 import io.openmessaging.consumer.table.ReceiveMessageTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -25,7 +28,16 @@ public class AbstractConsumer {
 
     private CountDownLatch countDownLatch = new CountDownLatch(1);
 
+    private ConsumeModel consumeModel = ConsumeModel.GROUP;//默认集群消费,点到点
+
+
     public AbstractConsumer(){
+
+    }
+
+    public void setConcumeModel(ConsumeModel concumeModel){
+
+        this.consumeModel = concumeModel;
 
     }
 
@@ -39,7 +51,14 @@ public class AbstractConsumer {
 
     public void subscribe(String topic, ListenerMessage listenerMessage,int num){
         this.topic = topic;
-        kernelConsumer.subscribe(topic,listenerMessage,num,countDownLatch);
+        String uniqId = null;
+        if (consumeModel == ConsumeModel.BROADCAST) {
+
+            uniqId = generatingUniqId();
+        }else {
+            uniqId = ConstantConsumer.GROUP_ID;
+        }
+        kernelConsumer.subscribe(topic,listenerMessage,num,countDownLatch,uniqId);
 
     }
     //开启定时任务
@@ -52,6 +71,17 @@ public class AbstractConsumer {
         kernelConsumer.start(receiveMessageTable,topic);
     }
 
+
+    public String generatingUniqId(){
+        InetAddress inetAddress = null;
+        try {
+            inetAddress = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        inetAddress.getHostAddress();
+        return null;
+    }
 
     public Properties getImplProperties() {
         return implProperties;

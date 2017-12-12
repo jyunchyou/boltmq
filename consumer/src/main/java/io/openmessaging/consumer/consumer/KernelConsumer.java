@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.util.concurrent.Future;
 import io.openmessaging.consumer.constant.ConstantConsumer;
+import io.openmessaging.consumer.constant.ConsumeModel;
 import io.openmessaging.consumer.listener.ListenerMessage;
 import io.openmessaging.consumer.net.EncodeAndDecode;
 import io.openmessaging.consumer.net.NettyConsumer;
@@ -42,7 +43,8 @@ public class KernelConsumer {
         KernelConsumer.kernelConsumer = kernelConsumer;
     }
 
-    public void subscribe(String topic, ListenerMessage listenerMessage,int num,CountDownLatch countDownLatch){
+    public void subscribe(String topic, ListenerMessage listenerMessage, int num, CountDownLatch countDownLatch, String consumeModel){
+
 
 
 
@@ -64,7 +66,7 @@ public class KernelConsumer {
 
         while (true) {
 
-            pull(topic, num,listenerMessage,countDownLatch);
+            pull(topic, num,listenerMessage,countDownLatch,consumeModel);
 
         }
     }
@@ -99,9 +101,9 @@ public class KernelConsumer {
 
 
 
-    public void pull(String topic,int num,ListenerMessage listenerMessage,CountDownLatch countDownLatch){
+    public void pull(String topic,int num,ListenerMessage listenerMessage,CountDownLatch countDownLatch,String uniqId){
 
-        nettyConsumer.pull(topic,num,listenerMessage,countDownLatch);
+        nettyConsumer.pull(topic,num,listenerMessage,countDownLatch,uniqId);
 
 
 

@@ -8,6 +8,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.Future;
+import io.openmessaging.consumer.constant.ConsumeModel;
 import io.openmessaging.consumer.consumer.BrokerInfo;
 import io.openmessaging.consumer.consumer.NameServerInfo;
 import io.openmessaging.consumer.listener.ListenerMessage;
@@ -174,7 +175,8 @@ public class NettyConsumer {
     }
 
 
-    public void pull(String topic, int num,ListenerMessage listenerMessage,CountDownLatch countDownLatch) {
+    public void pull(String topic, int num, ListenerMessage listenerMessage, CountDownLatch countDownLatch,String uniqId) {
+
         while (TopicBrokerTable.concurrentHashMap.isEmpty()) {
             try {
                 Thread.sleep(3000);
@@ -206,7 +208,7 @@ public class NettyConsumer {
             BrokerInfo brokerInfo = (BrokerInfo) map.keySet().iterator().next();
 
             List queueIds = (List) map.get(brokerInfo);
-            ByteBuf byteBuf = encodeAndDecode.encodePull(topic, num, queueIds);
+            ByteBuf byteBuf = encodeAndDecode.encodePull(topic, num, queueIds,uniqId);
 
             Channel channel = ConnectionCacheBrokerTabel.connectionCacheBrokerTable.get(brokerInfo);
 

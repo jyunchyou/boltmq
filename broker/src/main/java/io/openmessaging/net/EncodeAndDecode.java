@@ -30,7 +30,7 @@ public class EncodeAndDecode {
 
 
 
-    //TODO queueId,topic和总数据(返回List,因为粘包可能有多个)一起返回
+    //包括粘包处理
         public List decode(ByteBuf byteBuf){
 
 
@@ -470,7 +470,7 @@ public class EncodeAndDecode {
 
                     byteBuf.writeLong(offset);
                     byteBuf.writeLong(len);
-                    System.out.println("queueId has output!!!!!!!!!");
+                    System.out.println("queueId has output");
 
 
                 }

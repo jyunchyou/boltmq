@@ -1,6 +1,7 @@
 package io.openmessaging.table;
 
 
+import io.openmessaging.common.NodeMessageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,11 +18,13 @@ public class MessageInfoQueue {
 
     Logger logger = LoggerFactory.getLogger(MessageInfoQueue.class);
 
-    public  List queue = new ArrayList<MessageInfo>();
+    private NodeMessageInfo nodeMessageInfo = null;
+
+    private List list = new ArrayList<MessageInfo>();
 
     private String queueId;
 
-    private long messageIndex;//文件命名为offset,可通过offset直接得到文件名,每个文件(MessageInfoQueue)最大为上一个文件index+1073741824(1G);
+    private long messageIndex;
 
     private long previousMessageIndex = 0;//上一个文件的index, 方便创建新文件时给fileIndex命名;
 
@@ -35,15 +38,6 @@ public class MessageInfoQueue {
 
     public void setQueueId(String queueId) {
         this.queueId = queueId;
-    }
-
-    public void setList(List list){
-        this.queue = list;
-
-    }
-
-    public List getList(){
-        return this.queue;
     }
 
     public long getMessageIndex() {
@@ -60,5 +54,21 @@ public class MessageInfoQueue {
 
     public void setPreviousMessageIndex(long previousMessageIndex) {
         this.previousMessageIndex = previousMessageIndex;
+    }
+
+    public NodeMessageInfo getNodeMessageInfo() {
+        return nodeMessageInfo;
+    }
+
+    public void setNodeMessageInfo(NodeMessageInfo nodeMessageInfo) {
+        this.nodeMessageInfo = nodeMessageInfo;
+    }
+
+    public List getList() {
+        return list;
+    }
+
+    public void setList(List list) {
+        this.list = list;
     }
 }

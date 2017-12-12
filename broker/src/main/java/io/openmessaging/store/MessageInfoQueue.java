@@ -1,6 +1,7 @@
 package io.openmessaging.store;
 
-import io.openmessaging.Constant.ConstantBroker;
+
+import io.openmessaging.common.NodeMessageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,45 +18,33 @@ public class MessageInfoQueue {
 
     Logger logger = LoggerFactory.getLogger(MessageInfoQueue.class);
 
-    private String queueId = null;
+    private NodeMessageInfo nodeMessageInfo = null;
 
-    private   List queue = new ArrayList<MessageInfo>();
+    private List list = new ArrayList<MessageInfo>();//TODO 索引删除 标记清除
 
-    private int index;//consumer list index
+    private String queueId;
+
+    private int  index;//
 
     private long previousMessageIndex = 0;//上一个文件的index, 方便创建新文件时给fileIndex命名;
 
     private File file;
 
-    public MessageInfoQueue(String name){
+    private int size;
 
-        this.file = new File(ConstantBroker.ROOT_PATH+name);
-        if (!file.exists()){
+    private String topic;
 
-                file.mkdir();
-        }
 
+    public MessageInfoQueue(String topic){
+        this.topic = topic;
     }
 
-
-
-    public void setList(List list){
-        this.queue = list;
-
+    public String getQueueId() {
+        return queueId;
     }
 
-    public List getList(){
-        return this.queue;
-    }
-
-
-
-    public long getPreviousMessageIndex() {
-        return previousMessageIndex;
-    }
-
-    public void setPreviousMessageIndex(long previousMessageIndex) {
-        this.previousMessageIndex = previousMessageIndex;
+    public void setQueueId(String queueId) {
+        this.queueId = queueId;
     }
 
     public int getIndex() {
@@ -66,11 +55,43 @@ public class MessageInfoQueue {
         this.index = index;
     }
 
-    public String getQueueId() {
-        return queueId;
+    public long getPreviousMessageIndex() {
+        return previousMessageIndex;
     }
 
-    public void setQueueId(String queueId) {
-        this.queueId = queueId;
+    public void setPreviousMessageIndex(long previousMessageIndex) {
+        this.previousMessageIndex = previousMessageIndex;
+    }
+
+    public NodeMessageInfo getNodeMessageInfo() {
+        return nodeMessageInfo;
+    }
+
+    public void setNodeMessageInfo(NodeMessageInfo nodeMessageInfo) {
+        this.nodeMessageInfo = nodeMessageInfo;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public List getList() {
+        return list;
+    }
+
+    public void setList(List list) {
+        this.list = list;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 }

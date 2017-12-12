@@ -1,3 +1,4 @@
+
 package io.openmessaging.processor;
 
 import io.netty.buffer.ByteBuf;
@@ -48,7 +49,7 @@ public class ProcessorIn {
 
         long index;
         if (l.size() == 0) {
-        index = 0;
+            index = 0;
         }else {
             MessageInfo lastMessageInfo = l.get((l.size() - 1));
             index = lastMessageInfo.getOffset() + lastMessageInfo.getLen();

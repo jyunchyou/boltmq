@@ -3,6 +3,7 @@ package io.openmessaging.consumer.net;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.openmessaging.consumer.constant.ConstantConsumer;
+import io.openmessaging.consumer.constant.ConsumeModel;
 import io.openmessaging.consumer.consumer.BrokerInfo;
 import io.openmessaging.consumer.consumer.Message;
 import io.openmessaging.consumer.table.ReceiveMessageTable;
@@ -282,7 +283,7 @@ public class EncodeAndDecode {
      * queueIdByte
      */
 
-    public ByteBuf encodePull(String topic, int num, List<String> queueIds){
+    public ByteBuf encodePull(String topic, int num, List<String> queueIds,String uniqId){
 
         byte[] topicByte = topic.getBytes();
         byte topicByteLen = (byte) topicByte.length;
