@@ -14,6 +14,8 @@ public class ConstantConsumer {
 
     public static final int PULL_BUFFER_SIZE = 1;
 
-    public static final String GROUP_ID = "group";
+    public static final long GROUP_ID = 0;
+
+    public static final int CONSUMER_PORT = 9988;
 
 }

@@ -276,14 +276,16 @@ public class EncodeAndDecode {
 
     /**
      * 协议格式
-     * byte 批量拉取条数
-     * topicByteLen
-     * topicByte
-     * queueIdByteLen
-     * queueIdByte
+     * topicByteLen     1 byte
+     * topicByte        String
+     * queueIdByteLen   1 byte
+     * queueIdByte      String
+     * pullNumByteLen   1 byte
+     * pullNum          int
+     * uniqId           long
      */
 
-    public ByteBuf encodePull(String topic, int num, List<String> queueIds,String uniqId){
+    public ByteBuf encodePull(String topic, int num, List<String> queueIds,long uniqId){
 
         byte[] topicByte = topic.getBytes();
         byte topicByteLen = (byte) topicByte.length;
@@ -297,6 +299,7 @@ public class EncodeAndDecode {
 
         byteBuf.writeBytes(new byte[]{numByte});
 
+        byteBuf.writeLong(uniqId);
 
 //        for (String queueId : queueIds) {
 //

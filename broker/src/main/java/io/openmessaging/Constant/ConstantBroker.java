@@ -26,4 +26,7 @@ public class ConstantBroker {
     public static final int NAMESERVER_PORT = 9999;
 
     public static final int WAIT_TIME_MESSAGE = 20000;
+
+    public static final long GROUP_ID = 0;
+
 }

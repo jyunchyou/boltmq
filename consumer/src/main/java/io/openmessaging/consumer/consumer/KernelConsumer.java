@@ -43,7 +43,7 @@ public class KernelConsumer {
         KernelConsumer.kernelConsumer = kernelConsumer;
     }
 
-    public void subscribe(String topic, ListenerMessage listenerMessage, int num, CountDownLatch countDownLatch, String consumeModel){
+    public void subscribe(String topic, ListenerMessage listenerMessage, int num, CountDownLatch countDownLatch, long consumeModel){
 
 
 
@@ -101,7 +101,7 @@ public class KernelConsumer {
 
 
 
-    public void pull(String topic,int num,ListenerMessage listenerMessage,CountDownLatch countDownLatch,String uniqId){
+    public void pull(String topic,int num,ListenerMessage listenerMessage,CountDownLatch countDownLatch,long uniqId){
 
         nettyConsumer.pull(topic,num,listenerMessage,countDownLatch,uniqId);
 

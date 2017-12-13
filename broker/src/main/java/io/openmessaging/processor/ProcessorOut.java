@@ -3,10 +3,7 @@ package io.openmessaging.processor;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.openmessaging.Constant.ConstantBroker;
-import io.openmessaging.store.MessageInfo;
-import io.openmessaging.store.MessageInfoQueue;
-import io.openmessaging.store.MessageInfoQueues;
-import io.openmessaging.store.MessageStore;
+import io.openmessaging.store.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +19,7 @@ public class ProcessorOut {
 
     private MessageStore messageStore = MessageStore.getMessageStore();
 
-    public ByteBuf out(String topic,int num){
+    public ByteBuf out(String topic,int num,long uniqId){
 
 
 
@@ -35,7 +32,7 @@ public class ProcessorOut {
             int bufferSize = 0;
 //拉取num条
             for (int indexNum = 0;indexNum < num;indexNum++) {
-                int consumeIndex = messageInfoQueue.getIndex();
+                int consumeIndex = ConsumerIndexTable.concurrentHashMap.get(uniqId);
 
                 List list = messageInfoQueue.getList();
 
@@ -59,6 +56,8 @@ public class ProcessorOut {
                 byte[] messageByte = messageStore.out(offset,len,queueId);
 
                 messagesByte.add(messageByte);
+
+                ConsumerIndexTable.concurrentHashMap.put(uniqId,++indexNum);
 
                 bufferSize += len;
 

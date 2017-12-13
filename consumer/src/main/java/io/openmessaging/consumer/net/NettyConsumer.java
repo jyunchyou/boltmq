@@ -175,7 +175,7 @@ public class NettyConsumer {
     }
 
 
-    public void pull(String topic, int num, ListenerMessage listenerMessage, CountDownLatch countDownLatch,String uniqId) {
+    public void pull(String topic, int num, ListenerMessage listenerMessage, CountDownLatch countDownLatch,long uniqId) {
 
         while (TopicBrokerTable.concurrentHashMap.isEmpty()) {
             try {

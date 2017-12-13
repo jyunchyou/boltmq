@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
  */
 public class PullHandlerAdapter extends ChannelHandlerAdapter {
 
-
     Logger logger = LoggerFactory.getLogger(PullHandlerAdapter.class);
 
     private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
@@ -47,8 +46,9 @@ public class PullHandlerAdapter extends ChannelHandlerAdapter {
 
         int pullNum = pullNumByte[0];
 
+        long uniqId = byteBuf.readLong();
 
-        ByteBuf backByteBuf = processorOut.out(topic,pullNum);
+        ByteBuf backByteBuf = processorOut.out(topic,pullNum,uniqId);
 
         Future pullBackFuture = channelHandlerContext.writeAndFlush(backByteBuf);
 
