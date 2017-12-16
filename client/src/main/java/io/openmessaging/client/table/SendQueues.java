@@ -26,7 +26,7 @@ public class SendQueues {
 
    private Map<NameServerInfo,Channel> nameServerConnectionCacheTable = ConnectionCacheNameServerTable.getConnectionCacheNameServerTable();
 
-   private NettyClient nettyClient = new NettyClient();
+   private NettyClient nettyClient = NettyClient.getNettyClient();
 
    public static ByteBuf routeByteBuf = null;
 

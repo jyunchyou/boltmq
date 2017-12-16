@@ -15,6 +15,9 @@ public class ConstantNameServer {
 
     public static final int UPDATE_TOPIC_PORT = 8899;
 
+    public static final String INDEX_STORE_PATH = "/home/fbhw/store/nameserver_01";
+
+
 
 
 }

@@ -278,8 +278,7 @@ public class EncodeAndDecode {
      * 协议格式
      * topicByteLen     1 byte
      * topicByte        String
-     * queueIdByteLen   1 byte
-     * queueIdByte      String
+
      * pullNumByteLen   1 byte
      * pullNum          int
      * uniqId           long
@@ -299,7 +298,14 @@ public class EncodeAndDecode {
 
         byteBuf.writeBytes(new byte[]{numByte});
 
-        byteBuf.writeLong(uniqId);
+        String uniqIdString = new String(String.valueOf(uniqId));
+
+        byte[] uniqIdByte = uniqIdString.getBytes();
+
+        byte uniqIdByteLen = (byte) uniqIdByte.length;
+
+        byteBuf.writeBytes(new byte[]{uniqIdByteLen});
+        byteBuf.writeBytes(uniqIdByte);
 
 //        for (String queueId : queueIds) {
 //

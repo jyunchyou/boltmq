@@ -46,7 +46,17 @@ public class PullHandlerAdapter extends ChannelHandlerAdapter {
 
         int pullNum = pullNumByte[0];
 
-        long uniqId = byteBuf.readLong();
+        byte[] uniqIdByteLen = new byte[1];
+
+        byteBuf.readBytes(uniqIdByteLen);
+
+        byte[] uniqIdByte = new byte[uniqIdByteLen[0]];
+
+        byteBuf.readBytes(uniqIdByte);
+
+        String uniqIdString = new String(uniqIdByte);
+
+        long uniqId = Long.parseLong(uniqIdString);
 
         ByteBuf backByteBuf = processorOut.out(topic,pullNum,uniqId);
 

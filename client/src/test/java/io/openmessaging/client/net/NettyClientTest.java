@@ -22,7 +22,7 @@ public class NettyClientTest {
 
     @Before
     public void init(){
-        nettyClient = new NettyClient();
+        nettyClient = NettyClient.getNettyClient();
 
         nameServerInfo = new NameServerInfo();
 

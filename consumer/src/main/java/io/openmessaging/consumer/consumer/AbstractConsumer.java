@@ -32,6 +32,8 @@ public class AbstractConsumer {
 
     private ConsumeModel consumeModel = ConsumeModel.GROUP;//默认集群消费,点到点
 
+    private long uniqId = 0;
+
 
     public AbstractConsumer(){
 
@@ -75,6 +77,10 @@ public class AbstractConsumer {
 
 
     public long generatingUniqId(){
+
+        if (uniqId != 0) {
+            return uniqId;
+        }
         InetAddress inetAddress = null;
         try {
             inetAddress = InetAddress.getLocalHost();
@@ -101,7 +107,9 @@ public class AbstractConsumer {
         String name = ManagementFactory.getRuntimeMXBean().getName();
         String pidString = name.split("@")[0];
         int pid = Integer.parseInt(pidString);
-        long uniqId = ipInt + port + currentTime + pid;
+        long uId = ipInt + port + currentTime + pid;
+
+        uniqId = uId;
 
         return uniqId;
 

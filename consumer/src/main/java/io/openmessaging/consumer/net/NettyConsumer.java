@@ -208,6 +208,7 @@ public class NettyConsumer {
             BrokerInfo brokerInfo = (BrokerInfo) map.keySet().iterator().next();
 
             List queueIds = (List) map.get(brokerInfo);
+            System.out.println(topic);
             ByteBuf byteBuf = encodeAndDecode.encodePull(topic, num, queueIds,uniqId);
 
             Channel channel = ConnectionCacheBrokerTabel.connectionCacheBrokerTable.get(brokerInfo);

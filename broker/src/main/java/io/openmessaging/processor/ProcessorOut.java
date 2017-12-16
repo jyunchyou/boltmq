@@ -23,6 +23,7 @@ public class ProcessorOut {
 
 
 
+        System.out.println("------------------------"+topic);
             MessageInfoQueue messageInfoQueue = MessageInfoQueues.concurrentHashMap.get(topic);
 
             String queueId = messageInfoQueue.getQueueId();
@@ -32,7 +33,16 @@ public class ProcessorOut {
             int bufferSize = 0;
 //拉取num条
             for (int indexNum = 0;indexNum < num;indexNum++) {
-                int consumeIndex = ConsumerIndexTable.concurrentHashMap.get(uniqId);
+
+
+
+                Integer consumeIndex = ConsumerIndexTable.concurrentHashMap.get(uniqId);
+
+                if (consumeIndex == null) {
+                    ConsumerIndexTable.concurrentHashMap.put(uniqId,0);
+                    consumeIndex = 0;
+                }
+
 
                 List list = messageInfoQueue.getList();
 
