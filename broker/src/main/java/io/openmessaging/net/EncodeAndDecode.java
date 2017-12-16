@@ -262,9 +262,8 @@ public class EncodeAndDecode {
             byteBuf.readBytes(cacheBytes);
 
             return list;
-
-
         }
+
 
         public ByteBuf encodeSendMessageBack(){
             byte[] sendResultBytes = "1".getBytes();
