@@ -286,6 +286,7 @@ public class EncodeAndDecode {
 
     public ByteBuf encodePull(String topic, int num, List<String> queueIds,long uniqId){
 
+        byte[] magicNum = "#".getBytes();
         byte[] topicByte = topic.getBytes();
         byte topicByteLen = (byte) topicByte.length;
 
@@ -293,16 +294,17 @@ public class EncodeAndDecode {
 
         ByteBuf byteBuf = Unpooled.buffer(topicByteLen + 1);
 
-        byteBuf.writeBytes(new byte[]{topicByteLen});
-        byteBuf.writeBytes(topicByte);
-
-        byteBuf.writeBytes(new byte[]{numByte});
-
         String uniqIdString = new String(String.valueOf(uniqId));
 
         byte[] uniqIdByte = uniqIdString.getBytes();
 
         byte uniqIdByteLen = (byte) uniqIdByte.length;
+
+        byteBuf.writeBytes(magicNum);
+        byteBuf.writeBytes(new byte[]{topicByteLen});
+        byteBuf.writeBytes(topicByte);
+
+        byteBuf.writeBytes(new byte[]{numByte});
 
         byteBuf.writeBytes(new byte[]{uniqIdByteLen});
         byteBuf.writeBytes(uniqIdByte);

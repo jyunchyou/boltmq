@@ -1,6 +1,7 @@
 package io.openmessaging.net;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.concurrent.Future;
@@ -8,6 +9,8 @@ import io.openmessaging.processor.ProcessorIn;
 import io.openmessaging.processor.ProcessorOut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 /**
  * Created by fbhw on 17-12-9.
@@ -34,29 +37,18 @@ public class PullHandlerAdapter extends ChannelHandlerAdapter {
 
         System.out.println("准备读取...");
 
-        byte[] topicByteLen = new byte[1];
-        byteBuf.readBytes(topicByteLen);
-        int topicByteLenInt = topicByteLen[0];
-        byte[] topicByte = new byte[topicByteLenInt];
-        byteBuf.readBytes(topicByte);
 
-        String topic = new String(topicByte);
-        byte[] pullNumByte = new byte[1];
-        byteBuf.readBytes(pullNumByte);
+        Map map = encodeAndDecode.decodePull(byteBuf);
 
-        int pullNum = pullNumByte[0];
+        if (map == null) {
 
-        byte[] uniqIdByteLen = new byte[1];
+            channelHandlerContext.writeAndFlush(Unpooled.buffer(0));
+            return;
+        }
+        String topic = (String) map.get("topic");
+        int pullNum = (int) map.get("pullNum");
+        long uniqId = (long) map.get("uniqId");
 
-        byteBuf.readBytes(uniqIdByteLen);
-
-        byte[] uniqIdByte = new byte[uniqIdByteLen[0]];
-
-        byteBuf.readBytes(uniqIdByte);
-
-        String uniqIdString = new String(uniqIdByte);
-
-        long uniqId = Long.parseLong(uniqIdString);
 
         ByteBuf backByteBuf = processorOut.out(topic,pullNum,uniqId);
 

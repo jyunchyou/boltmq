@@ -47,7 +47,14 @@ public class ReceiveMessageHandlerAdapter extends ChannelHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg) {
 
+
         ByteBuf byteBuf = (ByteBuf) msg;
+
+        if (byteBuf.readableBytes() <= 0) {
+            countDownLatch.countDown();
+            return;
+        }
+
 //decode缓存byte[],为一级解析
 // channelhandleradapter缓存 list,为二级解析,只返回list 没有大小限制,可能小于pullNum
 // 也可能等于,也可能大于

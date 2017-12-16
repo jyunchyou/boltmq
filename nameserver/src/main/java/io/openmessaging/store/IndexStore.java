@@ -60,7 +60,7 @@ public class IndexStore {
                 fileChannel.force(true);
                 fileChannel.write(byteBuffer);
 
-                
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

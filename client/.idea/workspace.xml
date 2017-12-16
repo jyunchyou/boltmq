@@ -1026,12 +1026,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="junit - 2017.12.12 at 11h 07m 41s.xml">
-      <configuration name="junit" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="junit - 2017.12.12 at 11h 19m 30s.xml">
-      <configuration name="junit" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="junit - 2017.12.16 at 19h 58m 24s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
@@ -1054,6 +1048,12 @@
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
     <history-entry file="junit - 2017.12.16 at 20h 59m 32s.xml">
+      <configuration name="junit" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="junit - 2017.12.16 at 21h 50m 49s.xml">
+      <configuration name="junit" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="junit - 2017.12.16 at 21h 54m 10s.xml">
       <configuration name="junit" configurationId="JUnit" />
     </history-entry>
   </component>

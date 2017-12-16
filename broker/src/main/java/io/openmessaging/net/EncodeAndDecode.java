@@ -25,6 +25,8 @@ public class EncodeAndDecode {
 
     private byte[] cacheBytes;
 
+    private byte[] cachePullBytes;
+
     private int index = 0;
 
 
@@ -482,6 +484,52 @@ public class EncodeAndDecode {
             return byteBuf;
         }
 
+        public Map decodePull(ByteBuf byteBuf) {
+
+
+
+
+
+
+                    byte[] magicNum = new byte[1];
+                    byteBuf.readBytes(magicNum);
+
+                    if (!"#".equals(new String(magicNum))) {
+                        return null;
+                    }
+
+                    byte[] topicByteLen = new byte[1];
+                    byteBuf.readBytes(topicByteLen);
+                    int topicByteLenInt = topicByteLen[0];
+                    byte[] topicByte = new byte[topicByteLenInt];
+                    byteBuf.readBytes(topicByte);
+
+                    String topic = new String(topicByte);
+                    byte[] pullNumByte = new byte[1];
+                    byteBuf.readBytes(pullNumByte);
+
+                    int pullNum = pullNumByte[0];
+
+                    byte[] uniqIdByteLen = new byte[1];
+
+                    byteBuf.readBytes(uniqIdByteLen);
+
+                    byte[] uniqIdByte = new byte[uniqIdByteLen[0]];
+
+                    byteBuf.readBytes(uniqIdByte);
+
+                    String uniqIdString = new String(uniqIdByte);
+
+                    long uniqId = Long.parseLong(uniqIdString);
+
+                    Map map = new HashMap(3);
+                    map.put("topic",topic);
+                    map.put("pullNum",pullNum);
+                    map.put("uniqId",uniqId);
+
+
+            return map;
+        }
         }
 
 
