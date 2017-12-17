@@ -31,13 +31,13 @@ public class IndexStore {
     }
 
 
-    public void save(ByteBuf byteBuf) {
+    public void save(ByteBuf byteBuf,String brokerIndexFileName) {
 
         //初始化连接对象和文件句柄
         try {
             if (file == null) {
 
-                file = new File(ConstantNameServer.INDEX_STORE_PATH);
+                file = new File(ConstantNameServer.INDEX_STORE_PATH+brokerIndexFileName);
 
                 if (!file.exists()) {
                     file.createNewFile();

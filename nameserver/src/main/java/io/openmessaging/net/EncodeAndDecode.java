@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.openmessaging.constant.ConstantNameServer;
 import io.openmessaging.producer.BrokerInfo;
+import io.openmessaging.start.BrokerRestart;
 import io.openmessaging.table.*;
 
 import java.nio.ByteBuffer;
@@ -18,6 +19,9 @@ public class EncodeAndDecode {
     private TopicBrokerTable topicBrokerTable = new TopicBrokerTable();
 
     private BrokerInfoTable brokerInfoTable = new BrokerInfoTable();
+
+    private BrokerRestart brokerRestart = new BrokerRestart();
+
     /**
      *nameServerRouteTable协议格式
      *
@@ -190,15 +194,13 @@ public class EncodeAndDecode {
     }
 
     /*queueId,topic,offset,len*/
-    public  void decode(ByteBuf byteBuf){
+    public Object decode(ByteBuf byteBuf){
 
 
 //        byte[] data = new byte[byteBuf.readableBytes()];
 //        byteBuf.readBytes(data);
 //        System.out.println(new String(data));
 
-
-        while (byteBuf.isReadable()) {
 
 
 
@@ -239,8 +241,12 @@ public class EncodeAndDecode {
 
             if (!byteBuf.isReadable()) {
 
-                putBroker(ip,producerPort,nameServerPort,consumerPort);
-                return ;
+                ByteBuf returnByteBuf = putBroker(ip,producerPort,nameServerPort,consumerPort);
+
+                if (returnByteBuf != null) {
+                    return returnByteBuf;
+                }
+                return ip+producerPort+nameServerPort+consumerPort ;
 
             }
 
@@ -326,19 +332,37 @@ public class EncodeAndDecode {
                     System.out.println("----list size is not 0--------"+list.size()+"-------");
 
                 }
-            }
+
+            return ip+producerPort+nameServerPort+consumerPort;
         }
 
 
-        public void putBroker(String ip,String producerPort,String nameServerPort,String consumerPort){
+
+        public ByteBuf putBroker(String ip,String producerPort,String nameServerPort,String consumerPort){
 
 
         BrokerInfo brokerInfo = new BrokerInfo();
+
+
+
         brokerInfo.setIp(ip);
         brokerInfo.setProducerPort(Integer.parseInt(producerPort));
         brokerInfo.setNameServerPort(Integer.parseInt(nameServerPort));
         brokerInfo.setConsumerPort(Integer.parseInt(consumerPort));
+
+        //如果已存在，开启broker故障重启处理
+        if (BrokerInfoTable.map.containsKey(brokerInfo)) {
+
+            ByteBuf byteBuf = brokerRestart.restart(ip,producerPort,nameServerPort,consumerPort);
+
+            return byteBuf;
+
+
+        }
+
+
         BrokerInfoTable.map.put(brokerInfo,new MessageInfoQueues());
+        return null;
         }
 
         public synchronized void putTopicBrokerTable(String topic,String ip,String producerPort,String nameServerPort,String consumerPort,String queueId) {

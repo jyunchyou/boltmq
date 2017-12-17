@@ -30,10 +30,17 @@ public class BrokerTableHandlerAdapter extends ChannelHandlerAdapter {
 
 
         byteBuf.markReaderIndex();
-        encodeAndDecode.decode(byteBuf);
+        Object o = encodeAndDecode.decode(byteBuf);
+
+        //如果返回类型不为String,则返回输出brokerIndex数据
+        if (!String.class.equals(o.getClass())) {
+            ByteBuf brokerIndex = (ByteBuf) o;
+            channelHandlerContext.writeAndFlush(brokerIndex);
+            return ;
+        }
 
         byteBuf.resetReaderIndex();
-        indexStore.save(byteBuf);
+        indexStore.save(byteBuf,(String) o);
 
         System.out.println("update broker data success!");
 
