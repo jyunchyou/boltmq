@@ -8,6 +8,7 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 import io.openmessaging.client.common.SendCallBack;
 import io.openmessaging.client.constant.ConstantClient;
 import io.openmessaging.client.producer.BrokerInfo;
@@ -21,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by fbhw on 17-11-25.
@@ -80,6 +82,9 @@ public class NettyClient implements ConnectionHandler {
                 bootstrap.group(eventLoopGroup);
                 bootstrap.channel(NioSocketChannel.class);
                 bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
+                bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS,ConstantClient.CHANNEL_TIMEOUT);
+
+
                 //bootstrap.remoteAddress(ip,port);
             }catch (Exception e){
                 eventLoopGroup.shutdownGracefully();
@@ -90,7 +95,9 @@ public class NettyClient implements ConnectionHandler {
                 @Override
                 protected void initChannel(SocketChannel socketChannel) throws Exception {
 
-                    socketChannel.pipeline().addLast(new NettyClientHandler(new SendResult(),countDownLatchSendMessage));
+                    socketChannel.pipeline().addLast(new NettyClientHandler(new SendResult(),countDownLatchSendMessage,brokerInfo));
+
+                    socketChannel.pipeline().addLast(new IdleStateHandler(ConstantClient.CHANNEL_TIMEOUT,0,0, TimeUnit.MILLISECONDS));
 
                 }
             });

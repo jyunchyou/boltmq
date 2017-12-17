@@ -30,6 +30,10 @@ public class BrokerRestart {
             byteBuffer = ByteBuffer.allocate(ConstantNameServer.INDEX_BROKER_BUFFER_SIZE);
 
 
+            if (file.canRead()) {
+            return null;
+
+            }
             fileChannel.read(byteBuffer);
         } catch (IOException e) {
             e.printStackTrace();

@@ -3,8 +3,6 @@ package io.openmessaging.consumer.net;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-import io.openmessaging.consumer.consumer.KernelConsumer;
-import io.openmessaging.consumer.consumer.Message;
 import io.openmessaging.consumer.listener.ListenerMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

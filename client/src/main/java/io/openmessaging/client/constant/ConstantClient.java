@@ -35,6 +35,8 @@ public class ConstantClient {
 
     public static final int GET_LIST_TIMER_PERIOD = 30000;//周期刷新路由信息的时间间隔
 
+    public static final int CHANNEL_TIMEOUT = 10000;//消息发送的channel等待断开的时间
+
 
 
 

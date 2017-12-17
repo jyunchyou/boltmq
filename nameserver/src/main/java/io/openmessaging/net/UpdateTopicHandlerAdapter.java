@@ -2,9 +2,12 @@ package io.openmessaging.net;
 
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.openmessaging.producer.BrokerInfo;
+import io.openmessaging.table.BrokerConnectionCacheTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -16,9 +19,13 @@ public class UpdateTopicHandlerAdapter extends ChannelHandlerAdapter {
 
     private CountDownLatch countDownLatch = null;
 
-    public UpdateTopicHandlerAdapter(CountDownLatch countDownLatch){
+    private BrokerInfo brokerInfo = null;
+
+    public UpdateTopicHandlerAdapter(CountDownLatch countDownLatch,BrokerInfo brokerInfo){
 
         this.countDownLatch = countDownLatch;
+        this.brokerInfo = brokerInfo;
+
     }
 
 
@@ -36,4 +43,20 @@ public class UpdateTopicHandlerAdapter extends ChannelHandlerAdapter {
 
 
     }
+
+
+    //channel连接超时,在连接表中移除
+
+
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx,Object object){
+
+        Map map = BrokerConnectionCacheTable.concurrentHashMap;
+
+        map.remove(brokerInfo);
+
+    //TODO  是先删索引,先保存索引,还是超时broker的索引不变
+
+    }
+
 }

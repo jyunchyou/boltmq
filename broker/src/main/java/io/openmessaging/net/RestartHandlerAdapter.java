@@ -13,6 +13,8 @@ public class RestartHandlerAdapter extends ChannelHandlerAdapter {
 
     Logger logger = LoggerFactory.getLogger(RestartHandlerAdapter.class);
 
+    private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
 
@@ -24,6 +26,9 @@ public class RestartHandlerAdapter extends ChannelHandlerAdapter {
 
         ByteBuf byteBuf = (ByteBuf) msg;
         //TODO 解析为Index
+
+        encodeAndDecode.decodeRestart(byteBuf);
+
 
 
     }

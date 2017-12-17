@@ -3,8 +3,10 @@ package io.openmessaging.net;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.openmessaging.Constant.ConstantBroker;
+import io.openmessaging.Message;
 import io.openmessaging.broker.BrokerInfo;
 import io.openmessaging.nameserver.NameServerInfo;
+import io.openmessaging.store.ConsumerIndexTable;
 import io.openmessaging.store.MessageInfo;
 import io.openmessaging.store.MessageInfoQueue;
 import io.openmessaging.store.MessageInfoQueues;
@@ -476,6 +478,8 @@ public class EncodeAndDecode {
 
                 }
 
+                byteBuf = encodeConsumerIndex(byteBuf);
+
             }
             if (byteBuf.readableBytes() == 0) {
                 byteBuf = encodeBrokerInfo(brokerInfo,byteBuf);
@@ -529,6 +533,94 @@ public class EncodeAndDecode {
 
 
             return map;
+        }
+
+
+        public void decodeRestart(ByteBuf byteBuf){
+
+
+
+            byte[] ipByteLen = new byte[1];
+            byteBuf.readBytes(ipByteLen);
+            int ipByteLenInt = ipByteLen[0];
+            byteBuf.skipBytes(ipByteLenInt);
+
+            byte[] producerPortByteLen = new byte[1];
+            byteBuf.readBytes(producerPortByteLen);
+            int producerPortByteLenInt = producerPortByteLen[0];
+            byteBuf.skipBytes(producerPortByteLenInt);
+
+            byte[] nameServerPortByteLen = new byte[1];
+            byteBuf.readBytes(nameServerPortByteLen);
+            int nameServerPortByteLenInt = nameServerPortByteLen[0];
+            byteBuf.skipBytes(nameServerPortByteLenInt);
+
+            byte[] consumerPortByteLen = new byte[1];
+            byteBuf.readBytes(consumerPortByteLen);
+            int consumerPortByteLenInt = consumerPortByteLen[0];
+            byteBuf.skipBytes(consumerPortByteLenInt);
+
+            byte[] topicByteLen = new byte[1];
+            byteBuf.readBytes(topicByteLen);
+            int topicByteLenInt = topicByteLen[0];
+
+            byte[] topicByte = new byte[topicByteLenInt];
+            byteBuf.readBytes(topicByte);
+
+            byte[] queueIdByteLen = new byte[1];
+            byteBuf.readBytes(queueIdByteLen);
+            int queueIdByteLenInt = queueIdByteLen[0];
+
+            byte[] queueIdByte = new byte[queueIdByteLenInt];
+            byteBuf.readBytes(queueIdByte);
+
+            long offset = byteBuf.readLong();
+            long len = byteBuf.readLong();
+            String topic = new String(topicByte);
+            String queueId = new String(queueIdByte);
+
+
+            Map map = MessageInfoQueues.concurrentHashMap;
+
+            MessageInfoQueue messageInfoQueue = new MessageInfoQueue(topic);
+            List list = messageInfoQueue.getList();
+            MessageInfo messageInfo = new MessageInfo();
+            messageInfo.setOffset(offset);
+            messageInfo.setLen(len);
+
+            list.add(messageInfo);
+            map.put(topic,messageInfoQueue);
+
+            int mapSize = byteBuf.readInt();
+            for (int checkNum = 0;checkNum < mapSize;checkNum++) {
+                long consumerUniqId = byteBuf.readLong();
+                int consumerIndex = byteBuf.readInt();
+                ConsumerIndexTable.concurrentHashMap.put(consumerUniqId,consumerIndex);
+
+
+            }
+
+        }
+
+        public ByteBuf encodeConsumerIndex(ByteBuf byteBuf){
+
+            if (ConsumerIndexTable.concurrentHashMap.size() > 0 ) {
+
+                Set<Map.Entry<Long, Integer>> set = ConsumerIndexTable.concurrentHashMap.entrySet();
+
+                int mapSize = ConsumerIndexTable.concurrentHashMap.size();
+
+                byteBuf.writeInt(mapSize);
+                for (Map.Entry entry : set) {
+
+                    long uniqConcumerId = (long) entry.getKey();
+                    int consumerIndex = (int) entry.getValue();
+
+                    byteBuf.writeLong(uniqConcumerId);
+                    byteBuf.writeInt(consumerIndex);
+                }
+            }
+            return byteBuf;
         }
         }
 

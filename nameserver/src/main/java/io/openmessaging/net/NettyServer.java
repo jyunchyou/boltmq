@@ -8,10 +8,13 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
+import io.openmessaging.constant.ConstantNameServer;
 import io.openmessaging.producer.BrokerInfo;
 import io.openmessaging.table.BrokerConnectionCacheTable;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by fbhw on 17-12-3.
@@ -104,17 +107,22 @@ public class NettyServer {
 
     }
 
-    public Channel bind(BrokerInfo brokerInfo, final CountDownLatch countDownLatch){
+    public Channel bind(final BrokerInfo brokerInfo, final CountDownLatch countDownLatch){
 
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(work);
 
         bootstrap.channel(NioSocketChannel.class);
         bootstrap.option(ChannelOption.SO_KEEPALIVE,true);
+        bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, ConstantNameServer.CHANNEL_TIMEOUT);
+
         bootstrap.handler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel socketChannel) throws Exception {
-                socketChannel.pipeline().addLast(new UpdateTopicHandlerAdapter(countDownLatch));
+                socketChannel.pipeline().addLast(new UpdateTopicHandlerAdapter(countDownLatch,brokerInfo));
+                socketChannel.pipeline().addLast(new IdleStateHandler(ConstantNameServer.CHANNEL_TIMEOUT,0,0, TimeUnit.MILLISECONDS));
+
+
             }
         });
         ChannelFuture channelFuture = null;

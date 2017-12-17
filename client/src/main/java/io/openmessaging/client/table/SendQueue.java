@@ -17,7 +17,6 @@ public class SendQueue implements Serializable{
 
     private BrokerInfo brokerInfo = null;
 
-
     public String getTopicName() {
         return topicName;
     }
@@ -33,7 +32,6 @@ public class SendQueue implements Serializable{
     public void setQueueId(String queueId) {
         this.queueId = queueId;
     }
-
 
     public BrokerInfo getBrokerInfo() {
         return brokerInfo;

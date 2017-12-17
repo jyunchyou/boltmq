@@ -18,7 +18,7 @@ import java.util.Map;
 public class SendQueues {
 
 
-   static List messageQueues = new ArrayList<SendQueue>();
+   public static List<SendQueue> messageQueues = new ArrayList();
 
    private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
 

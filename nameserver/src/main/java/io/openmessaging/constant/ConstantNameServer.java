@@ -19,6 +19,8 @@ public class ConstantNameServer {
 
     public static final int INDEX_BROKER_BUFFER_SIZE = 10000;
 
+    public static final int CHANNEL_TIMEOUT = 10000;
+
 
 
 
