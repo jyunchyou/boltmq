@@ -1,18 +1,11 @@
-package io.openmessaging.client.net;
+package io.openmessaging.client.handler;
 
-import com.aliyuncs.DefaultAcsClient;
-import com.aliyuncs.IAcsClient;
-import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
-import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.http.MethodType;
-import com.aliyuncs.profile.DefaultProfile;
-import com.aliyuncs.profile.IClientProfile;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.openmessaging.client.net.SendResult;
 import io.openmessaging.client.producer.BrokerInfo;
-import io.openmessaging.client.table.ConnectionCacheNameServerTable;
 import io.openmessaging.client.table.ConnectionCacheTable;
 import io.openmessaging.client.table.SendQueue;
 import io.openmessaging.client.table.SendQueues;
@@ -20,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-import javax.swing.text.html.FormSubmitEvent;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 

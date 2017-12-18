@@ -2,8 +2,8 @@ package io.openmessaging.consumer.table;
 
 import io.netty.channel.Channel;
 import io.openmessaging.consumer.constant.ConstantConsumer;
-import io.openmessaging.consumer.consumer.BrokerInfo;
-import io.openmessaging.consumer.consumer.NameServerInfo;
+import io.openmessaging.consumer.broker.BrokerInfo;
+import io.openmessaging.consumer.nameserver.NameServerInfo;
 import io.openmessaging.consumer.net.EncodeAndDecode;
 import io.openmessaging.consumer.net.NettyConsumer;
 

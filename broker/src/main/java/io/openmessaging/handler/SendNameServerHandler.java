@@ -1,4 +1,4 @@
-package io.openmessaging.net;
+package io.openmessaging.handler;
 
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;

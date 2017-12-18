@@ -10,6 +10,9 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.openmessaging.constant.ConstantNameServer;
+import io.openmessaging.handler.BrokerTableHandlerAdapter;
+import io.openmessaging.handler.NettyServerHandlerAdapter;
+import io.openmessaging.handler.UpdateTopicHandlerAdapter;
 import io.openmessaging.producer.BrokerInfo;
 import io.openmessaging.table.BrokerConnectionCacheTable;
 

@@ -4,7 +4,7 @@ package io.openmessaging.consumer.table;
  * Created by fbhw on 17-12-8.
  */
 
-import io.openmessaging.consumer.consumer.BrokerInfo;
+import io.openmessaging.consumer.broker.BrokerInfo;
 
 import java.util.List;
 import java.util.Map;

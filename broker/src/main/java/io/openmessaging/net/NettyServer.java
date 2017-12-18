@@ -10,10 +10,13 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.openmessaging.Constant.ConstantBroker;
 import io.openmessaging.broker.BrokerInfo;
-import io.openmessaging.nameserver.NameServerInfo;
-import io.openmessaging.store.ConnectionCacheNameServerTable;
+import io.openmessaging.handler.NettyServerHandlerAdapter;
+import io.openmessaging.handler.PullHandlerAdapter;
+import io.openmessaging.handler.RestartHandlerAdapter;
+import io.openmessaging.handler.UpdateTopicHandlerAdapter;
+import io.openmessaging.broker.NameServerInfo;
+import io.openmessaging.table.ConnectionCacheNameServerTable;
 
-import javax.naming.Name;
 import java.util.Map;
 
 /**

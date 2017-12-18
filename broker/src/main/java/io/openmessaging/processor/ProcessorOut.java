@@ -4,6 +4,10 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.openmessaging.Constant.ConstantBroker;
 import io.openmessaging.store.*;
+import io.openmessaging.table.ConsumerIndexTable;
+import io.openmessaging.table.MessageInfo;
+import io.openmessaging.table.MessageInfoQueue;
+import io.openmessaging.table.MessageInfoQueues;
 
 import java.util.ArrayList;
 import java.util.List;

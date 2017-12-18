@@ -1,4 +1,4 @@
-package io.openmessaging.consumer.consumer;
+package io.openmessaging.consumer.broker;
 
 /**
  * Created by fbhw on 17-11-6.

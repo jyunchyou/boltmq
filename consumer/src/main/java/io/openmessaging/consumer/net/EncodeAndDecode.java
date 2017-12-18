@@ -2,11 +2,8 @@ package io.openmessaging.consumer.net;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.openmessaging.consumer.constant.ConstantConsumer;
-import io.openmessaging.consumer.constant.ConsumeModel;
-import io.openmessaging.consumer.consumer.BrokerInfo;
+import io.openmessaging.consumer.broker.BrokerInfo;
 import io.openmessaging.consumer.consumer.Message;
-import io.openmessaging.consumer.table.ReceiveMessageTable;
 import io.openmessaging.consumer.table.TopicBrokerTable;
 
 import java.util.ArrayList;
@@ -356,7 +353,7 @@ public class EncodeAndDecode {
 
 
 
-        List list = new ArrayList(pullNum);
+        List list = new ArrayList();
 
         while (byteBuf.readableBytes() >= 4) {
 

@@ -1,4 +1,4 @@
-package io.openmessaging.nameserver;
+package io.openmessaging.broker;
 
 /**
  * Created by fbhw on 17-12-2.

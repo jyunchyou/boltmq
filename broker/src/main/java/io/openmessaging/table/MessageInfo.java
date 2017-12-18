@@ -1,4 +1,4 @@
-package io.openmessaging.store;
+package io.openmessaging.table;
 
 /**
  * Created by fbhw on 17-12-5.

@@ -1,4 +1,4 @@
-package io.openmessaging.consumer.consumer;
+package io.openmessaging.consumer.nameserver;
 
 /**
  * Created by fbhw on 17-12-2.

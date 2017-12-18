@@ -1,4 +1,4 @@
-package io.openmessaging.net;
+package io.openmessaging.handler;
 
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
@@ -8,7 +8,6 @@ import io.openmessaging.table.BrokerInfoTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 /**

@@ -1,7 +1,7 @@
-package io.openmessaging.store;
+package io.openmessaging.table;
 
 import io.netty.channel.Channel;
-import io.openmessaging.nameserver.NameServerInfo;
+import io.openmessaging.broker.NameServerInfo;
 
 
 import java.util.Map;

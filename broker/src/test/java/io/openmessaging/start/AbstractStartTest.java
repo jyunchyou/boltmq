@@ -1,20 +1,11 @@
 package io.openmessaging.start;
 
-import io.openmessaging.Constant.ConstantBroker;
-import io.openmessaging.nameserver.NameServerInfo;
-import io.openmessaging.net.NettyServer;
+import io.openmessaging.broker.NameServerInfo;
 import io.openmessaging.net.NettyServerTest;
-import io.openmessaging.store.MessageInfo;
-import io.openmessaging.store.MessageInfoQueue;
-import io.openmessaging.store.MessageInfoQueues;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by fbhw on 17-12-7.

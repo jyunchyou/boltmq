@@ -1,7 +1,7 @@
 package io.openmessaging.start;
 
 import io.openmessaging.Constant.ConstantBroker;
-import io.openmessaging.nameserver.NameServerInfo;
+import io.openmessaging.broker.NameServerInfo;
 import io.openmessaging.net.NettyServer;
 
 /**

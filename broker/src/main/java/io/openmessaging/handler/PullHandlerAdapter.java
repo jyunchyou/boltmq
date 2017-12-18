@@ -1,11 +1,11 @@
-package io.openmessaging.net;
+package io.openmessaging.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.concurrent.Future;
-import io.openmessaging.processor.ProcessorIn;
+import io.openmessaging.net.EncodeAndDecode;
 import io.openmessaging.processor.ProcessorOut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

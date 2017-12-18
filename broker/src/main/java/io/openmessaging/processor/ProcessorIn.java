@@ -1,18 +1,14 @@
 
 package io.openmessaging.processor;
 
-import io.netty.buffer.ByteBuf;
 import io.openmessaging.Constant.ConstantBroker;
-import io.openmessaging.broker.BrokerInfo;
-import io.openmessaging.store.MessageInfo;
-import io.openmessaging.store.MessageInfoQueue;
-import io.openmessaging.store.MessageInfoQueues;
+import io.openmessaging.table.MessageInfo;
+import io.openmessaging.table.MessageInfoQueue;
+import io.openmessaging.table.MessageInfoQueues;
 import io.openmessaging.store.MessageStore;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by fbhw on 17-12-5.

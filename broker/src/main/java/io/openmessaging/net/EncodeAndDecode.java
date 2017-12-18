@@ -3,23 +3,18 @@ package io.openmessaging.net;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.openmessaging.Constant.ConstantBroker;
-import io.openmessaging.Message;
 import io.openmessaging.broker.BrokerInfo;
-import io.openmessaging.nameserver.NameServerInfo;
-import io.openmessaging.store.ConsumerIndexTable;
-import io.openmessaging.store.MessageInfo;
-import io.openmessaging.store.MessageInfoQueue;
-import io.openmessaging.store.MessageInfoQueues;
+import io.openmessaging.table.ConsumerIndexTable;
+import io.openmessaging.table.MessageInfo;
+import io.openmessaging.table.MessageInfoQueue;
+import io.openmessaging.table.MessageInfoQueues;
 
-import java.nio.ByteBuffer;
 import java.util.*;
 
 /**
  * Created by fbhw on 17-12-5.
  */
 public class EncodeAndDecode {
-
-        //需要解析queueId,Topic字段
 
     private boolean discard = false;
 

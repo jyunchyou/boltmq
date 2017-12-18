@@ -1,17 +1,18 @@
-package io.openmessaging.net;
+package io.openmessaging.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-import io.openmessaging.constant.ConstantNameServer;
+import io.openmessaging.net.EncodeAndDecode;
+import io.openmessaging.net.NettyServer;
 import io.openmessaging.producer.BrokerInfo;
 
 import io.openmessaging.table.BrokerInfoTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.HashMap;
+
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 

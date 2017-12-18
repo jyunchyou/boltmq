@@ -1,7 +1,7 @@
 package io.openmessaging.consumer.table;
 
 import io.netty.channel.Channel;
-import io.openmessaging.consumer.consumer.NameServerInfo;
+import io.openmessaging.consumer.nameserver.NameServerInfo;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

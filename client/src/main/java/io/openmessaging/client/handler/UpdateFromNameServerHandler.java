@@ -1,12 +1,10 @@
-package io.openmessaging.consumer.net;
+package io.openmessaging.client.handler;
 
-
+import com.aliyuncs.exceptions.ClientException;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-
-import io.openmessaging.consumer.table.ReceiveMessageTable;
-import io.openmessaging.consumer.table.TopicBrokerTable;
+import io.openmessaging.client.table.SendQueues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,11 +20,16 @@ public class UpdateFromNameServerHandler extends ChannelHandlerAdapter {
 
     private CountDownLatch countDownLatch = null;
 
-    private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
+    private Condition condition = null;
 
     public UpdateFromNameServerHandler(CountDownLatch countDownLatch){
 
         this.countDownLatch = countDownLatch;
+
+    }
+
+    public UpdateFromNameServerHandler(Condition condition){
+        this.condition = condition;
 
     }
 
@@ -37,7 +40,7 @@ public class UpdateFromNameServerHandler extends ChannelHandlerAdapter {
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg)  {
+    public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg) throws ClientException {
 
 
 
@@ -46,11 +49,20 @@ public class UpdateFromNameServerHandler extends ChannelHandlerAdapter {
 
         System.out.println("update success");
 
-        encodeAndDecode.decodeReceiveTable(byteBuf);
+
+//        logger.info("Server端返回消息:"+ new String(bb.array()));
+
+/*
+
+        ByteBuffer byteBuffer = (ByteBuffer) msg;
+
+        SendQueues.routeByteBuffer = byteBuffer;
+*/
 
 
+        SendQueues.routeByteBuf = byteBuf;
 
-        System.out.println(TopicBrokerTable.concurrentHashMap);
+
 
 
         countDownLatch.countDown();

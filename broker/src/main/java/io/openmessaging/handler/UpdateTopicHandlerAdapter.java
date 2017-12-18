@@ -1,11 +1,11 @@
-package io.openmessaging.net;
+package io.openmessaging.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-import io.openmessaging.store.MessageInfoQueue;
-import io.openmessaging.store.MessageInfoQueues;
+import io.openmessaging.table.MessageInfoQueue;
+import io.openmessaging.table.MessageInfoQueues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

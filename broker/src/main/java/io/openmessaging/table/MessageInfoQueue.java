@@ -1,4 +1,4 @@
-package io.openmessaging.store;
+package io.openmessaging.table;
 
 
 import io.openmessaging.common.NodeMessageInfo;

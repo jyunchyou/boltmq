@@ -1,11 +1,6 @@
 package io.openmessaging.net;
 
 import io.openmessaging.constant.ConstantNameServer;
-import io.openmessaging.producer.BrokerInfo;
-import io.openmessaging.table.BrokerInfoTable;
-import io.openmessaging.table.MessageInfo;
-import io.openmessaging.table.MessageInfoQueue;
-import io.openmessaging.table.MessageInfoQueues;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;

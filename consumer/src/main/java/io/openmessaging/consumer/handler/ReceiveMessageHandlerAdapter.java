@@ -1,9 +1,11 @@
-package io.openmessaging.consumer.net;
+package io.openmessaging.consumer.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.openmessaging.consumer.filter.FilterList;
 import io.openmessaging.consumer.listener.ListenerMessage;
+import io.openmessaging.consumer.net.EncodeAndDecode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +29,8 @@ public class ReceiveMessageHandlerAdapter extends ChannelHandlerAdapter {
     private int num;
 
     private CountDownLatch countDownLatch = null;
+
+    private FilterList filterList = new FilterList();
 
     public ReceiveMessageHandlerAdapter(int num, ListenerMessage listenerMessage, CountDownLatch countDownLatch){
 
@@ -60,20 +64,26 @@ public class ReceiveMessageHandlerAdapter extends ChannelHandlerAdapter {
 
         List backList = encodeAndDecode.decodeMessage(byteBuf,num);
 
+
+
+
+
         if (backList.size() == 0) {
             countDownLatch.countDown();
             return;
         }else {
-            for (int checkNum = 0;checkNum < backList.size();checkNum++) {
 
-                list.add(backList.remove(checkNum));
+            filterList.setPullNum(num);
+            List<List> list = filterList.filter(backList);
+            if (list == null) {
+                countDownLatch.countDown();
+                return;
+            }
+            for (List l : list) {
+                listenerMessage.listener(l);
 
-                if (list.size() == num) {
-                    listenerMessage.listener(list);
-                    list = new ArrayList(num);
-                }
             }
-            countDownLatch.countDown();
-            }
+
+        }
     }
 }
