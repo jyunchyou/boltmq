@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.openmessaging.producer.BrokerInfo;
 import io.openmessaging.table.BrokerConnectionCacheTable;
+import io.openmessaging.table.BrokerInfoTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,11 +52,14 @@ public class UpdateTopicHandlerAdapter extends ChannelHandlerAdapter {
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx,Object object){
 
-        Map map = BrokerConnectionCacheTable.concurrentHashMap;
 
-        map.remove(brokerInfo);
+    //删连接
+        BrokerConnectionCacheTable.concurrentHashMap.remove(brokerInfo);
 
-    //TODO  是先删索引,先保存索引,还是超时broker的索引不变
+    //删索引
+        BrokerInfoTable.map.remove(brokerInfo);
+
+
 
     }
 

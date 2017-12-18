@@ -4,20 +4,31 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>io.openmessaging</groupId>
-        <artifactId>boltmq</artifactId>
-        <version>1.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
-    </parent>
-
-
     <groupId>io.openmessaging</groupId>
-    <artifactId>consumer</artifactId>
+    <artifactId>boltmq</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>client</module>
+        <module>broker</module>
+        <module>consumer</module>
+        <module>nameserver</module>
+    </modules>
+
+    <developers>
+        <developer>
+            <name>hujunqiu</name>
+            <email>jyunchyou@gmail.com</email>
+            <roles>
+                <role>Project Manager</role>
+                <role>Architect</role>
+            </roles>
+            <timezone>+8</timezone>
+        </developer>
+    </developers>
 
 
-    <!--logback相关-->
+    <!--junit相关-->
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -56,5 +67,6 @@
         </dependency>
 
     </dependencies>
+
 
 </project>
