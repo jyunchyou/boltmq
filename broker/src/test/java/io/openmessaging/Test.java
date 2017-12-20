@@ -12,9 +12,6 @@ public class Test {
 
     linkedList.add("Message_01");
     linkedList.add("Message_02");
-    System.out.println(linkedList.peek());
-    System.out.println(linkedList.element());
-    System.out.println(linkedList);
 
 
 

@@ -198,7 +198,6 @@ public class NettyConsumer {
 
         while (list == null || list.size() == 0) {
 
-            System.out.println("list == 0 || == null");
             try {
                 Thread.sleep(15000);
             } catch (InterruptedException e) {
@@ -248,7 +247,6 @@ public class NettyConsumer {
 
                 Future future = c.writeAndFlush(byteBuf);
                 if (future.isSuccess()) {
-                    System.out.println("-------pull请求发送-----");
 
                     try {
                         countDownLatch.await();
@@ -256,7 +254,6 @@ public class NettyConsumer {
                         e.printStackTrace();
                     }
                 } else {
-                    System.out.println("------pull shibai-----");
                 }
 
 

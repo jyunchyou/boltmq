@@ -40,11 +40,16 @@ public class UpdateTopicHandlerAdapter extends ChannelHandlerAdapter {
         ByteBuf back = Unpooled.buffer(1);
         back.writeBytes("0".getBytes());
         channelHandlerContext.writeAndFlush(back);
+
+
+
+
+
     }
 
     public void putTopicQueue(String topic){
 
-        System.out.println("-----------notify update topic--------------");
+
         if (MessageInfoQueues.concurrentHashMap.containsKey(topic)){
             return ;
         }

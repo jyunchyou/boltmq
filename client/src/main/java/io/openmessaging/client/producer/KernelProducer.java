@@ -72,6 +72,7 @@ public class KernelProducer {
             nettyClient.send(channel, byteBuf, 0, null, null);
     }
 
+
     }
 
     //开启定时任务

@@ -67,7 +67,6 @@ public class NettyServer {
         }
 
         if (channelFuture.isSuccess()) {
-            System.out.println("Server connect success");
 
 
         }
@@ -102,8 +101,6 @@ public class NettyServer {
         }
 
         if (channelFuture.isSuccess()) {
-            System.out.println("broker connect success");
-
 
         }
 
@@ -137,7 +134,6 @@ public class NettyServer {
             work.shutdownGracefully();
         }
         if (channelFuture.isSuccess()) {
-            System.out.println("nameServer connect success");
 
 
         }
@@ -157,10 +153,10 @@ public class NettyServer {
         }
 
         if (channel == null) {
-            System.out.println("send to broker fail");
             return;
         }
         channel.writeAndFlush(byteBuf);
+
 
 
 

@@ -18,7 +18,7 @@ import java.util.Map;
 public class SendQueues {
 
 
-   public static List<SendQueue> messageQueues = new ArrayList();
+   public static List<SendQueue> messageQueues = new ArrayList<>();
 
    private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
 
@@ -48,7 +48,7 @@ public class SendQueues {
 
     public List getList(){
         if (messageQueues.size() == 0) {
-          //TODO get byteBuffer and channel  from nameServer
+          //TODO get byteBuffer and channel  from  countDownLatch.countDown();nameServer
 
 
             Channel channel = nameServerConnectionCacheTable.get(nameServerInfo);

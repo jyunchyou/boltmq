@@ -37,7 +37,6 @@ public class UpdateTopicHandlerAdapter extends ChannelHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg) {
 
-        System.out.println("notify over backed nameServer");
 
 
 

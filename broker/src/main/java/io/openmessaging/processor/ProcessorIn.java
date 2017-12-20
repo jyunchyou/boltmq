@@ -2,10 +2,10 @@
 package io.openmessaging.processor;
 
 import io.openmessaging.Constant.ConstantBroker;
+import io.openmessaging.store.MessageStore;
 import io.openmessaging.table.MessageInfo;
 import io.openmessaging.table.MessageInfoQueue;
 import io.openmessaging.table.MessageInfoQueues;
-import io.openmessaging.store.MessageStore;
 
 import java.io.IOException;
 import java.util.List;

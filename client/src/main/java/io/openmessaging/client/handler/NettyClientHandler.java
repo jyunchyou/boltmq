@@ -40,14 +40,12 @@ public class NettyClientHandler extends ChannelHandlerAdapter {
     public void channelActive(ChannelHandlerContext channelHandlerContext){
 
 
-        System.out.println("channelActivity has executing!");
 
     }
 
     @Override
     public void channelRead(ChannelHandlerContext channelHandlerContext,Object msg) throws ClientException {
 
-        System.out.println("message back success");
         ByteBuf byteBuf  = (ByteBuf) msg;
 
         byte[] resultBytes = new byte[byteBuf.readableBytes()];
@@ -58,13 +56,12 @@ public class NettyClientHandler extends ChannelHandlerAdapter {
 
 
 
+
         if ("1".equals(resultString)) {
-            System.out.println("send message back success!");
 
         }else{
 
-            logger.warn("消息发送失败");
-        }
+             }
 
         //同步发送释放
         if (countDownLatch != null) {

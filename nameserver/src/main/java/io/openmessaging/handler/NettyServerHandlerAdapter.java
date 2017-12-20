@@ -44,12 +44,10 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
 
         String result = new String(b);
 
-        logger.info("Server端收到消息:"+result);
 
         //test
         if ("getList".equals(result)) {
 
-            System.out.println("成功获取getList");
             ByteBuf byteBuf = encodeAndDecode.encodeSendList();
 
 
@@ -60,31 +58,25 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
 
 
 
-        } else {
-            System.out.println("成功获取getTable");
 
+        } else {
 
             String topic = result;
 
-
             this.notifyAllBroker(topic);
 
-
-
-
             ByteBuf byteBuf = encodeAndDecode.encodeReceiveTable(result);
-
 
             if (byteBuf == null) {
                 return ;
             }
             ChannelFuture channelFuture = channelHandlerContext.writeAndFlush(byteBuf);
 
+
             if (channelFuture.isSuccess()) {
-                System.out.println("返回成功");
 
             }else {
-                System.out.println("fail");
+
             }
         }
 /*

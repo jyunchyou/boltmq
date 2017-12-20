@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by fbhw on 17-12-5.
@@ -20,7 +20,7 @@ public class MessageInfoQueue {
 
     private NodeMessageInfo nodeMessageInfo = null;
 
-    private List list = new ArrayList<MessageInfo>();//TODO 索引删除 标记清除
+    private List list = new Vector<MessageInfo>();//TODO 索引删除 标记清除
 
     private String queueId;
 
@@ -83,7 +83,7 @@ public class MessageInfoQueue {
         return list;
     }
 
-    public void setList(List list) {
+    public void setList(Vector list) {
         this.list = list;
     }
 

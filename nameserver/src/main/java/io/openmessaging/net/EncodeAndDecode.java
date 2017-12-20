@@ -21,6 +21,9 @@ public class EncodeAndDecode {
 
     private BrokerRestart brokerRestart = new BrokerRestart();
 
+    private byte[] bBuf = null;
+    int allLenInt = 0;
+
     /**
      *nameServerRouteTable协议格式
      *
@@ -36,6 +39,8 @@ public class EncodeAndDecode {
      }
      */
     public ByteBuf encodeSendList() {
+
+
 
 
 
@@ -73,12 +78,12 @@ public class EncodeAndDecode {
             //
             int queueNum = messageInfoQueues.getConcurrentHashMap().size();
 
-            System.out.println("---------------------queueNum--------------------"+queueNum);
             byte queueNumByte = (byte) queueNum;
             heapBuffer.writeInt(queueNum);
             Set<Map.Entry> s = concurrentHashMap.entrySet();
             for (Map.Entry entry : s) {
                 String queueId = (String) entry.getKey();
+
 
 
 
@@ -144,8 +149,6 @@ public class EncodeAndDecode {
         heapBuffer.writeBytes(new byte[]{topicByteLen});
         heapBuffer.writeBytes(topicByte);
         int listSize = list.size();
-        System.out.println("topicByteLen:"+topicByte.length);
-        System.out.println("mapSize:"+listSize);
         byte mapSizeByte = (byte) listSize;
         heapBuffer.writeBytes(new byte[]{mapSizeByte});
         for (Map map : list) {
@@ -193,12 +196,97 @@ public class EncodeAndDecode {
     }
 
     /*queueId,topic,offset,len*/
-    public Object decode(ByteBuf byteBuf){
+    public synchronized Object decode(ByteBuf byteBuf){
+
+        byteBuf.markReaderIndex();
+        byte[] a = new byte[byteBuf.readableBytes()];
+        byteBuf.readBytes(a);
+        byteBuf.resetReaderIndex();
 
 
-//        byte[] data = new byte[byteBuf.readableBytes()];
-//        byteBuf.readBytes(data);
-//        System.out.println(new String(data));
+
+
+        if (bBuf != null) {
+            ByteBuf b = Unpooled.buffer(bBuf.length + byteBuf.readableBytes());
+            b.writeBytes(bBuf);
+            byte[] byteBufByte = new byte[byteBuf.readableBytes()];
+            byteBuf.readBytes(byteBufByte);
+
+            b.writeBytes(byteBufByte);
+            byteBuf = b;
+        }
+
+
+
+
+            byteBuf.markReaderIndex();
+            byte[] allLength = new byte[4];
+            byteBuf.readBytes(allLength);
+
+            int allLenInt = 0;
+            if (allLength[0] != 0 && allLength[1] != 0 && allLength[2] != 0 && allLength[3] != 0) {
+                allLenInt = allLength[0] * 127 * 127 * 127 + allLength[1] * 127 * 127 +  allLength[2] * 127 + allLength[3];
+
+
+            } else if (allLength[1] != 0 && allLength[2] != 0 && allLength[3] != 0) {
+
+                allLenInt = allLength[1] * 127 * 127 +  allLength[2] * 127 + allLength[3];
+
+            } else if (allLength[2] != 0 && allLength[3] != 0) {
+
+                allLenInt = allLength[2] * 127 + allLength[3];
+
+            } else {
+                allLenInt = allLength[3];
+            }
+
+
+
+
+            if (byteBuf.readableBytes() < allLenInt) {
+                byteBuf.resetReaderIndex();
+              bBuf = new byte[byteBuf.readableBytes()];
+              byteBuf.readBytes(bBuf);
+              return null;
+
+
+            }else if (byteBuf.readableBytes() > allLenInt) {
+                ByteBuf temp = byteBuf;
+                byteBuf = Unpooled.buffer(allLenInt);
+                byte[] tempByte = new byte[allLenInt];
+                temp.readBytes(tempByte);
+                byteBuf.writeBytes(tempByte);
+                bBuf = new byte[temp.readableBytes()];
+                temp.readBytes(bBuf);
+
+            }else if (byteBuf.readableBytes() == allLenInt) {
+                bBuf = null;
+            }
+
+
+
+
+
+
+
+        String ip = null;
+        String producerPort = null;
+        String nameServerPort = null;
+        String consumerPort = null;
+
+
+
+
+
+
+            int mapSize = byteBuf.readInt();
+            for (int indexNum = 0;indexNum < mapSize;indexNum++) {
+                byteBuf.skipBytes(4);
+                byteBuf.skipBytes(8);
+            }
+
+
+
 
 
 
@@ -210,7 +298,7 @@ public class EncodeAndDecode {
 
             byte[] ipByte = new byte[ipIntLen];
             byteBuf.readBytes(ipByte);
-            String ip = new String(ipByte);
+            ip = new String(ipByte);
 
             byte[] producerPortByteLen = new byte[1];
             byteBuf.readBytes(producerPortByteLen);
@@ -218,7 +306,7 @@ public class EncodeAndDecode {
 
             byte[] producerPortByte = new byte[producerPortIntLen];
             byteBuf.readBytes(producerPortByte);
-            String producerPort = new String(producerPortByte);
+            producerPort = new String(producerPortByte);
 
             byte[] nameServerPortByteLen = new byte[1];
             byteBuf.readBytes(nameServerPortByteLen);
@@ -226,7 +314,7 @@ public class EncodeAndDecode {
 
             byte[] nameServerPortByte = new byte[nameServerPortIntLen];
             byteBuf.readBytes(nameServerPortByte);
-            String nameServerPort = new String(nameServerPortByte);
+            nameServerPort = new String(nameServerPortByte);
 
 
             byte[] consumerPortByteLen = new byte[1];
@@ -235,102 +323,149 @@ public class EncodeAndDecode {
 
             byte[] consumerPortByte = new byte[consumerPortIntLen];
             byteBuf.readBytes(consumerPortByte);
-            String consumerPort = new String(consumerPortByte);
+            consumerPort = new String(consumerPortByte);
+            ByteBuf returnByteBuf = putBroker(ip, producerPort, nameServerPort, consumerPort);
 
-
+///////////////////////////////////////////////////////////////////////////
             if (!byteBuf.isReadable()) {
 
-                ByteBuf returnByteBuf = putBroker(ip,producerPort,nameServerPort,consumerPort);
 
-                if (returnByteBuf != null) {
+               /* if (returnByteBuf != null) {
                     return returnByteBuf;
-                }
-                return ip+producerPort+nameServerPort+consumerPort ;
+                }*/
+                return ip + producerPort + nameServerPort + consumerPort;
+
+            }
+            int mSize = byteBuf.readInt();
+            for (int checkNum = 0;checkNum < mSize;checkNum++) {
+
+                byte[] topicByteLen = new byte[1];
+                byteBuf.readBytes(topicByteLen);
+                int topicIntLen = topicByteLen[0];
+
+                byte[] topicByte = new byte[topicIntLen];
+                byteBuf.readBytes(topicByte);
+                String topic = new String(topicByte);
+
+                byte[] queueIdByteLen = new byte[1];
+                byteBuf.readBytes(queueIdByteLen);
+                int queueIdIntLen = queueIdByteLen[0];
+
+                byte[] queueIdByte = new byte[queueIdIntLen];
+                byteBuf.readBytes(queueIdByte);
+                String queueId = new String(queueIdByte);
+                putTopicBrokerTable(topic, ip, producerPort, nameServerPort, consumerPort, queueId);
+
+
+
+
+                    int listSize = byteBuf.readInt();
+
+                    if (listSize == 0) {
+                        BrokerInfo brokerInfo = new BrokerInfo();
+                        brokerInfo.setIp(ip);
+                        brokerInfo.setProducerPort(Integer.parseInt(producerPort));
+                        brokerInfo.setNameServerPort(Integer.parseInt(nameServerPort));
+                        brokerInfo.setConsumerPort(Integer.parseInt(consumerPort));
+                        MessageInfoQueues messageInfoQueues = null;
+                        if (!brokerInfoTable.map.containsKey(brokerInfo)) {
+
+                            messageInfoQueues = new MessageInfoQueues();
+
+                            brokerInfoTable.map.put(brokerInfo, messageInfoQueues);
+
+                        }else {
+                            messageInfoQueues = brokerInfoTable.map.get(brokerInfo);
+                        }
+                        Map map = messageInfoQueues.getConcurrentHashMap();
+
+                        if (map.containsKey(topic)) {
+
+                            MessageInfoQueue messageInfoQueue = (MessageInfoQueue) map.get(topic);
+                            messageInfoQueue.setQueueId(queueId);
+
+
+                        } else {
+
+                            MessageInfoQueue messageInfoQueue = new MessageInfoQueue();
+                            map.put(topic, messageInfoQueue);
+                            messageInfoQueue.setQueueId(queueId);
+
+
+
+
+
+                        }
+                    }
+
+                    for (int index = 0;index < listSize;index++) {
+
+
+                        long offset = 0;
+                        long len = 0;
+
+                        offset = byteBuf.readLong();
+                        len = byteBuf.readLong();
+
+
+
+                        BrokerInfo brokerInfo = new BrokerInfo();
+                        brokerInfo.setIp(ip);
+                        brokerInfo.setProducerPort(Integer.parseInt(producerPort));
+                        brokerInfo.setNameServerPort(Integer.parseInt(nameServerPort));
+                        brokerInfo.setConsumerPort(Integer.parseInt(consumerPort));
+                        MessageInfoQueues messageInfoQueues = null;
+                        if (brokerInfoTable.map.containsKey(brokerInfo)) {
+
+                            messageInfoQueues = (MessageInfoQueues) brokerInfoTable.map.get(brokerInfo);
+
+                        } else {
+
+                            messageInfoQueues = new MessageInfoQueues();
+
+                            brokerInfoTable.map.put(brokerInfo, messageInfoQueues);
+
+                        }
+                        Map map = messageInfoQueues.getConcurrentHashMap();
+
+
+                        if (map.containsKey(topic)) {
+
+                            MessageInfoQueue messageInfoQueue = (MessageInfoQueue) map.get(topic);
+                            messageInfoQueue.setQueueId(queueId);
+                            List list = messageInfoQueue.getList();
+                            MessageInfo messageInfo = new MessageInfo();
+                            messageInfo.setLen(len);
+                            messageInfo.setOffset(offset);
+                            list.add(messageInfo);
+
+
+                        } else {
+
+                            MessageInfoQueue messageInfoQueue = new MessageInfoQueue();
+                            map.put(topic, messageInfoQueue);
+                            messageInfoQueue.setQueueId(queueId);
+
+                            List list = messageInfoQueue.getList();
+
+                            MessageInfo messageInfo = new MessageInfo();
+                            messageInfo.setLen(len);
+                            messageInfo.setOffset(offset);
+                            list.add(messageInfo);
+
+                        }
+
+                    }
+
+
+
+
 
             }
 
-            byte[] topicByteLen = new byte[1];
-            byteBuf.readBytes(topicByteLen);
-            int topicIntLen = topicByteLen[0];
-
-            byte[] topicByte = new byte[topicIntLen];
-            byteBuf.readBytes(topicByte);
-            String topic = new String(topicByte);
-
-            byte[] queueIdByteLen = new byte[1];
-            byteBuf.readBytes(queueIdByteLen);
-            int queueIdIntLen = queueIdByteLen[0];
-
-            byte[] queueIdByte = new byte[queueIdIntLen];
-            byteBuf.readBytes(queueIdByte);
-            String queueId = new String(queueIdByte);
-
-
-            System.out.println(topic + "-------------------------------------");
-
-            long offset = 0;
-            long len = 0;
-            if (byteBuf.isReadable()) {
-
-                 offset = byteBuf.readLong();
-                 len = byteBuf.readLong();
-            }
 
 
 
-
-
-            putTopicBrokerTable(topic,ip,producerPort,nameServerPort,consumerPort,queueId);
-
-            BrokerInfo brokerInfo = new BrokerInfo();
-            brokerInfo.setIp(ip);
-            brokerInfo.setProducerPort(Integer.parseInt(producerPort));
-            brokerInfo.setNameServerPort(Integer.parseInt(nameServerPort));
-            brokerInfo.setConsumerPort(Integer.parseInt(consumerPort));
-            MessageInfoQueues messageInfoQueues = null;
-            if (brokerInfoTable.map.containsKey(brokerInfo)){
-
-                messageInfoQueues = (MessageInfoQueues) brokerInfoTable.map.get(brokerInfo);
-
-            }else {
-
-                messageInfoQueues = new MessageInfoQueues();
-
-                brokerInfoTable.map.put(brokerInfo, messageInfoQueues);
-
-            }
-                Map map = messageInfoQueues.getConcurrentHashMap();
-
-
-
-
-                if (map.containsKey(topic)) {
-
-                    MessageInfoQueue messageInfoQueue = (MessageInfoQueue) map.get(topic);
-                    messageInfoQueue.setQueueId(queueId);
-                    List list = messageInfoQueue.getList();
-                    MessageInfo messageInfo = new MessageInfo();
-                    messageInfo.setLen(len);
-                    messageInfo.setOffset(offset);
-                    list.add(messageInfo);
-                    System.out.println("----list size is not 0--------"+list.size()+"-------");
-
-
-                } else {
-
-                    MessageInfoQueue messageInfoQueue = new MessageInfoQueue();
-                    map.put(topic, messageInfoQueue);
-                    messageInfoQueue.setQueueId(queueId);
-
-                    List list = messageInfoQueue.getList();
-
-                    MessageInfo messageInfo = new MessageInfo();
-                    messageInfo.setLen(len);
-                    messageInfo.setOffset(offset);
-                    list.add(messageInfo);
-                    System.out.println("----list size is not 0--------"+list.size()+"-------");
-
-                }
 
             return ip+producerPort+nameServerPort+consumerPort;
         }
@@ -352,9 +487,9 @@ public class EncodeAndDecode {
         //如果已存在，开启broker故障重启处理
         if (BrokerInfoTable.map.containsKey(brokerInfo)) {
 
-            ByteBuf byteBuf = brokerRestart.restart(ip,producerPort,nameServerPort,consumerPort);
+            //ByteBuf byteBuf = brokerRestart.restart(ip,producerPort,nameServerPort,consumerPort);
 
-            return byteBuf;
+            return null/*byteBuf*/;
 
 
         }
@@ -366,7 +501,6 @@ public class EncodeAndDecode {
 
         public synchronized void putTopicBrokerTable(String topic,String ip,String producerPort,String nameServerPort,String consumerPort,String queueId) {
 
-            System.out.println(topic + ip + producerPort + nameServerPort + consumerPort + queueId);
             List<Map<BrokerInfo, List<String>>> list = null;
 
             list = topicBrokerTable.concurrentHashMap.get(topic);

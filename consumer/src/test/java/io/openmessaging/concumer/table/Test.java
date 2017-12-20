@@ -42,7 +42,6 @@ public class Test {
         int pid = Integer.parseInt(pidString);
         long uniqId = ipInt + port + currentTime + pid;
 
-        System.out.println(uniqId);
 
     }
 }

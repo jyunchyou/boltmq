@@ -1,21 +1,14 @@
 package io.openmessaging.consumer.consumer;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.Channel;
-import io.netty.util.concurrent.Future;
 import io.openmessaging.consumer.constant.ConstantConsumer;
-import io.openmessaging.consumer.constant.ConsumeModel;
 import io.openmessaging.consumer.listener.ListenerMessage;
 import io.openmessaging.consumer.net.EncodeAndDecode;
 import io.openmessaging.consumer.net.NettyConsumer;
-import io.openmessaging.consumer.table.ConnectionCacheBrokerTabel;
 import io.openmessaging.consumer.table.ReceiveMessageTable;
 import io.openmessaging.consumer.table.TopicBrokerTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -49,7 +42,7 @@ public class KernelConsumer {
 
 
 
-        System.out.println("subscribe");
+
 
         if (TopicBrokerTable.concurrentHashMap.isEmpty()) {
             try {
@@ -60,9 +53,6 @@ public class KernelConsumer {
 
         }
 
-        //TODO get路由from nameServer
-        //TODO 建立netty连接
-        //TODO 将ListenerMessage 传入 ChannelHandlerAdapter执行消息处理,在这之前进行解码
 
         while (true) {
 

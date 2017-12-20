@@ -1,6 +1,5 @@
 package io.openmessaging.consumer.consumer;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import io.openmessaging.consumer.constant.ConstantConsumer;
 import io.openmessaging.consumer.constant.ConsumeModel;
 import io.openmessaging.consumer.listener.ListenerMessage;
@@ -69,8 +68,11 @@ public class AbstractConsumer {
     public void start(){
 
         if (topic == null) {
-            throw new NullPointerException();
 
+            //throw new NullPointerException();
+
+
+            topic = "TOPIC_01";
         }
         kernelConsumer.start(receiveMessageTable,topic);
     }

@@ -21,6 +21,8 @@ public class ConstantNameServer {
 
     public static final int CHANNEL_TIMEOUT = 10000;
 
+    public static final int BUFFER_ROUTE_SIZE = 30000000;//路由缓冲大小
+
 
 
 

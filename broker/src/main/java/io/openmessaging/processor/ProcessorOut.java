@@ -27,7 +27,6 @@ public class ProcessorOut {
 
 
 
-        System.out.println("------------------------"+topic);
             MessageInfoQueue messageInfoQueue = MessageInfoQueues.concurrentHashMap.get(topic);
 
             String queueId = messageInfoQueue.getQueueId();

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
 
 /**
  * Created by fbhw on 17-12-3.
@@ -23,6 +24,15 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
 
     private ProcessorIn processIn = new ProcessorIn();
 
+    private Lock lock = null;
+
+    public NettyServerHandlerAdapter(Lock lock){
+
+        this.lock = lock;
+    }
+
+
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
 
@@ -32,7 +42,7 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
     @Override
     public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg){
 
-        logger.info("method channelRead has executed");
+
 
         ByteBuf data = (ByteBuf) msg;
 /*
@@ -57,6 +67,7 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
         List<Map> list = encodeAndDecode.decode(data);
 
 
+
         if (list.size() > 0) {
 
 
@@ -71,6 +82,7 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
                   processIn.input(d,topic,queueId);
 
             }
+
             }
 
 
@@ -78,11 +90,12 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
         ByteBuf byteBuf = encodeAndDecode.encodeSendMessageBack();
         ChannelFuture channelFuture = channelHandlerContext.writeAndFlush(byteBuf);
         if (channelFuture.isSuccess()) {
-            System.out.println("返回成功");
+
 
         }else{
-            System.out.println("返回失败");
-        }
+
+                    }
+
 
 
 

@@ -18,6 +18,8 @@ import io.openmessaging.broker.NameServerInfo;
 import io.openmessaging.table.ConnectionCacheNameServerTable;
 
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by fbhw on 17-12-3.
@@ -30,7 +32,11 @@ public class NettyServer {
 
     private Map<NameServerInfo,Channel> nameServerConnectionCacheTable = ConnectionCacheNameServerTable.getConnectionCacheNameServerTable();
 
-    private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
+    private Lock lock = new ReentrantLock(false);
+
+    private EncodeAndDecode encodeAndDecode = new EncodeAndDecode(lock);
+
+
 
     public void bind(int port){
         ServerBootstrap bootstrap = new ServerBootstrap();
@@ -42,7 +48,7 @@ public class NettyServer {
         bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel socketChannel) throws Exception {
-                socketChannel.pipeline().addLast(new NettyServerHandlerAdapter());
+                socketChannel.pipeline().addLast(new NettyServerHandlerAdapter(lock));
             }
         });
         ChannelFuture channelFuture = null;
@@ -55,7 +61,6 @@ public class NettyServer {
             boss.shutdownGracefully();
         }
         if (channelFuture.isSuccess()) {
-            System.out.println("Server connect success");
 
 
         }
@@ -88,7 +93,6 @@ public class NettyServer {
             boss.shutdownGracefully();
         }
         if (channelFuture.isSuccess()) {
-            System.out.println("producer connect success");
 
 
         }
@@ -97,7 +101,6 @@ public class NettyServer {
 
 
     public Channel bind(NameServerInfo nameServerInfo){
-        System.out.println("bind");
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(work);
 
@@ -118,7 +121,6 @@ public class NettyServer {
             work.shutdownGracefully();
         }
         if (channelFuture.isSuccess()) {
-            System.out.println("nameServer connect success");
 
 
         }
@@ -150,8 +152,11 @@ public class NettyServer {
         brokerInfo.setConsumerPort(ConstantBroker.PULL_PORT);
         ByteBuf byteBuf = encodeAndDecode.encodeToNameServer(brokerInfo);
 
-
         channel.writeAndFlush(byteBuf);
+
+
+
+
 
     }
 
@@ -180,7 +185,6 @@ public class NettyServer {
             boss.shutdownGracefully();
         }
         if (channelFuture.isSuccess()) {
-            System.out.println("nameServer port bind success");
 
 
         }

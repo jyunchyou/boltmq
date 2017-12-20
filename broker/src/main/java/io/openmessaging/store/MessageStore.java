@@ -1,7 +1,5 @@
 package io.openmessaging.store;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.openmessaging.Constant.ConstantBroker;
 
 import java.io.*;
@@ -14,6 +12,9 @@ import java.nio.channels.FileChannel;
 public class MessageStore {
 
     private static MessageStore messageStore = new MessageStore();
+
+
+    private File file = null;
 
     private MessageStore(){
 
@@ -28,11 +29,10 @@ public class MessageStore {
     public void input(byte[] byteBuf,boolean newFile,String queueAddress,long fileAddress) throws IOException {
 
 
-        System.out.println(new String(byteBuf));
-        File file = new File(ConstantBroker.ROOT_PATH+queueAddress+"/"+fileAddress);
+        if (file == null) {
+            file = new File(ConstantBroker.ROOT_PATH + queueAddress + "/" + fileAddress);
+        }
 
-
-        System.out.println(ConstantBroker.ROOT_PATH+queueAddress+"/"+fileAddress);
 
         FileOutputStream fileOutputStream = null;
 
@@ -54,7 +54,7 @@ public class MessageStore {
 
            ByteBuffer byteBuffer = ByteBuffer.allocate(byteBuf.length);
            byteBuffer.put(byteBuf);
-            fileChannel.force(true);
+            //fileChannel.force(true);
             byteBuffer.flip();
            fileChannel.write(byteBuffer);
 
@@ -75,7 +75,7 @@ public class MessageStore {
                channel = fileOutputStream.getChannel();
 
 
-               fileChannel.force(true);
+               //fileChannel.force(true);
                fileChannel.write(byteBuffer);
 
 

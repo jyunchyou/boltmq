@@ -33,11 +33,6 @@ public class PullHandlerAdapter extends ChannelHandlerAdapter {
     public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg) {
         ByteBuf byteBuf = (ByteBuf) msg;
 
-
-
-        System.out.println("准备读取...");
-
-
         Map map = encodeAndDecode.decodePull(byteBuf);
 
         if (map == null) {
@@ -53,6 +48,7 @@ public class PullHandlerAdapter extends ChannelHandlerAdapter {
         ByteBuf backByteBuf = processorOut.out(topic,pullNum,uniqId);
 
         Future pullBackFuture = channelHandlerContext.writeAndFlush(backByteBuf);
+
 
         if (pullBackFuture.isSuccess()) {
 

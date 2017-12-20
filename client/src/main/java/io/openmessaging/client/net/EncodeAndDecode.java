@@ -8,7 +8,6 @@ import io.openmessaging.client.producer.BrokerInfo;
 import io.openmessaging.client.producer.Message;
 import io.openmessaging.client.producer.Properties;
 import io.openmessaging.client.table.SendQueue;
-import io.openmessaging.client.table.SendQueues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,30 +98,29 @@ public class EncodeAndDecode {
         byte[] bodyLen = new byte[4];
         int len =  body.length;
 
-        if (body.length > 127 * 127 * 127 * 127) {
 
 
-            logger.error("消息内容长度超过限定长度");
-            throw new OutOfBodyLengthException();
+        if (len > 127 * 127 * 127 * 127) {
+
 
         }
 
         else if(len > 127 * 127 * 127){
             bodyLen[0] = (byte) (len / (127 * 127 * 127));
-            bodyLen[1] = (byte) (len / (bodyLen[0] * 127 * 127));
-            bodyLen[2] = (byte) (len / (bodyLen[0] * bodyLen[1] * 127));
-            bodyLen[3] = (byte) (len / (bodyLen[0] * bodyLen[1] * bodyLen[2]));
+            bodyLen[1] = (byte) ((len - (bodyLen[0] * (127 * 127 * 127))) / (127 * 127));
+            bodyLen[2] = (byte) ((len - (bodyLen[0] * (127 * 127 * 127)) - (bodyLen[1] * (127 * 127))) / 127);
+            bodyLen[3] = (byte) (len % 127);
         }
         else if(len > 127 * 127){
             bodyLen[0] = 0;
             bodyLen[1] = (byte) (len / (127 * 127));
-            bodyLen[2] = (byte) (len / (bodyLen[1] * 127));
-            bodyLen[3] = (byte) (len / (bodyLen[1] * bodyLen[2]));
+            bodyLen[2] = (byte) ((len - (bodyLen[1] * (127 * 127))) / 127);
+            bodyLen[3] = (byte) (len % 127);
         }else if(len > 127){
-                bodyLen[0] = 0;
-                bodyLen[1] = 0;
-                bodyLen[2] = (byte) (len / 127);
-                bodyLen[3] = (byte) (len / bodyLen[2]);
+            bodyLen[0] = 0;
+            bodyLen[1] = 0;
+            bodyLen[2] = (byte) (len / 127);
+            bodyLen[3] = (byte) (len % 127);
         }else {
             bodyLen[0] = 0;
             bodyLen[1] = 0;
@@ -141,36 +139,30 @@ public class EncodeAndDecode {
 
         topicLen+orderIdLen+body.length+(1+1+4);//35
 
-        System.out.println(byteBufferLen);
-
         ByteBuf byteBuf = Unpooled.buffer(byteBufferLen);
-
 
         byte[] allLengthByte = new byte[4];
         if (byteBufferLen > 127 * 127 * 127 * 127) {
 
 
-            logger.error("消息属性和请求传输对象总长度超过byteBuffer限定长度");
-            throw new OutOfByteBufferException();
-
         }
 
         else if(byteBufferLen > 127 * 127 * 127){
             allLengthByte[0] = (byte) (byteBufferLen / (127 * 127 * 127));
-            allLengthByte[1] = (byte) (byteBufferLen / (allLengthByte[0] * 127 * 127));
-            allLengthByte[2] = (byte) (byteBufferLen / (allLengthByte[0] * allLengthByte[1] * 127));
-            allLengthByte[3] = (byte) (byteBufferLen / (allLengthByte[0] * allLengthByte[1] * allLengthByte[2]));
+            allLengthByte[1] = (byte) ((byteBufferLen - (allLengthByte[0] * (127 * 127 * 127))) / (127 * 127));
+            allLengthByte[2] = (byte) ((byteBufferLen - (allLengthByte[0] * (127 * 127 * 127)) - (allLengthByte[1] * (127 * 127))) / 127);
+            allLengthByte[3] = (byte) (byteBufferLen % 127);
         }
         else if(byteBufferLen > 127 * 127){
             allLengthByte[0] = 0;
             allLengthByte[1] = (byte) (byteBufferLen / (127 * 127));
-            allLengthByte[2] = (byte) (byteBufferLen / (allLengthByte[1] * 127));
-            allLengthByte[3] = (byte) (byteBufferLen / (allLengthByte[1] * allLengthByte[2]));
+            allLengthByte[2] = (byte) ((byteBufferLen - (allLengthByte[1] * (127 * 127))) / 127);
+            allLengthByte[3] = (byte) (byteBufferLen % 127);
         }else if(byteBufferLen > 127){
             allLengthByte[0] = 0;
             allLengthByte[1] = 0;
             allLengthByte[2] = (byte) (byteBufferLen / 127);
-            allLengthByte[3] = (byte) (byteBufferLen / allLengthByte[2]);
+            allLengthByte[3] = (byte) (byteBufferLen % 127);
         }else {
             allLengthByte[0] = 0;
             allLengthByte[1] = 0;
@@ -179,7 +171,6 @@ public class EncodeAndDecode {
 
 
         }
-
 
 
         byteBuf.writeBytes(allLengthByte);

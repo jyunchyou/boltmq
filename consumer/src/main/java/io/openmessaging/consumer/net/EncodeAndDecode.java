@@ -44,8 +44,7 @@ public class EncodeAndDecode {
             byte[] mapSizeByte = new byte[1];
             heapBuffer.readBytes(mapSizeByte);
             int mapSize = mapSizeByte[0];
-        System.out.println("topicByteLen:"+topicByte.length);
-        System.out.println("mapSize:"+mapSize);
+
             for (int indexNum = 0; indexNum < mapSize; indexNum++) {
 
                 int ipByteLenInt = heapBuffer.readInt();
@@ -63,7 +62,6 @@ public class EncodeAndDecode {
                 byte[] queueSizeByte = new byte[1];
                 heapBuffer.readBytes(queueSizeByte);
                 int queueSize = queueSizeByte[0];
-                System.out.println(queueSize);
 
                 for (int checkNum = 0; checkNum < queueSize; checkNum++) {
 
@@ -216,7 +214,6 @@ public class EncodeAndDecode {
 
     public void putTopicBrokerTable(String topic,String ip,String port,String queueId) {
 
-        System.out.println(topic + ip + port + queueId);
         List<Map<BrokerInfo, List<String>>> list = null;
 
         list = TopicBrokerTable.concurrentHashMap.get(topic);
@@ -375,18 +372,19 @@ public class EncodeAndDecode {
             byte[] allLength = new byte[4];
             byteBuf.readBytes(allLength);
 
-            System.out.println(new String(allLength));
             int allLenInt = 0;
             if (allLength[0] != 0 && allLength[1] != 0 && allLength[2] != 0 && allLength[3] != 0) {
-                allLenInt = allLength[0] * allLength[1] * allLength[2] * allLength[3];
+                allLenInt = allLength[0] * 127 * 127 * 127 + allLength[1] * 127 * 127 +  allLength[2] * 127 + allLength[3];
 
 
             } else if (allLength[1] != 0 && allLength[2] != 0 && allLength[3] != 0) {
 
-                allLenInt = allLength[1] * allLength[2] * allLength[3];
+                allLenInt = allLength[1] * 127 * 127 +  allLength[2] * 127 + allLength[3];
+
             } else if (allLength[2] != 0 && allLength[3] != 0) {
 
-                allLenInt = allLength[2] * allLength[3];
+                allLenInt = allLength[2] * 127 + allLength[3];
+
             } else {
                 allLenInt = allLength[3];
             }
@@ -421,18 +419,11 @@ public class EncodeAndDecode {
             int remain = byteBuf.readableBytes();
 
 
-            System.out.println("alllenInt:" + allLenInt);
-
-
-                System.out.println("listSize:"+list.size());
-                System.out.println("remain"+remain);
-                System.out.println("bytebufLen:"+testByteBufLen);
 
 
             if (allLenInt == remain) {
 
                 cacheBytes = null;
-                System.out.println("==");
 
 //topic
                 byte[] topicByteLen = new byte[1];
@@ -448,7 +439,6 @@ public class EncodeAndDecode {
                 String topic = new String(topicByte);
 
 
-                System.out.println(topic+"----------------------------");
                 byte[] queueIdByteLen = new byte[1];
 
                 byteBuf.readBytes(queueIdByteLen);
@@ -465,19 +455,27 @@ public class EncodeAndDecode {
                 byteBuf.readBytes(bodyLength);
 
                 int bodyLenInt = 0;
+
+
+
+
                 if (bodyLength[0] != 0 && bodyLength[1] != 0 && bodyLength[2] != 0 && bodyLength[3] != 0) {
-                    bodyLenInt = bodyLength[0] * bodyLength[1] * bodyLength[2] * bodyLength[3];
+                    bodyLenInt = bodyLength[0] * 127 * 127 * 127 + bodyLength[1] * 127 * 127 +  bodyLength[2] * 127 + bodyLength[3];
 
 
                 } else if (bodyLength[1] != 0 && bodyLength[2] != 0 && bodyLength[3] != 0) {
 
-                    bodyLenInt = bodyLength[1] * bodyLength[2] * bodyLength[3];
+                    bodyLenInt = bodyLength[1] * 127 * 127 +  bodyLength[2] * 127 + bodyLength[3];
+
                 } else if (bodyLength[2] != 0 && bodyLength[3] != 0) {
 
-                    bodyLenInt = bodyLength[2] * bodyLength[3];
+                    bodyLenInt = bodyLength[2] * 127 + bodyLength[3];
+
                 } else {
                     bodyLenInt = bodyLength[3];
                 }
+
+
 
                 byte[] body = new byte[bodyLenInt];
                 byteBuf.readBytes(body);
@@ -499,10 +497,6 @@ public class EncodeAndDecode {
 
             } else if (allLenInt < remain) {
 
-
-                System.out.println("<");
-
-
                 byte[] topicByteLen = new byte[1];
 
                 byteBuf.readBytes(topicByteLen);
@@ -515,7 +509,6 @@ public class EncodeAndDecode {
 
                 String topic = new String(topicByte);
 
-                System.out.println(topic+"----------------------------");
                 byte[] queueIdByteLen = new byte[1];
 
                 byteBuf.readBytes(queueIdByteLen);
@@ -592,7 +585,6 @@ public class EncodeAndDecode {
             } else {
 
 
-                System.out.println(">");
                 if (cacheBytes != null) {
 
                     ByteBuf b = Unpooled.buffer(remain + 4 + cacheBytes.length);

@@ -4,9 +4,7 @@ package io.openmessaging.consumer.handler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-
 import io.openmessaging.consumer.net.EncodeAndDecode;
-import io.openmessaging.consumer.table.TopicBrokerTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,19 +36,9 @@ public class UpdateFromNameServerHandler extends ChannelHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg)  {
 
-
-
         ByteBuf byteBuf = (ByteBuf) msg;
 
-
-        System.out.println("update success");
-
         encodeAndDecode.decodeReceiveTable(byteBuf);
-
-
-
-        System.out.println(TopicBrokerTable.concurrentHashMap);
-
 
         countDownLatch.countDown();
     }

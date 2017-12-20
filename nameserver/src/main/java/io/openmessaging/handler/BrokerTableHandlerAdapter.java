@@ -29,23 +29,23 @@ public class BrokerTableHandlerAdapter extends ChannelHandlerAdapter {
 
         ByteBuf byteBuf = (ByteBuf) msg;
 
-
         byteBuf.markReaderIndex();
         Object o = encodeAndDecode.decode(byteBuf);
 
+        if (o == null) {
+            return ;
+        }
         //如果返回类型不为String,则返回输出brokerIndex数据
         if (!String.class.equals(o.getClass())) {
             ByteBuf brokerIndex = (ByteBuf) o;
             channelHandlerContext.writeAndFlush(brokerIndex);
+
+            System.out.println("没有保存索引");
             return ;
         }
 
         byteBuf.resetReaderIndex();
         indexStore.save(byteBuf,(String) o);
-
-        System.out.println("update broker data success!");
-
-
 
     }
     }

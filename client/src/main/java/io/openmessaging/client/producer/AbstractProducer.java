@@ -1,19 +1,18 @@
     package io.openmessaging.client.producer;
 
     import io.openmessaging.client.common.SendCallBack;
-    import io.openmessaging.client.exception.OutOfBodyLengthException;
-    import io.openmessaging.client.exception.OutOfByteBufferException;
-    import io.openmessaging.client.net.SendResult;
-    import io.openmessaging.client.selector.QueueSelectByHash;
-    import io.openmessaging.client.selector.QueueSelectByRandom;
-    import io.openmessaging.client.selector.QueueSelector;
-    import io.openmessaging.client.table.SendQueue;
-    import io.openmessaging.client.table.SendQueues;
-    import org.slf4j.Logger;
-    import org.slf4j.LoggerFactory;
+import io.openmessaging.client.exception.OutOfBodyLengthException;
+import io.openmessaging.client.exception.OutOfByteBufferException;
+import io.openmessaging.client.net.SendResult;
+import io.openmessaging.client.selector.QueueSelectByHash;
+import io.openmessaging.client.selector.QueueSelectByRandom;
+import io.openmessaging.client.table.SendQueue;
+import io.openmessaging.client.table.SendQueues;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-    import java.io.IOException;
-    import java.util.List;
+import java.io.IOException;
+import java.util.List;
 
     /**
      * Created by fbhw on 17-10-31.
@@ -81,7 +80,6 @@
             List list = sendQueues.getList();
 
             while (list.size() == 0) {
-                System.out.println("wait queue is not 0......");
                 try {
                     Thread.sleep(17000);
                 } catch (InterruptedException e) {

@@ -38,7 +38,7 @@ public class AbstractProducerTest {
         abstractProducer.start();
 
         try {
-            Thread.sleep(7000);
+            Thread.sleep(17000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -57,22 +57,22 @@ public class AbstractProducerTest {
 
 
 
-        for (int indexNum = 0;indexNum < 1000000000;indexNum++) {
+        long startTime = System.currentTimeMillis();
+        for (int indexNum = 0;indexNum < 10000;indexNum++) {
             Message message = new Message("TOPIC_01", "1", "发送成功！".getBytes());
 
             abstractProducer.send(message);
-            try {
-                Thread.sleep(20000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
+
         }
+        long endTime = System.currentTimeMillis();
+        System.out.println("tpc:"+10000/(endTime - startTime));
 
 
 
 
         try {
-            Thread.sleep(1000000);
+            Thread.sleep(10000000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
