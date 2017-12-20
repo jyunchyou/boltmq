@@ -50,6 +50,7 @@ public class ReceiveMessageHandlerAdapter extends ChannelHandlerAdapter {
     public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg) {
 
 
+
         ByteBuf byteBuf = (ByteBuf) msg;
 
         if (byteBuf.readableBytes() <= 0) {

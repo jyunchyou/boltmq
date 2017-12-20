@@ -2,12 +2,16 @@ package io.openmessaging.concumer.table;
 
 import io.openmessaging.consumer.consumer.AbstractConsumer;
 import io.openmessaging.consumer.consumer.FactoryConsumer;
+import io.openmessaging.consumer.consumer.Message;
 import io.openmessaging.consumer.consumer.Properties;
+import io.openmessaging.consumer.listener.ListenerMessage;
 import io.openmessaging.consumer.table.ReceiveMessageTable;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * Created by fbhw on 17-12-7.
@@ -33,9 +37,9 @@ public class TestReceiveMessageTable {
     public void testUpdateReceiveTableFromNameServer() throws InterruptedException {
 
 
-        abstractConsumer.start();
 
-      /*  new Thread(new Runnable() {
+
+        new Thread(new Runnable() {
             public void run() {
 
 
@@ -46,18 +50,16 @@ public class TestReceiveMessageTable {
                     }
 
                     public void listener(List<Message> list) {
-                        for (Message message : list) {
+
+                        System.out.println("消费成功");
+                    }
 
 
-                        }
-                        }
                 });
 
-
-
             }
-        }).start();*/
-
+        }).start();
+        abstractConsumer.start();
 
 
 

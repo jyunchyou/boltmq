@@ -68,11 +68,11 @@ public class AbstractConsumer {
     public void start(){
 
         if (topic == null) {
-
-            //throw new NullPointerException();
-
-
-            topic = "TOPIC_01";
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         kernelConsumer.start(receiveMessageTable,topic);
     }
