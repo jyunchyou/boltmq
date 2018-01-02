@@ -37,6 +37,8 @@ public class ConstantClient {
 
     public static final int CHANNEL_TIMEOUT = 10000;//消息发送的channel等待断开的时间
 
+    public static final int BODY_OVER_HOW_MUTH_COMRESS = 4094;//body超过多大开始缓存,请务必保证与消费端配置一致
+
 
 
 

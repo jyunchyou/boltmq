@@ -3,9 +3,12 @@ package io.openmessaging.consumer.net;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.openmessaging.consumer.broker.BrokerInfo;
+import io.openmessaging.consumer.compress.CompressOfDeflater;
+import io.openmessaging.consumer.constant.ConstantConsumer;
 import io.openmessaging.consumer.consumer.Message;
 import io.openmessaging.consumer.table.TopicBrokerTable;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -477,9 +480,20 @@ public class EncodeAndDecode {
 
 
 
+
                 byte[] body = new byte[bodyLenInt];
                 byteBuf.readBytes(body);
 //order
+
+                if (bodyLenInt == ConstantConsumer.BODY_OVER_HOW_MUTH_COMRESS) {
+
+                    try {
+                        body = CompressOfDeflater.uncompress(body);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 byte[] orderByteLen = new byte[1];
 
                 byteBuf.readBytes(orderByteLen);

@@ -18,22 +18,6 @@
 
     <dependencies>
 
-        <!--短信验证码sdk-->
-        <dependency>
-            <groupId>a</groupId>
-            <artifactId>b</artifactId>
-            <version>*</version>
-            <systemPath>/home/fbhw/下载/dysms_java/java/api_demo/alicom-dysms-api/libs/aliyun-java-sdk-core-3.3.1.jar</systemPath>
-<scope>system</scope>
-        </dependency>
-        <dependency>
-            <groupId>c</groupId>
-            <artifactId>d</artifactId>
-            <version>*</version>
-            <systemPath>/home/fbhw/下载/dysms_java/java/api_demo/alicom-dysms-api/libs/aliyun-java-sdk-dysmsapi-1.0.0.jar</systemPath>
-
-            <scope>system</scope>
-        </dependency>
 
 
         <!--ProtuBuf 解析相关-->
@@ -43,6 +27,11 @@
             <artifactId>protobuf-java</artifactId>
             <version>3.0.0</version>
         </dependency>
+
+
+
+
+
 
 
 

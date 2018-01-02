@@ -18,4 +18,6 @@ public class ConstantConsumer {
 
     public static final int CONSUMER_PORT = 9988;
 
+    public static final int BODY_OVER_HOW_MUTH_COMRESS = 4094;//body超过多大开始缓存,请务必保证与消费端配置一致
+
 }

@@ -2,6 +2,8 @@ package io.openmessaging.client.net;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.openmessaging.client.compress.CompressOfDeflater;
+import io.openmessaging.client.constant.ConstantClient;
 import io.openmessaging.client.exception.OutOfBodyLengthException;
 import io.openmessaging.client.exception.OutOfByteBufferException;
 import io.openmessaging.client.producer.BrokerInfo;
@@ -11,6 +13,7 @@ import io.openmessaging.client.table.SendQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -91,12 +94,23 @@ public class EncodeAndDecode {
         byte[] topic = message.getTopic().getBytes();
         byte[] orderId = message.getOrderId().getBytes();
         byte[] body = message.getBody();
+        //超过压缩
+        if (body.length >= ConstantClient.BODY_OVER_HOW_MUTH_COMRESS) {
+            try {
+                body = CompressOfDeflater.compress(body);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+        }
 
         //message length
         byte topicLen = (byte) topic.length;
         byte orderIdLen = (byte) orderId.length;
         byte[] bodyLen = new byte[4];
         int len =  body.length;
+
 
 
 

@@ -31,7 +31,9 @@ public class PullHandlerAdapter extends ChannelHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg) {
+
         ByteBuf byteBuf = (ByteBuf) msg;
+
 
         Map map = encodeAndDecode.decodePull(byteBuf);
 
