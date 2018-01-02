@@ -46,6 +46,8 @@ public class BrokerTableHandlerAdapter extends ChannelHandlerAdapter {
 
         byteBuf.resetReaderIndex();
         indexStore.save(byteBuf,(String) o);
+        //TODO 保存了Broker消息索引，但是没有保存borker的消费下标
+        //然后重启时条件判断是否为重启，返回消息索引和消费下标
 
     }
     }

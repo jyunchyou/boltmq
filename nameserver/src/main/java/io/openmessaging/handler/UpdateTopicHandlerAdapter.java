@@ -57,6 +57,9 @@ public class UpdateTopicHandlerAdapter extends ChannelHandlerAdapter {
     //删索引
         BrokerInfoTable.map.remove(brokerInfo);
 
+        //TODO 保存消费下标
+
+
 
 
     }
