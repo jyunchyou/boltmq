@@ -76,10 +76,11 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
             for (Map map:list) {
                 String topic = (String) map.get("topic");
                 String queueId = (String) map.get("queueId");
+                long sendTime = (long) map.get("sendTime");
                 byte[] d = (byte[]) map.get("data");
 
 
-                  processIn.input(d,topic,queueId);
+                  processIn.input(d,topic,queueId,sendTime);
 
             }
 

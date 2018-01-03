@@ -26,4 +26,12 @@ public class ConstantBroker {
 
     public static final long GROUP_ID = 0;
 
+    public static final long DELETE_MESSAGE_INDEX_CYCLE = 864000000;//删除消息索引任务的周期执行时间
+
+    public static final long MESSAGE_SAVE_HOW_LONG = 864000000;//消息索引保存多长时间可以删除
+
+    public static final float DElETE_DISK_OVER = (float) 0.7;//为0到1的浮点数大小，磁盘占用大小超过多少可以释放
+
+    public static final float DELETE_DISK_LIMIT = (float) 0.3;//为0到1的浮点数大小，每次释放磁盘控制在多少，值过小有释放掉未消费消息的风险
+
 }

@@ -2,7 +2,10 @@ package io.openmessaging.start;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandlerContext;
 import io.openmessaging.constant.ConstantNameServer;
+import io.openmessaging.producer.BrokerInfo;
+import io.openmessaging.store.IndexStore;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,10 +19,11 @@ import java.nio.channels.FileChannel;
  */
 public class BrokerRestart {
 
-//TODO broker连接断开处理
-    public ByteBuf restart(String ip, String producerPort, String nameServerPort, String consumerPort){
 
-        File file = new File(ConstantNameServer.INDEX_STORE_PATH+ip+producerPort+nameServerPort+consumerPort);
+
+
+    public ByteBuf resumeData(File file){
+
 
         FileOutputStream fileOutputStream = null;
         ByteBuffer byteBuffer = null;

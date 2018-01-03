@@ -22,7 +22,7 @@ public class ProcessorIn {
 
 
     //寻找queue
-    public void input(byte[] byteBuf,String topic,String queueId){
+    public void input(byte[] byteBuf,String topic,String queueId,long sendTime){
 
 
 
@@ -30,13 +30,13 @@ public class ProcessorIn {
 
 
 
-        this.input(byteBuf,topic,queueId,messageInfoQueue);
+        this.input(byteBuf,topic,queueId,messageInfoQueue,sendTime);
 
 
     }
 
     //保存topic,设置index,判断是否需要new新文件
-    public void input(byte[] byteBuf,String topic,String queueId,MessageInfoQueue messageInfoQueue){
+    public void input(byte[] byteBuf,String topic,String queueId,MessageInfoQueue messageInfoQueue,long sendTime){
 
 
         List list = messageInfoQueue.getList();
@@ -62,9 +62,11 @@ public class ProcessorIn {
 
         MessageInfo m = new MessageInfo();
         m.setTopic(topic);
+
         m.setOffset(index);
         m.setLen(byteBuf.length);
 
+        m.setSendTime(sendTime);
         list.add(m);
 
         if ((newMessageIndex + byteBuf.length)> (newPreviousIndex)) {

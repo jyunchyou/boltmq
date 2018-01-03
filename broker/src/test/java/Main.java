@@ -2,18 +2,21 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 public class Main {
-    /**
+   /* *//**
      *
      * @param inputByte
      *      待解压缩的字节数组
      * @return 解压缩后的字节数组
      * @throws IOException
-     */
+     *//*
     public static byte[] uncompress(byte[] inputByte) throws IOException {
         int len = 0;
         Inflater infl = new Inflater();
@@ -38,14 +41,14 @@ public class Main {
         return bos.toByteArray();
     }
 
-    /**
+    *//**
      * 压缩.
      *
-     * @param inputByte
-     *      待压缩的字节数组
+     * @param
+     *
      * @return 压缩后的数据
      * @throws IOException
-     */
+     *//*
     public static byte[] compress(byte[] inputByte) throws IOException {
         int len = 0;
         Deflater defl = new Deflater();
@@ -77,7 +80,7 @@ public class Main {
             e.printStackTrace();
         }
 
-/*        try {
+*//*        try {
             FileInputStream fis = new FileInputStream("D:\\testdeflate.txt");
             int len = fis.available();
             byte[] b = new byte[len];
@@ -93,7 +96,25 @@ public class Main {
             fis.close();
         } catch (Exception e) {
             //
-        }*/
+        }*//*
+    }*/
+
+
+    public static void main(String[] args){
+
+        List list = new ArrayList();
+        System.out.println(list.size());
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        System.out.println(list.size());
+
+        list.remove(1);
+        System.out.println(list.size());
+        System.out.println(list.get(1));
+
+
+
     }
 }
 

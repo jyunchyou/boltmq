@@ -196,7 +196,7 @@ public class EncodeAndDecode {
     }
 
     /*queueId,topic,offset,len*/
-    public synchronized Object decode(ByteBuf byteBuf){
+    public synchronized String decode(ByteBuf byteBuf){
 
         byteBuf.markReaderIndex();
         byte[] a = new byte[byteBuf.readableBytes()];
@@ -324,7 +324,7 @@ public class EncodeAndDecode {
             byte[] consumerPortByte = new byte[consumerPortIntLen];
             byteBuf.readBytes(consumerPortByte);
             consumerPort = new String(consumerPortByte);
-            ByteBuf returnByteBuf = putBroker(ip, producerPort, nameServerPort, consumerPort);
+            putBroker(ip, producerPort, nameServerPort, consumerPort);
 
 ///////////////////////////////////////////////////////////////////////////
             if (!byteBuf.isReadable()) {
@@ -472,7 +472,7 @@ public class EncodeAndDecode {
 
 
 
-        public ByteBuf putBroker(String ip,String producerPort,String nameServerPort,String consumerPort){
+        public void putBroker(String ip,String producerPort,String nameServerPort,String consumerPort){
 
 
         BrokerInfo brokerInfo = new BrokerInfo();
@@ -484,19 +484,19 @@ public class EncodeAndDecode {
         brokerInfo.setNameServerPort(Integer.parseInt(nameServerPort));
         brokerInfo.setConsumerPort(Integer.parseInt(consumerPort));
 
-        //如果已存在，开启broker故障重启处理
+
         if (BrokerInfoTable.map.containsKey(brokerInfo)) {
 
             //ByteBuf byteBuf = brokerRestart.restart(ip,producerPort,nameServerPort,consumerPort);
 
-            return null/*byteBuf*/;
+            return;
 
 
         }
 
 
         BrokerInfoTable.map.put(brokerInfo,new MessageInfoQueues());
-        return null;
+
         }
 
         public synchronized void putTopicBrokerTable(String topic,String ip,String producerPort,String nameServerPort,String consumerPort,String queueId) {

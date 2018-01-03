@@ -12,24 +12,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
-      <library name="Maven: a:b:*">
-        <CLASSES>
-          <root url="jar://$USER_HOME$/下载/dysms_java/java/api_demo/alicom-dysms-api/libs/aliyun-java-sdk-core-3.3.1.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="Maven: c:d:*">
-        <CLASSES>
-          <root url="jar://$USER_HOME$/下载/dysms_java/java/api_demo/alicom-dysms-api/libs/aliyun-java-sdk-dysmsapi-1.0.0.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.0.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />

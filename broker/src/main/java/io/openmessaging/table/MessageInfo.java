@@ -13,6 +13,8 @@ public class MessageInfo {
 
     private long len;
 
+    private long sendTime;
+
     public String getTopic() {
         return topic;
     }
@@ -35,5 +37,13 @@ public class MessageInfo {
 
     public void setLen(long len) {
         this.len = len;
+    }
+
+    public long getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(long sendTime) {
+        this.sendTime = sendTime;
     }
 }

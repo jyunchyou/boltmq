@@ -193,6 +193,8 @@ public class EncodeAndDecode {
         byteBuf.writeBytes(topic);
         byteBuf.writeBytes(new byte[]{queueIdByteLen});
         byteBuf.writeBytes(queueId);
+        //时间戳
+        byteBuf.writeLong(System.currentTimeMillis());
         byteBuf.writeBytes(bodyLen);
         byteBuf.writeBytes(body);
 

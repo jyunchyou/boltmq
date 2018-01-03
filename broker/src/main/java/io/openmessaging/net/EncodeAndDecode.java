@@ -140,6 +140,8 @@ public class EncodeAndDecode {
 
                     String queueId = new String(queueIdByte);
 
+                    long sendTime = byteBuf.readLong();
+
                     byteBuf.resetReaderIndex();
 
 
@@ -151,6 +153,7 @@ public class EncodeAndDecode {
 
                     map.put("topic", topic);
                     map.put("queueId", queueId);
+                    map.put("sendTime",sendTime);
                     map.put("data", data);
 
                     list.add(map);
@@ -462,12 +465,18 @@ public class EncodeAndDecode {
 
 
 
-                byteBuf.writeInt(list.size());
+                int incrementSaveIndex = messageInfoQueue.getIndex();
+
+                int listSize = list.size();
+
+                messageInfoQueue.setIndex(listSize);
+
+                byteBuf.writeInt(listSize - incrementSaveIndex);
 
 
 
 
-                for (int checkNum = 0;checkNum < list.size();checkNum++) {
+                for (int checkNum = incrementSaveIndex;checkNum < listSize;checkNum++) {
                     MessageInfo messageInfo = list.get(checkNum);
                     //
                     long offset = messageInfo.getOffset();
