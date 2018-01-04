@@ -1,13 +1,6 @@
 package io.openmessaging.client;
 
-import com.aliyuncs.DefaultAcsClient;
-import com.aliyuncs.IAcsClient;
-import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
-import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
-import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.http.MethodType;
-import com.aliyuncs.profile.DefaultProfile;
-import com.aliyuncs.profile.IClientProfile;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,9 +27,9 @@ import org.slf4j.LoggerFactory;
  */
 public class Test {
 
-    public static void main(String[] args) throws ClientException {
+    public static void main(String[] args)/* throws ClientException*/ {
 
-        Logger logger = LoggerFactory.getLogger(Test.class);
+   /*     Logger logger = LoggerFactory.getLogger(Test.class);
 
 
         logger.trace("======trace") ;
@@ -88,6 +81,7 @@ public class Test {
             logger.info("请求失败");
         }
     }
+*/
 
-
+    }
 }

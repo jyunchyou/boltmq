@@ -1,6 +1,6 @@
 package io.openmessaging.client.handler;
 
-import com.aliyuncs.exceptions.ClientException;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
@@ -44,7 +44,7 @@ public class NettyClientHandler extends ChannelHandlerAdapter {
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext channelHandlerContext,Object msg) throws ClientException {
+    public void channelRead(ChannelHandlerContext channelHandlerContext,Object msg) {
 
         ByteBuf byteBuf  = (ByteBuf) msg;
 

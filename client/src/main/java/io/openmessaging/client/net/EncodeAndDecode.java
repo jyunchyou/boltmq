@@ -151,7 +151,7 @@ public class EncodeAndDecode {
 
                 allLength+(properties.getSize()*(2+1))+//51
 
-        topicLen+orderIdLen+body.length+(1+1+4);//35
+        topicLen+orderIdLen+body.length+(1+1+4+8/*sendTime*/);//35
 
         ByteBuf byteBuf = Unpooled.buffer(byteBufferLen);
 
@@ -194,7 +194,8 @@ public class EncodeAndDecode {
         byteBuf.writeBytes(new byte[]{queueIdByteLen});
         byteBuf.writeBytes(queueId);
         //时间戳
-        byteBuf.writeLong(System.currentTimeMillis());
+        long nowTime = System.currentTimeMillis();
+        byteBuf.writeLong(nowTime);
         byteBuf.writeBytes(bodyLen);
         byteBuf.writeBytes(body);
 

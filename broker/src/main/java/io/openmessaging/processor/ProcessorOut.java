@@ -49,7 +49,7 @@ public class ProcessorOut {
 
                 List list = messageInfoQueue.getList();
 
-                if (consumeIndex >= list.size()) {
+                while (consumeIndex >= list.size()) {
 
                     //TODO 等待新消息发送
 

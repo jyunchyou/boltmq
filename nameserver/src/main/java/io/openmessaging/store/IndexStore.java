@@ -46,6 +46,10 @@ public class IndexStore {
 
 
             ByteBuf b = brokerRestart.resumeData(indexFile);
+            if (b == null) {
+                return ;
+
+            }
             channelHandlerContext.writeAndFlush(b);
 
         }else {

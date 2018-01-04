@@ -115,11 +115,12 @@ public class EncodeAndDecode {
 
 
 
-                    byte[] topicByteLen = new byte[1];
 
-                    byteBuf.readBytes(topicByteLen);
 
-                    int topicIntLen = topicByteLen[0];
+
+                    byte topicByteLen = byteBuf.readByte();
+
+                    int topicIntLen = topicByteLen;
 
                     byte[] topicByte = new byte[topicIntLen];
 
@@ -166,11 +167,9 @@ public class EncodeAndDecode {
 
 
 
-                    byte[] topicByteLen = new byte[1];
 
-                    byteBuf.readBytes(topicByteLen);
 
-                    int topicIntLen = topicByteLen[0];
+                    int topicIntLen = byteBuf.readByte();
 
                     byte[] topicByte = new byte[topicIntLen];
 
@@ -191,7 +190,7 @@ public class EncodeAndDecode {
 
                     String queueId = new String(queueIdByte);
 
-
+                    long sendTime = byteBuf.readLong();
 
                     byteBuf.resetReaderIndex();
                     byte[] data = new byte[allLenInt + 4];
@@ -207,6 +206,7 @@ public class EncodeAndDecode {
 
                     map.put("topic", topic);
                     map.put("queueId", queueId);
+                    map.put("sendTime",sendTime);
                     map.put("data", data);
 
 

@@ -18,6 +18,7 @@ public class MessageStore {
 
     private MessageStore(){
 
+
     }
 
     public static MessageStore getMessageStore(){
@@ -30,7 +31,18 @@ public class MessageStore {
 
 
         if (file == null) {
+
+
             file = new File(ConstantBroker.ROOT_PATH + queueAddress + "/" + fileAddress);
+
+            if (!file.exists()) {
+                File directFile = new File(ConstantBroker.ROOT_PATH + queueAddress);
+
+                if (!directFile.exists()) {
+                    directFile.mkdir();
+                }
+                file.createNewFile();
+            }
         }
 
 
