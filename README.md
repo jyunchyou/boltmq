@@ -17,8 +17,9 @@
 
 * 支持集群消费,广播消费,批量拉取的消费方式   
 ## BoltMQ文档 
-* TODO 
-## TODO list
+  
+* [文档目录](https://github.com/jyunchyou/boltmq/blob/master/docs/README.md)  
+
  下面是待完善的功能模块 
 * 索引持久化   
   
