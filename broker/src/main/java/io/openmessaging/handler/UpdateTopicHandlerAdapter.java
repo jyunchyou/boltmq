@@ -4,10 +4,11 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-import io.openmessaging.table.MessageInfoQueue;
-import io.openmessaging.table.MessageInfoQueues;
+import io.openmessaging.table.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by fbhw on 17-12-10.
@@ -35,6 +36,7 @@ public class UpdateTopicHandlerAdapter extends ChannelHandlerAdapter {
         byteBuf.readBytes(topicByte);
         String topic = new String(topicByte);
 
+        System.out.println("broker:"+topic);
         putTopicQueue(topic);
 
         ByteBuf back = Unpooled.buffer(1);
@@ -50,12 +52,19 @@ public class UpdateTopicHandlerAdapter extends ChannelHandlerAdapter {
     public void putTopicQueue(String topic){
 
 
-        if (MessageInfoQueues.concurrentHashMap.containsKey(topic)){
+        if (IndexFileQueueMap.indexQueueMap.containsKey(topic)){
             return ;
         }
-        MessageInfoQueue messageInfoQueue = new MessageInfoQueue(topic);
-        messageInfoQueue.setQueueId(topic);
-        MessageInfoQueues.concurrentHashMap.put(topic,messageInfoQueue);
+
+        //设置索引map
+        IndexFileQueue indexFileQueue = new IndexFileQueue(topic);
+
+        IndexFileQueueMap.indexQueueMap.put(topic,indexFileQueue);
+
+        //设置消息map
+        FileQueue fileQueue = new FileQueue(topic);
+
+        FileQueueMap.queueMap.put(topic,fileQueue);
 
     }
 

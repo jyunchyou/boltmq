@@ -34,7 +34,6 @@ public class MessageInfoQueue {
 
     private String topic;
 
-
     public MessageInfoQueue(String topic){
         this.topic = topic;
     }

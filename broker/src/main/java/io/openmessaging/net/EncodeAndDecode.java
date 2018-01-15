@@ -4,11 +4,9 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.openmessaging.Constant.ConstantBroker;
 import io.openmessaging.broker.BrokerInfo;
-import io.openmessaging.table.ConsumerIndexTable;
-import io.openmessaging.table.MessageInfo;
-import io.openmessaging.table.MessageInfoQueue;
-import io.openmessaging.table.MessageInfoQueues;
+import io.openmessaging.table.*;
 
+import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 
@@ -329,28 +327,18 @@ public class EncodeAndDecode {
 
         return byteBuf;
     }
-   /*ip,port,queueId,topic,offset,len*/
+    /*ip,port,queueId,topic,offset,len*/
     public  ByteBuf  encodeToNameServer(BrokerInfo brokerInfo) {
-
         ByteBuf byteBuf = Unpooled.buffer(ConstantBroker.BUFFER_ROUTE_SIZE);
-
-
         byteBuf.markWriterIndex();
-
         byteBuf.writeBytes(new byte[4]);
 
-        byteBuf = encodeConsumerIndex(byteBuf);
-        if (MessageInfoQueues.concurrentHashMap.size() == 0) {
-           byteBuf = encodeBrokerInfo(brokerInfo,byteBuf);
-
+        if (IndexFileQueueMap.indexQueueMap.size() == 0) {
+            byteBuf = encodeBrokerInfo(brokerInfo,byteBuf);
             int byteBufferLen = byteBuf.readableBytes() - 4;
-
             byte[] allLengthByte = new byte[4];
             if (byteBufferLen > 127 * 127 * 127 * 127) {
-
-
             }
-
             else if(byteBufferLen > 127 * 127 * 127){
                 allLengthByte[0] = (byte) (byteBufferLen / (127 * 127 * 127));
                 allLengthByte[1] = (byte) ((byteBufferLen - (allLengthByte[0] * (127 * 127 * 127))) / (127 * 127));
@@ -372,139 +360,53 @@ public class EncodeAndDecode {
                 allLengthByte[1] = 0;
                 allLengthByte[2] = 0;
                 allLengthByte[3] = (byte) byteBufferLen;
-
-
             }
-
-
-
             int index = byteBuf.writerIndex();
             byteBuf.resetWriterIndex();
-
             byteBuf.writeBytes(allLengthByte);
-
             byteBuf.writerIndex(index);
-
-
             return byteBuf;
-
         }
-
         String ip = brokerInfo.getIp();
         String producerPort = brokerInfo.getProducerPort() + "";
         String nameServerPort = brokerInfo.getNameServerPort() + "";
         String consumerPort = brokerInfo.getConsumerPort() + "";
-
         byte[] ipByte = ip.getBytes();
         int ipIntLen = ipByte.length;
         byte[] ipByteLen = new byte[1];
         ipByteLen[0] = (byte) ipIntLen;
-
         byte[] producerPortByte = producerPort.getBytes();
         int producerPortIntLen = producerPortByte.length;
         byte[] producerPortByteLen = new byte[1];
         producerPortByteLen[0] = (byte) producerPortIntLen;
-
         byte[] nameServerPortByte = nameServerPort.getBytes();
         int nameServerPortIntLen = nameServerPortByte.length;
         byte[] nameServerPortByteLen = new byte[1];
         nameServerPortByteLen[0] = (byte) nameServerPortIntLen;
-
         byte[] consumerPortByte = consumerPort.getBytes();
         int consumerPortIntLen = consumerPortByte.length;
         byte[] consumerPortByteLen = new byte[1];
         consumerPortByteLen[0] = (byte) consumerPortIntLen;
-
         byteBuf.writeBytes(ipByteLen);
         byteBuf.writeBytes(ipByte);
         byteBuf.writeBytes(producerPortByteLen);
         byteBuf.writeBytes(producerPortByte);
-
         byteBuf.writeBytes(nameServerPortByteLen);
         byteBuf.writeBytes(nameServerPortByte);
-
         byteBuf.writeBytes(consumerPortByteLen);
         byteBuf.writeBytes(consumerPortByte);
-
-
-        byteBuf.writeInt(MessageInfoQueues.concurrentHashMap.size());
-            Set<String> set = MessageInfoQueues.concurrentHashMap.keySet();
-            for (String topic : set){
-
-                MessageInfoQueue e = MessageInfoQueues.concurrentHashMap.get(topic);
-                //
-
-                byte[] topicByte = topic.getBytes();
-
-                byte topicByteLen = (byte) topicByte.length;
-                MessageInfoQueue messageInfoQueue= e;
-
-                String queueId = messageInfoQueue.getQueueId();
-
-
-
-
-                byte[] queueIdByte = queueId.getBytes();
-                byte queueIdByteLen = (byte) queueIdByte.length;
-
-
-                byteBuf.writeBytes(new byte[]{topicByteLen});
-                byteBuf.writeBytes(topicByte);
-                byteBuf.writeBytes(new byte[]{queueIdByteLen});
-                byteBuf.writeBytes(queueIdByte);
-
-
-
-                List<MessageInfo> list = messageInfoQueue.getList();
-
-
-
-
-
-
-
-
-
-                int incrementSaveIndex = messageInfoQueue.getIndex();
-
-                int listSize = list.size();
-
-                messageInfoQueue.setIndex(listSize);
-
-                byteBuf.writeInt(listSize - incrementSaveIndex);
-
-
-
-
-                for (int checkNum = incrementSaveIndex;checkNum < listSize;checkNum++) {
-                    MessageInfo messageInfo = list.get(checkNum);
-                    //
-                    long offset = messageInfo.getOffset();
-
-
-                    long len = messageInfo.getLen();
-
-
-                    byteBuf.writeLong(offset);
-                    byteBuf.writeLong(len);
-
-
-                }
-
-
-
-            }
-
-
-
+        byteBuf.writeInt(IndexFileQueueMap.indexQueueMap.size());
+        Set<String> set = IndexFileQueueMap.indexQueueMap.keySet();
+        for (String topic : set){
+            byte[] topicByte = topic.getBytes();
+            byte topicByteLen = (byte) topicByte.length;
+            byteBuf.writeBytes(new byte[]{topicByteLen});
+            byteBuf.writeBytes(topicByte);
+        }
         int byteBufferLen = byteBuf.readableBytes() - 4;
-
         byte[] allLengthByte = new byte[4];
         if (byteBufferLen > 127 * 127 * 127 * 127) {
-
-
         }
-
         else if(byteBufferLen > 127 * 127 * 127){
             allLengthByte[0] = (byte) (byteBufferLen / (127 * 127 * 127));
             allLengthByte[1] = (byte) ((byteBufferLen - (allLengthByte[0] * (127 * 127 * 127))) / (127 * 127));
@@ -526,23 +428,13 @@ public class EncodeAndDecode {
             allLengthByte[1] = 0;
             allLengthByte[2] = 0;
             allLengthByte[3] = (byte) byteBufferLen;
-
-
         }
-
-
-
-
-        int i = byteBuf.writerIndex();
+        int index = byteBuf.writerIndex();
         byteBuf.resetWriterIndex();
-
         byteBuf.writeBytes(allLengthByte);
-
-        byteBuf.writerIndex(i);
-
-
-            return byteBuf;
-        }
+        byteBuf.writerIndex(index);
+        return byteBuf;
+    }
 
         public Map decodePull(ByteBuf byteBuf) {
 
@@ -593,7 +485,7 @@ public class EncodeAndDecode {
         }
 
 
-        public void decodeRestart(ByteBuf byteBuf){
+       /* public void decodeRestart(ByteBuf byteBuf){
 
 
 
@@ -679,7 +571,96 @@ public class EncodeAndDecode {
 
             return byteBuf;
         }
+*/
+
+        public byte[] encodeIndex(long offset,long len,long sendTime){
+
+        byte[] offsetByte = longToBytes(offset);
+        byte[] lenByte = longToBytes(len);
+        byte[] sendTimeByte = longToBytes(sendTime);
+         byte[] indexByte = new byte[3 * 8];
+
+
+        int indexNum = 0;
+
+            for (int checkNum = 0;checkNum < 8;checkNum++) {
+                indexByte[indexNum++] = offsetByte[checkNum];
+
+            }
+
+            for (int checkNum = 0;checkNum < 8;checkNum++) {
+                indexByte[indexNum++] = lenByte[checkNum];
+
+            }
+
+            for (int checkNum = 0;checkNum < 8;checkNum++) {
+                indexByte[indexNum++] = sendTimeByte[checkNum];
+
+            }
+
+
+            return indexByte;
+
         }
+
+
+        ByteBuffer b = ByteBuffer.allocate(8);
+
+        //TODO 更换更快的转化方式
+    public static byte[] longToBytes(long x) {
+        ByteBuffer buffer = ByteBuffer.allocate(8);
+        buffer.putLong(0, x);
+        byte[] b = buffer.array();
+
+        return b;
+    }
+
+    public static long bytesToLong(byte[] bytes) {
+        ByteBuffer b = ByteBuffer.allocate(8);
+
+        b.put(bytes, 0, bytes.length);
+        b.flip();//need flip
+
+        long l = b.getLong();
+
+        return l;
+    }
+
+
+    public AbstractIndex decodeIndex(byte[] indexByte){
+        byte[] offsetByte = new byte[8];
+        byte[] lenByte = new byte[8];
+        byte[] sendTimeByte = new byte[8];
+        int indexNum = 0;
+
+        for (int checkNum = 0;checkNum < 8;checkNum++) {
+             offsetByte[checkNum] = indexByte[indexNum++];
+
+        }
+
+        for (int checkNum = 0;checkNum < 8;checkNum++) {
+             lenByte[checkNum] =  indexByte[indexNum++];
+
+        }
+
+        for (int checkNum = 0;checkNum < 8;checkNum++) {
+             sendTimeByte[checkNum] = indexByte[indexNum++];
+
+        }
+
+        long offset = bytesToLong(offsetByte);
+
+        long len = bytesToLong(lenByte);
+
+        long sendTime = bytesToLong(sendTimeByte);
+
+        return new AbstractIndex(offset,len,sendTime);
+
+
+
+
+    }
+}
 
 
 

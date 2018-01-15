@@ -51,6 +51,7 @@ public class ReceiveMessageHandlerAdapter extends ChannelHandlerAdapter {
 
 
 
+
         ByteBuf byteBuf = (ByteBuf) msg;
 
         if (byteBuf.readableBytes() <= 0) {
@@ -80,7 +81,9 @@ public class ReceiveMessageHandlerAdapter extends ChannelHandlerAdapter {
                 countDownLatch.countDown();
                 return;
             }
+
             for (List l : list) {
+
                 listenerMessage.listener(l);
 
             }

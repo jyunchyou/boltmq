@@ -4,13 +4,11 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.openmessaging.Constant.ConstantBroker;
 import io.openmessaging.store.*;
-import io.openmessaging.table.ConsumerIndexTable;
-import io.openmessaging.table.MessageInfo;
-import io.openmessaging.table.MessageInfoQueue;
-import io.openmessaging.table.MessageInfoQueues;
+import io.openmessaging.table.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 /**
@@ -23,7 +21,110 @@ public class ProcessorOut {
 
     private MessageStore messageStore = MessageStore.getMessageStore();
 
-    public ByteBuf out(String topic,int num,long uniqId){
+
+    public AbstractMessage out(String topic,int num,long uniqId){
+
+        AbstractIndex abstractIndex = outIndex(topic,num,uniqId);
+        return outMessage(topic,abstractIndex);
+
+
+    }
+
+    public AbstractIndex outIndex(String topic,int num,long uniqId) {
+        IndexFileQueue indexFileQueue = IndexFileQueueMap.indexQueueMap.get(topic);
+        for (int indexNum = 0; indexNum < num; indexNum++) {
+
+
+            Long consumeIndex = ConsumerIndexTable.concurrentHashMap.get(uniqId);
+
+            if (consumeIndex == null) {
+                consumeIndex = 0l;
+                ConsumerIndexTable.concurrentHashMap.put(uniqId,consumeIndex);
+
+            }
+
+
+            List list = indexFileQueue.getIndexFileQueue();
+
+            long index = indexFileQueue.getIndex();
+            System.out.println("consumeIndex"+consumeIndex+"index"+index);
+            while (consumeIndex >= index) {
+
+                //TODO 等待新消息发送
+
+                try {
+                    Thread.sleep(ConstantBroker.WAIT_TIME_MESSAGE);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+
+
+
+            int consumerQueueIndex = (int) (consumeIndex/ConstantBroker.INDEX_FILE_SIZE);
+            AbstractIndexFile abstractIndexFile = (AbstractIndexFile) list.get(consumerQueueIndex);
+
+
+            consumeIndex = consumeIndex - (consumerQueueIndex * ConstantBroker.INDEX_FILE_SIZE);
+            AbstractIndex abstractIndex = abstractIndexFile.getIndex(Math.toIntExact(consumeIndex),(3 * 8));
+
+
+
+
+            // messagesByte.add(messageByte);
+
+
+            ConsumerIndexTable.concurrentHashMap.put(uniqId,consumeIndex + (3 * 8));
+
+
+            return abstractIndex;
+
+
+            // bufferSize += len;
+
+        }
+
+        //return this.converge(messagesByte,bufferSize);
+
+        return null;
+
+    }
+
+
+    public AbstractMessage outMessage(String topic,AbstractIndex abstractIndex){
+
+        System.out.println("topic:"+topic);
+        System.out.println("sendTime:"+abstractIndex.getSendTime());
+        System.out.println("out 消息index:"+abstractIndex.getIndex());
+        System.out.println("len"+abstractIndex.getLen());
+        long sendTime = abstractIndex.getSendTime();
+        long index = abstractIndex.getIndex();
+        long len = abstractIndex.getLen();
+
+
+        FileQueue fileQueue = FileQueueMap.queueMap.get(topic);
+        CopyOnWriteArrayList copyOnWriteArrayList = fileQueue.getFileQueue();
+        //TODO 消息index类型统一
+
+        int queueIndex = (int) (index/ConstantBroker.FILE_SIZE);
+        AbstractFile abstractFile = (AbstractFile) copyOnWriteArrayList.get(queueIndex);
+
+        long fileIndexLong = index - queueIndex * ConstantBroker.FILE_SIZE;
+
+        int fileIndex = new Long(fileIndexLong).intValue();
+        System.out.println("----get 下标:"+fileIndex);
+        System.out.println("----before long:"+fileIndexLong);
+
+        AbstractMessage abstractMessage = abstractFile.getMessage((int)fileIndex,(int)len);
+
+
+
+        return abstractMessage;
+
+    }
+  /*  public ByteBuf out(String topic,int num,long uniqId){
 
 
 
@@ -39,11 +140,11 @@ public class ProcessorOut {
 
 
 
-                Integer consumeIndex = ConsumerIndexTable.concurrentHashMap.get(uniqId);
+                Long consumeIndex = ConsumerIndexTable.concurrentHashMap.get(uniqId);
 
                 if (consumeIndex == null) {
-                    ConsumerIndexTable.concurrentHashMap.put(uniqId,0);
-                    consumeIndex = 0;
+                    ConsumerIndexTable.concurrentHashMap.put(uniqId,0l);
+                    consumeIndex = 0l;
                 }
 
 
@@ -61,7 +162,7 @@ public class ProcessorOut {
 
                 }
 
-                MessageInfo messageInfo = (MessageInfo) list.get(consumeIndex);
+
 
                 long offset = messageInfo.getOffset();
                 long len = messageInfo.getLen();
@@ -70,14 +171,14 @@ public class ProcessorOut {
 
                 messagesByte.add(messageByte);
 
-                ConsumerIndexTable.concurrentHashMap.put(uniqId,++indexNum);
+                ConsumerIndexTable.concurrentHashMap.put(uniqId);
 
                 bufferSize += len;
 
             }
 
             return this.converge(messagesByte,bufferSize);
-            }
+            }*/
 
 
             public ByteBuf converge(List<byte[]> messagesByte,int bufferSize){

@@ -44,9 +44,11 @@ public class KernelConsumer {
 
 
 
-        if (TopicBrokerTable.concurrentHashMap.isEmpty()) {
+
+        while (TopicBrokerTable.concurrentHashMap.isEmpty()) {
+
             try {
-                Thread.sleep(15000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -62,6 +64,7 @@ public class KernelConsumer {
     }
 
     public void start(final ReceiveMessageTable receiveMessageTable, final String topic){
+
 
 
 

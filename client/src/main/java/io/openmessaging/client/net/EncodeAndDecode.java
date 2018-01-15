@@ -290,65 +290,57 @@ public class EncodeAndDecode {
 
 
 
-            int brokerNum = byteBuf.readInt();
+            byte brokerNumByte = byteBuf.readByte();
+            int brokerNum = brokerNumByte;
 
-            for (int indexNum = 0;indexNum < brokerNum;indexNum++) {
-
-
-
-
-
-
-                BrokerInfo brokerInfo = new BrokerInfo();
-
-
-                //ip
-                byte[] ipLength = new byte[1];
-                byteBuf.readBytes(ipLength);
-                int ipLengthInt = ipLength[0];
-
-                byte[] ipByte = new byte[ipLengthInt];
+            System.out.println(brokerNum);
+            for (int checkNum = 0;checkNum < brokerNum;checkNum++) {
+                int ipLen = byteBuf.readByte();
+                byte[] ipByte = new byte[ipLen];
                 byteBuf.readBytes(ipByte);
                 String ip = new String(ipByte);
-                brokerInfo.setIp(ip);
-                //port
-                byte[] portLength = new byte[1];
-                byteBuf.readBytes(portLength);
-                int portLengthInt = portLength[0];
-                byte[] portByte = new byte[portLengthInt];
+
+                int portLen = byteBuf.readByte();
+                byte[] portByte = new byte[portLen];
                 byteBuf.readBytes(portByte);
                 String port = new String(portByte);
-                int portInteger = Integer.parseInt(port);
-                brokerInfo.setProducerPort(portInteger);
+
+                byte listSizeByte = byteBuf.readByte();
+                int listSize = listSizeByte;
 
 
 
-                byte[] queueNumByte = new byte[1];
-
-                int queueNum =  byteBuf.readInt();
-
-                for (int checkNum = 0;checkNum < queueNum;checkNum++) {
 
 
-                SendQueue sendQueue = new SendQueue();
-                //queueId
-                byte[] queueIdLength = new byte[1];
-                byteBuf.readBytes(queueIdLength);
-                int queueIdLengthInt = queueIdLength[0];
 
-                byte[] queueIdByte = new byte[queueIdLengthInt];
-                byteBuf.readBytes(queueIdByte);
-                String queueId = new String(queueIdByte);
+                for (int indexNum = 0;indexNum < listSize;indexNum ++) {
+
+                    byte topicByteLen = byteBuf.readByte();
+                    int topicLen = topicByteLen;
+                    byte[] topicByte = new byte[topicLen];
+                    byteBuf.readBytes(topicByte);
+
+                    SendQueue sendQueue = new SendQueue();
+                        BrokerInfo brokerInfo = new BrokerInfo();
+                        brokerInfo.setIp(ip);
+                        brokerInfo.setProducerPort(Integer.parseInt(port));
+
+                        sendQueue.setBrokerInfo(brokerInfo);
+                        sendQueue.setTopicName(new String(topicByte));
+                        sendQueue.setQueueId(new String(topicByte));
+                        list.add(sendQueue);
 
 
-                sendQueue.setQueueId(queueId);
-
-                sendQueue.setBrokerInfo(brokerInfo);
-
-                list.add(sendQueue);
 
                 }
-        }
+
+
+            }
+
+
+
+
+
         }
         return list;
 

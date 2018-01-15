@@ -6,9 +6,13 @@ package io.openmessaging.Constant;
 public class ConstantBroker {
 
 
+    public static final String ROOT_INDEX_PATH = "/home/fbhw/indexstore/";
+
     public static final String ROOT_PATH = "/home/fbhw/store/";
 
     public static final long FILE_SIZE = 1073741824/*1073741824*/;
+
+    public static final long INDEX_FILE_SIZE = 1073741824;//索引文件大小
 
     public static final int BUFFER_ROUTE_SIZE = 30000000;//路由缓冲大小
 
@@ -33,5 +37,6 @@ public class ConstantBroker {
     public static final float DElETE_DISK_OVER = (float) 0.7;//为0到1的浮点数大小，磁盘占用大小超过多少可以释放
 
     public static final float DELETE_DISK_LIMIT = (float) 0.3;//为0到1的浮点数大小，每次释放磁盘控制在多少，值过小有释放掉未消费消息的风险
+
 
 }

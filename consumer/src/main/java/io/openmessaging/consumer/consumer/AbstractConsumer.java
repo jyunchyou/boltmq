@@ -54,6 +54,10 @@ public class AbstractConsumer {
 
     public void subscribe(String topic, ListenerMessage listenerMessage,int num){
         this.topic = topic;
+
+
+
+        //获取唯一id
         long uniqId;
         if (consumeModel == ConsumeModel.BROADCAST) {
 
@@ -67,7 +71,8 @@ public class AbstractConsumer {
     //开启定时任务
     public void start(){
 
-        if (topic == null) {
+        while (topic == null) {
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

@@ -77,15 +77,17 @@ import java.util.List;
 
             SendQueue sendQueue = null;
 
-            List list = sendQueues.getList();
+            List<SendQueue> list = sendQueues.getList();
 
             while (list.size() == 0) {
                 try {
-                    Thread.sleep(17000);
+                    Thread.sleep(7000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+
+            System.out.println("listSize:"+list.size());
 
 
             if (shardingKey == null) {

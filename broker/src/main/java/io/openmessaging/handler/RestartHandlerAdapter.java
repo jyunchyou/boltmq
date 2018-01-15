@@ -28,7 +28,7 @@ public class RestartHandlerAdapter extends ChannelHandlerAdapter {
         ByteBuf byteBuf = (ByteBuf) msg;
         //TODO 解析为Index
 
-        encodeAndDecode.decodeRestart(byteBuf);
+        //encodeAndDecode.decodeRestart(byteBuf);
 
 
 

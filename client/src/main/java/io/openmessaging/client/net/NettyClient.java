@@ -116,7 +116,7 @@ public class NettyClient implements ConnectionHandler {
 
                 socketChannel = (SocketChannel) future.channel();
 
-                logger.info("client connect server success");
+                logger.info("connect broker success");
 
             }
 
@@ -128,6 +128,7 @@ public class NettyClient implements ConnectionHandler {
 
     public void send(Channel channel, ByteBuf byteBuf, int delayTime, SendCallBack sendCallBack,CountDownLatch countDownLatch){
 
+        System.out.println(byteBuf.readableBytes());
         ChannelFuture channelFuture = channel.writeAndFlush(byteBuf);
 
         if (sendCallBack != null) {
@@ -199,10 +200,8 @@ public class NettyClient implements ConnectionHandler {
 
                 channel = (SocketChannel) future.channel();
 
-                logger.info("client connect server success");
+                logger.info("connect nameserver success");
 
-            }else {
-                logger.info("client connect server fail");
             }
                 return channel;
     }

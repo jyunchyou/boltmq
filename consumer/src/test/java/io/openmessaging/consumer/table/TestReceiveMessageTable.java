@@ -1,11 +1,10 @@
-package io.openmessaging.concumer.table;
+package io.openmessaging.consumer.table;
 
 import io.openmessaging.consumer.consumer.AbstractConsumer;
 import io.openmessaging.consumer.consumer.FactoryConsumer;
 import io.openmessaging.consumer.consumer.Message;
 import io.openmessaging.consumer.consumer.Properties;
 import io.openmessaging.consumer.listener.ListenerMessage;
-import io.openmessaging.consumer.table.ReceiveMessageTable;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -51,7 +50,10 @@ public class TestReceiveMessageTable {
 
                     public void listener(List<Message> list) {
 
-                        System.out.println("消费成功");
+                       for (Message message : list) {
+                           System.out.println(new String(message.getBody()));
+
+                       }
                     }
 
 
@@ -59,7 +61,9 @@ public class TestReceiveMessageTable {
 
             }
         }).start();
-        abstractConsumer.start();
+
+        abstractConsumer.start();//启动定时任务
+
 
 
 

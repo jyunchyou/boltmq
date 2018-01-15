@@ -47,7 +47,7 @@ public class SendQueues {
     //3.最后通过encodeAndDecode解析为SendQueues.定时更新就是重复2,3步
 
     public List getList(){
-        if (messageQueues.size() == 0) {
+          if (messageQueues.size() == 0) {
           //TODO get byteBuffer and channel  from  countDownLatch.countDown();nameServer
 
 
@@ -66,6 +66,8 @@ public class SendQueues {
 
 
         }
+
+
         return messageQueues;
 
     }

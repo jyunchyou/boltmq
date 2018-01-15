@@ -44,6 +44,7 @@ public class UpdateFromNameServerHandler extends ChannelHandlerAdapter {
 
 
 
+
         ByteBuf byteBuf = (ByteBuf) msg;
 
 
@@ -55,6 +56,15 @@ public class UpdateFromNameServerHandler extends ChannelHandlerAdapter {
 
         SendQueues.routeByteBuffer = byteBuffer;
 */
+
+
+
+//Test
+        byteBuf.markReaderIndex();
+        byte[] r = new byte[byteBuf.readableBytes()];
+        byteBuf.readBytes(r);
+        System.out.println(new String(r));
+        byteBuf.resetReaderIndex();
 
 
         SendQueues.routeByteBuf = byteBuf;

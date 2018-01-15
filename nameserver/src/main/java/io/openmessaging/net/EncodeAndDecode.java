@@ -3,6 +3,7 @@ package io.openmessaging.net;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.openmessaging.constant.ConstantNameServer;
+import io.openmessaging.filter.EncodeAndDecodeFilter;
 import io.openmessaging.producer.BrokerInfo;
 import io.openmessaging.start.BrokerRestart;
 import io.openmessaging.table.*;
@@ -21,6 +22,8 @@ public class EncodeAndDecode {
 
     private BrokerRestart brokerRestart = new BrokerRestart();
 
+    private EncodeAndDecodeFilter encodeAndDecodeFilter = new EncodeAndDecodeFilter();
+
     private byte[] bBuf = null;
     int allLenInt = 0;
 
@@ -38,13 +41,61 @@ public class EncodeAndDecode {
      port 转为byte[]
      }
      */
+
+
+
     public ByteBuf encodeSendList() {
 
 
-
-
-
         ByteBuf heapBuffer = Unpooled.buffer(ConstantNameServer.ROUTE_TABLE_BUFFER_SIZE);
+
+
+        Map map = encodeAndDecodeFilter.filterBrokerTopicTable(BrokerTopicTable.concurrentHashMap);
+        System.out.println(map.size());
+        Set<Map.Entry<BrokerInfo, ArrayList<String>>> set = map.entrySet();
+
+        int brokerSize = map.size();
+
+
+
+        byte brokerSizeByte = (byte) brokerSize;
+        heapBuffer.writeByte(brokerSizeByte);
+        for (Map.Entry e : set) {
+            BrokerInfo brokerInfo = (BrokerInfo) e.getKey();
+            String ip = brokerInfo.getIp();
+
+            String port = brokerInfo.getProducerPort() + "";
+            byte[] ipByte = ip.getBytes();
+            byte[] portByte = port.getBytes();
+            byte ipByteLen = (byte) ipByte.length;
+            byte portByteLen = (byte) portByte.length;
+            heapBuffer.writeByte(ipByteLen);
+            heapBuffer.writeBytes(ipByte);
+            heapBuffer.writeByte(portByteLen);
+            heapBuffer.writeBytes(portByte);
+
+            ArrayList<String> arrayList = (ArrayList) e.getValue();
+
+
+
+            System.out.println("listSize:"+arrayList.size());
+            int topicSize = arrayList.size();
+            byte topicSizeByte = (byte) topicSize;
+            heapBuffer.writeByte(topicSizeByte);
+            for (String topic : arrayList) {
+                byte[] topicByte = topic.getBytes();
+                byte topicByteLen = (byte) topicByte.length;
+                heapBuffer.writeByte(topicByteLen);
+
+                heapBuffer.writeBytes(topicByte);
+            }
+        }
+
+
+        return heapBuffer;
+}
+
+/*
 
         Set<Map.Entry<BrokerInfo, MessageInfoQueues>> set = BrokerInfoTable.map.entrySet();
 //
@@ -98,11 +149,9 @@ public class EncodeAndDecode {
             }
 
         }
+*/
 
 
-
-        return heapBuffer;
-    }
 
 
     //brokerInfo-map{Ｎ*(topicName-queueId)
@@ -195,13 +244,9 @@ public class EncodeAndDecode {
         return heapBuffer;
     }
 
-    /*queueId,topic,offset,len*/
+    //解析broker map
     public synchronized String decode(ByteBuf byteBuf){
 
-        byteBuf.markReaderIndex();
-        byte[] a = new byte[byteBuf.readableBytes()];
-        byteBuf.readBytes(a);
-        byteBuf.resetReaderIndex();
 
 
 
@@ -279,11 +324,6 @@ public class EncodeAndDecode {
 
 
 
-            int mapSize = byteBuf.readInt();
-            for (int indexNum = 0;indexNum < mapSize;indexNum++) {
-                byteBuf.skipBytes(4);
-                byteBuf.skipBytes(8);
-            }
 
 
 
@@ -324,7 +364,7 @@ public class EncodeAndDecode {
             byte[] consumerPortByte = new byte[consumerPortIntLen];
             byteBuf.readBytes(consumerPortByte);
             consumerPort = new String(consumerPortByte);
-            putBroker(ip, producerPort, nameServerPort, consumerPort);
+            //putBroker(ip, producerPort, nameServerPort, consumerPort);
 
 ///////////////////////////////////////////////////////////////////////////
             if (!byteBuf.isReadable()) {
@@ -333,9 +373,13 @@ public class EncodeAndDecode {
                /* if (returnByteBuf != null) {
                     return returnByteBuf;
                 }*/
+               putBroker(ip,producerPort,nameServerPort,consumerPort);
                 return ip + producerPort + nameServerPort + consumerPort;
 
             }
+
+
+            System.out.println("继续");
             int mSize = byteBuf.readInt();
             for (int checkNum = 0;checkNum < mSize;checkNum++) {
 
@@ -347,115 +391,13 @@ public class EncodeAndDecode {
                 byteBuf.readBytes(topicByte);
                 String topic = new String(topicByte);
 
-                byte[] queueIdByteLen = new byte[1];
-                byteBuf.readBytes(queueIdByteLen);
-                int queueIdIntLen = queueIdByteLen[0];
 
-                byte[] queueIdByte = new byte[queueIdIntLen];
-                byteBuf.readBytes(queueIdByte);
-                String queueId = new String(queueIdByte);
-                putTopicBrokerTable(topic, ip, producerPort, nameServerPort, consumerPort, queueId);
-
-
-
-
-                    int listSize = byteBuf.readInt();
-
-                    if (listSize == 0) {
-                        BrokerInfo brokerInfo = new BrokerInfo();
-                        brokerInfo.setIp(ip);
-                        brokerInfo.setProducerPort(Integer.parseInt(producerPort));
-                        brokerInfo.setNameServerPort(Integer.parseInt(nameServerPort));
-                        brokerInfo.setConsumerPort(Integer.parseInt(consumerPort));
-                        MessageInfoQueues messageInfoQueues = null;
-                        if (!brokerInfoTable.map.containsKey(brokerInfo)) {
-
-                            messageInfoQueues = new MessageInfoQueues();
-
-                            brokerInfoTable.map.put(brokerInfo, messageInfoQueues);
-
-                        }else {
-                            messageInfoQueues = brokerInfoTable.map.get(brokerInfo);
-                        }
-                        Map map = messageInfoQueues.getConcurrentHashMap();
-
-                        if (map.containsKey(topic)) {
-
-                            MessageInfoQueue messageInfoQueue = (MessageInfoQueue) map.get(topic);
-                            messageInfoQueue.setQueueId(queueId);
-
-
-                        } else {
-
-                            MessageInfoQueue messageInfoQueue = new MessageInfoQueue();
-                            map.put(topic, messageInfoQueue);
-                            messageInfoQueue.setQueueId(queueId);
+                putTopicBrokerTable(topic, ip, producerPort, nameServerPort, consumerPort);
 
 
 
 
 
-                        }
-                    }
-
-                    for (int index = 0;index < listSize;index++) {
-
-
-                        long offset = 0;
-                        long len = 0;
-
-                        offset = byteBuf.readLong();
-                        len = byteBuf.readLong();
-
-
-
-                        BrokerInfo brokerInfo = new BrokerInfo();
-                        brokerInfo.setIp(ip);
-                        brokerInfo.setProducerPort(Integer.parseInt(producerPort));
-                        brokerInfo.setNameServerPort(Integer.parseInt(nameServerPort));
-                        brokerInfo.setConsumerPort(Integer.parseInt(consumerPort));
-                        MessageInfoQueues messageInfoQueues = null;
-                        if (brokerInfoTable.map.containsKey(brokerInfo)) {
-
-                            messageInfoQueues = (MessageInfoQueues) brokerInfoTable.map.get(brokerInfo);
-
-                        } else {
-
-                            messageInfoQueues = new MessageInfoQueues();
-
-                            brokerInfoTable.map.put(brokerInfo, messageInfoQueues);
-
-                        }
-                        Map map = messageInfoQueues.getConcurrentHashMap();
-
-
-                        if (map.containsKey(topic)) {
-
-                            MessageInfoQueue messageInfoQueue = (MessageInfoQueue) map.get(topic);
-                            messageInfoQueue.setQueueId(queueId);
-                            List list = messageInfoQueue.getList();
-                            MessageInfo messageInfo = new MessageInfo();
-                            messageInfo.setLen(len);
-                            messageInfo.setOffset(offset);
-                            list.add(messageInfo);
-
-
-                        } else {
-
-                            MessageInfoQueue messageInfoQueue = new MessageInfoQueue();
-                            map.put(topic, messageInfoQueue);
-                            messageInfoQueue.setQueueId(queueId);
-
-                            List list = messageInfoQueue.getList();
-
-                            MessageInfo messageInfo = new MessageInfo();
-                            messageInfo.setLen(len);
-                            messageInfo.setOffset(offset);
-                            list.add(messageInfo);
-
-                        }
-
-                    }
 
 
 
@@ -485,7 +427,7 @@ public class EncodeAndDecode {
         brokerInfo.setConsumerPort(Integer.parseInt(consumerPort));
 
 
-        if (BrokerInfoTable.map.containsKey(brokerInfo)) {
+        if (BrokerTopicTable.concurrentHashMap.containsKey(brokerInfo)) {
 
             //ByteBuf byteBuf = brokerRestart.restart(ip,producerPort,nameServerPort,consumerPort);
 
@@ -495,66 +437,55 @@ public class EncodeAndDecode {
         }
 
 
-        BrokerInfoTable.map.put(brokerInfo,new MessageInfoQueues());
+        BrokerTopicTable.concurrentHashMap.put(brokerInfo,new ArrayList<String>());
 
         }
 
-        public synchronized void putTopicBrokerTable(String topic,String ip,String producerPort,String nameServerPort,String consumerPort,String queueId) {
+        public synchronized void putTopicBrokerTable(String topic,String ip,String producerPort,String nameServerPort,String consumerPort) {
 
             List<Map<BrokerInfo, List<String>>> list = null;
 
+
+            //set BrokerTopicTable
+
+            BrokerInfo brokerInfo = new BrokerInfo();
+            brokerInfo.setIp(ip);
+            brokerInfo.setProducerPort(Integer.parseInt(producerPort));
+            brokerInfo.setNameServerPort(Integer.parseInt(nameServerPort));
+            brokerInfo.setConsumerPort(Integer.parseInt(consumerPort));
+
+            ArrayList arrayList = BrokerTopicTable.concurrentHashMap.get(brokerInfo);
+            if (arrayList == null) {
+                arrayList = new ArrayList();
+            }
+            arrayList.add(topic);
+
+            //set TopicBrokerTable
+
             list = topicBrokerTable.concurrentHashMap.get(topic);
+            Map map = new HashMap<BrokerInfo, List<String>>(1);
+
+            List topics = new ArrayList();
+            topics.add(topic);
+            map.put(brokerInfo,topics);
 
 
             if (list == null) {
+                list = new ArrayList<Map<BrokerInfo, List<String>>>();
+                topicBrokerTable.concurrentHashMap.put(topic, list);
 
-                list = new ArrayList();
-                topicBrokerTable.concurrentHashMap.put(topic, (List<Map<BrokerInfo, List<String>>>) list);
-
-                Map map = new HashMap<BrokerInfo, List<String>>();
-                BrokerInfo brokerInfo = new BrokerInfo();
-                brokerInfo.setIp(ip);
-                brokerInfo.setProducerPort(Integer.parseInt(producerPort));
-                brokerInfo.setNameServerPort(Integer.parseInt(nameServerPort));
-                brokerInfo.setConsumerPort(Integer.parseInt(consumerPort));
+            }else {
 
 
-                List queueIds = new ArrayList();
-                queueIds.add(queueId);
-                map.put(brokerInfo, queueIds);
-                list.add(map);
-
-            } else {
-                for (Map map : list) {
-
-                    BrokerInfo brokerInfo = new BrokerInfo();
-                    brokerInfo.setIp(ip);
-                    brokerInfo.setProducerPort(Integer.parseInt(producerPort));
-                    brokerInfo.setNameServerPort(Integer.parseInt(nameServerPort));
-                    brokerInfo.setConsumerPort(Integer.parseInt(consumerPort));
-                    List queueIds = null;
-
-                    queueIds = (List) map.get(brokerInfo);
-
-                    if (queueIds != null) {
-
-                        if (queueIds.contains(queueId)) {
-                            return;
-                        } else {
-                            queueIds.add(queueId);
-                        }
-
-                    } else {
-                        queueIds = new ArrayList();
-                        queueIds.add(queueId);
-                        map.put(brokerInfo, queueIds);
+                topicBrokerTable.concurrentHashMap.put(topic,list);
 
 
-                    }
 
-                }
+
+
 
             }
+            list.add(map);
 
      /*       if (topicBrokerTable.concurrentHashMap.containsKey(topic)) {
 

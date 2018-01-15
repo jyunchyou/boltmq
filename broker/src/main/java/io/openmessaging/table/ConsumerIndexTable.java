@@ -8,5 +8,5 @@ import java.util.concurrent.ConcurrentHashMap;
 //广播消费时,保存每个consumer的消费下标
 public class ConsumerIndexTable {
 
-    public static ConcurrentHashMap<Long,Integer> concurrentHashMap = new ConcurrentHashMap();
+    public static ConcurrentHashMap<Long,Long> concurrentHashMap = new ConcurrentHashMap();
 }

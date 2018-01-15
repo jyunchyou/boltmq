@@ -1,7 +1,17 @@
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import io.netty.buffer.ByteBuf;
+import io.openmessaging.Constant.ConstantBroker;
+import io.openmessaging.net.EncodeAndDecode;
+import io.openmessaging.table.AbstractFile;
+import io.openmessaging.table.AbstractMessage;
+import io.openmessaging.table.FileQueue;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.LinkedList;
@@ -10,112 +20,105 @@ import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 public class Main {
-   /* *//**
-     *
-     * @param inputByte
-     *      待解压缩的字节数组
-     * @return 解压缩后的字节数组
-     * @throws IOException
-     *//*
-    public static byte[] uncompress(byte[] inputByte) throws IOException {
-        int len = 0;
-        Inflater infl = new Inflater();
-        infl.setInput(inputByte);
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        byte[] outByte = new byte[1024];
+
+
+    private File file = null;
+
+    private RandomAccessFile randomAccessFile = null;
+
+    private MappedByteBuffer mappedByteBuffer = null;
+
+    private FileChannel channel = null;
+
+    @Before
+    public void s() {
+        init("test", "test", 10000);
+    }
+
+    public void init(String queueId, String fileName, int fileSize) {
+
+
+        file = new File(ConstantBroker.ROOT_PATH + fileName);
         try {
-            while (!infl.finished()) {
-                // 解压缩并将解压缩后的内容输出到字节输出流bos中
-                len = infl.inflate(outByte);
-                if (len == 0) {
-                    break;
-                }
-                bos.write(outByte, 0, len);
+
+            if (!file.exists()) {
+                file.createNewFile();
             }
-            infl.end();
-        } catch (Exception e) {
-            //
-        } finally {
-            bos.close();
-        }
-        return bos.toByteArray();
-    }
 
-    *//**
-     * 压缩.
-     *
-     * @param
-     *
-     * @return 压缩后的数据
-     * @throws IOException
-     *//*
-    public static byte[] compress(byte[] inputByte) throws IOException {
-        int len = 0;
-        Deflater defl = new Deflater();
-        defl.setLevel(1);//快速压缩
-        defl.setInput(inputByte);
-        defl.finish();
-        byte[] outputByte = new byte[1024];
 
-            while (!defl.finished()) {
-                // 压缩并将压缩后的内容输出到字节输出流bos中
-                len = defl.deflate(outputByte);
-                            }
-            defl.end();
-
-        return outputByte;
-    }
-
-    public static void main(String[] args) {
-
-        String string = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-
-        byte[] b = string.getBytes();
-        System.out.println(b.length);
-        try {
-            byte[] resultBytes  = compress(b);
-
-            System.out.println(resultBytes.length);
+            randomAccessFile = new RandomAccessFile(file, "rw");
+            channel = randomAccessFile.getChannel();
+            mappedByteBuffer = channel.map(FileChannel.MapMode.READ_WRITE, 0, fileSize);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-*//*        try {
-            FileInputStream fis = new FileInputStream("D:\\testdeflate.txt");
-            int len = fis.available();
-            byte[] b = new byte[len];
-            fis.read(b);
-            byte[] bd = compress(b);
-            // 为了压缩后的内容能够在网络上传输，一般采用Base64编码
-
-            byte[] bi = uncompress(bd);
-            FileOutputStream fos = new FileOutputStream("D:\\testinflate.txt");
-            fos.write(bi);
-            fos.flush();
-            fos.close();
-            fis.close();
-        } catch (Exception e) {
-            //
-        }*//*
-    }*/
+    }
 
 
-    public static void main(String[] args){
+    public AbstractMessage getMessage(int fileOffset, int len) {
 
-        List list = new ArrayList();
-        System.out.println(list.size());
-        list.add("a");
-        list.add("b");
-        list.add("c");
-        System.out.println(list.size());
 
-        list.remove(1);
-        System.out.println(list.size());
-        System.out.println(list.get(1));
+        byte[] messageByte = new byte[len];
+
+        for (int indexNum = 0; indexNum < len; indexNum++) {
+            messageByte[indexNum++] = mappedByteBuffer.get(fileOffset++);
+        }
+        return new AbstractMessage(messageByte);
+    }
+
+    public void putMessage(byte[] messageByte) {
+        mappedByteBuffer.put(messageByte);
+
+
+    }
+
+    @Test
+    public void test() {
+         /*   byte[] b = "   abc发  射的  发送，反倒是撒发f  asdf a".getBytes();
+            mappedByteBuffer.put(b);
+            mappedByteBuffer.force();
+            for (int i= 0;i < b.length;i++) {
+                System.out.print(b[i]);
+            }
+            System.out.println();
+
+            int start = 0;
+            byte[] backB = new byte[b.length];
+            for (int i= 0;i < b.length;i++) {
+                backB[i] = mappedByteBuffer.get(start++);
+            }
+            for (int i= 0;i < backB.length;i++) {
+                System.out.print(backB[i]);
+            }
+
+
+
+
+        }
+*/
+
+        byte[] b = "   abc发  射的  发送，反倒是撒发f  asdf a".getBytes();
+
+        FileQueue fileQueue = new FileQueue("TOPIC_01");
+        AbstractFile abstractFile = new AbstractFile("TOPIC_01",1+"", (int) ConstantBroker.FILE_SIZE);
+        abstractFile.putMessage(b);
+
+        for (int i= 0;i < b.length;i++) {
+            System.out.print(b[i]);
+        }
+        System.out.println();
+
+
+        int start = 0;
+        byte[] backB = abstractFile.getMessage(0,b.length).getMessageByte();
+
+        for (int i= 0;i < backB.length;i++) {
+            System.out.print(backB[i]);
+        }
 
 
 
     }
+
 }
-
-

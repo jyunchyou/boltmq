@@ -15,6 +15,8 @@ import io.openmessaging.handler.NettyServerHandlerAdapter;
 import io.openmessaging.handler.UpdateTopicHandlerAdapter;
 import io.openmessaging.producer.BrokerInfo;
 import io.openmessaging.table.BrokerConnectionCacheTable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -23,6 +25,8 @@ import java.util.concurrent.TimeUnit;
  * Created by fbhw on 17-12-3.
  */
 public class NettyServer {
+
+    Logger logger = LoggerFactory.getLogger("NettyServer");
 
     private static NettyServer nettyServer = new NettyServer();
 
@@ -68,6 +72,7 @@ public class NettyServer {
 
         if (channelFuture.isSuccess()) {
 
+            logger.info("bind client port and consumer port success ");
 
         }
 
@@ -101,6 +106,8 @@ public class NettyServer {
         }
 
         if (channelFuture.isSuccess()) {
+
+            logger.info("broker commit port bind success");
 
         }
 
@@ -157,6 +164,7 @@ public class NettyServer {
         }
         channel.writeAndFlush(byteBuf);
 
+        System.out.println("notify all broker");
 
 
 

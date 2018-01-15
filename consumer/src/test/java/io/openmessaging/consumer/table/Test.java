@@ -1,4 +1,4 @@
-package io.openmessaging.concumer.table;
+package io.openmessaging.consumer.table;
 
 import io.openmessaging.consumer.constant.ConstantConsumer;
 

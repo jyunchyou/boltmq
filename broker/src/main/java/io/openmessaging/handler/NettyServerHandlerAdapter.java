@@ -80,7 +80,7 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
                 byte[] d = (byte[]) map.get("data");
 
 
-                  processIn.input(d,topic,queueId,sendTime);
+                  processIn.inputMessage(d,topic,queueId,sendTime);
 
             }
 

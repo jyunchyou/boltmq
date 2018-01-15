@@ -100,10 +100,8 @@ public class NettyConsumer {
 
             channel = (SocketChannel) future.channel();
 
-            logger.info("client connect server success");
+            logger.info("connect nameserver success");
 
-        }else {
-            logger.info("client connect server fail");
         }
         return channel;
 
@@ -164,10 +162,8 @@ public class NettyConsumer {
 
            channel = (SocketChannel) future.channel();
 
-            logger.info("client connect server success");
+            logger.info("connect broker success");
 
-        }else {
-            logger.info("client connect server fail");
         }
         return channel;
 

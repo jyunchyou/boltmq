@@ -16,6 +16,8 @@ import io.openmessaging.handler.RestartHandlerAdapter;
 import io.openmessaging.handler.UpdateTopicHandlerAdapter;
 import io.openmessaging.broker.NameServerInfo;
 import io.openmessaging.table.ConnectionCacheNameServerTable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
@@ -25,6 +27,8 @@ import java.util.concurrent.locks.ReentrantLock;
  * Created by fbhw on 17-12-3.
  */
 public class NettyServer {
+
+    Logger logger = LoggerFactory.getLogger("NettyServer");
 
     private EventLoopGroup work = new NioEventLoopGroup();
 
@@ -61,8 +65,7 @@ public class NettyServer {
             boss.shutdownGracefully();
         }
         if (channelFuture.isSuccess()) {
-
-
+            logger.info("bind client port success");
         }
 
 
@@ -93,8 +96,7 @@ public class NettyServer {
             boss.shutdownGracefully();
         }
         if (channelFuture.isSuccess()) {
-
-
+            logger.info("bind consumer port success");
         }
 
     }
@@ -186,6 +188,7 @@ public class NettyServer {
         }
         if (channelFuture.isSuccess()) {
 
+            logger.info("bind nameserver port success");
 
         }
 

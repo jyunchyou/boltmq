@@ -10,10 +10,12 @@ import io.openmessaging.net.NettyServer;
 import io.openmessaging.producer.BrokerInfo;
 
 import io.openmessaging.table.BrokerInfoTable;
+import io.openmessaging.table.BrokerTopicTable;
+import io.openmessaging.table.TopicBrokerTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -48,12 +50,24 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
         //test
         if ("getList".equals(result)) {
 
+            while (TopicBrokerTable.concurrentHashMap.size() <= 0) {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
             ByteBuf byteBuf = encodeAndDecode.encodeSendList();
 
 
-           /* byte[] d = new byte[byteBuf.readableBytes()];
+            //Test
+            byteBuf.markReaderIndex();
+            byte[] d = new byte[byteBuf.readableBytes()];
             byteBuf.readBytes(d);
-            System.out.println(new String(d));*/
+            System.out.println("准备返回getLIst"+new String(d));
+            byteBuf.resetReaderIndex();
+
             channelHandlerContext.writeAndFlush(byteBuf);
 
 
@@ -63,12 +77,18 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
 
             String topic = result;
 
+
+            System.out.println(topic);
             this.notifyAllBroker(topic);
 
-            ByteBuf byteBuf = encodeAndDecode.encodeReceiveTable(result);
+            ByteBuf byteBuf = null;
 
-            if (byteBuf == null) {
-                return ;
+            while ((byteBuf = encodeAndDecode.encodeReceiveTable(result)) == null) {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             ChannelFuture channelFuture = channelHandlerContext.writeAndFlush(byteBuf);
 
@@ -89,27 +109,31 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
     }
 
 
-    public void notifyAllBroker(String topic){
-    byte[] topicByte = topic.getBytes();
-
-    byte topicByteLen = (byte) topicByte.length;
-    //nitify all broker if that it has connected
-
-    NettyServer nettyServer = NettyServer.getNettyServer();
 
 
-    Set<BrokerInfo> set = BrokerInfoTable.map.keySet();
+    //TODO !
 
-    ByteBuf byteBuf = Unpooled.buffer(topicByte.length + 1);
+    public void notifyAllBroker(String topic) {
+
+        byte[] topicByte = topic.getBytes();
+
+        byte topicByteLen = (byte) topicByte.length;
+        //nitify all broker if that it has connected
+
+        NettyServer nettyServer = NettyServer.getNettyServer();
+
+
+        Set<BrokerInfo> set = BrokerTopicTable.concurrentHashMap.keySet();
+        for (BrokerInfo brokerInfo : set) {
+            ByteBuf byteBuf = Unpooled.buffer(topicByte.length + 1);
 
             byteBuf.writeBytes(new byte[]{topicByteLen});
             byteBuf.writeBytes(topicByte);
-            for (BrokerInfo brokerInfo : set) {
+            nettyServer.notifyBroker(brokerInfo, byteBuf, countDownLatch);
 
 
-                nettyServer.notifyBroker(brokerInfo, byteBuf,countDownLatch);
-            }
+        }
+
     }
-
 
 }

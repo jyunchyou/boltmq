@@ -437,14 +437,11 @@ public class EncodeAndDecode {
 
                 int topicIntLen =  topicByteLen;
 
-                System.out.println("topicIntLen:"+topicIntLen);
                 byte[] topicByte = new byte[topicIntLen];
 
                 byteBuf.readBytes(topicByte);
 
                 String topic = new String(topicByte);
-
-                System.out.println(topic);
 
 
 
@@ -456,13 +453,10 @@ public class EncodeAndDecode {
 
 
 
-                System.out.println("queueIdIntLen:"+queueIdIntLen);
                 byte[] queueIdByte = new byte[queueIdIntLen];
 
                 byteBuf.readBytes(queueIdByte);
 
-
-                System.out.println("queueID:"+new String(queueIdByte));
 
                 //sendTime
                 long sendTime = byteBuf.readLong();
@@ -539,7 +533,6 @@ public class EncodeAndDecode {
 
                 String topic = new String(topicByte);
 
-                System.out.println("topic else:"+topic);
                 byte[] queueIdByteLen = new byte[1];
 
                 byteBuf.readBytes(queueIdByteLen);
@@ -549,10 +542,6 @@ public class EncodeAndDecode {
                 byte[] queueIdByte = new byte[queueIdIntLen];
 
                 byteBuf.readBytes(queueIdByte);
-
-                System.out.println("22222");
-
-                System.out.println(new String(queueIdByte));
 
                 //sendTime
                 long sendTime = byteBuf.readLong();

@@ -37,6 +37,7 @@ public class FilterList {
             list = l;
         }
 
+        System.out.println(list.size());
         int bigListSize = list.size()/pullNum;
 
         if (bigListSize <= 0) {
@@ -45,17 +46,23 @@ public class FilterList {
         }
 
         List bigList = new ArrayList(bigListSize);
+        List smallList = new ArrayList(pullNum);
+
+        //TODO 去掉bigList,换为反射调用listener(list)和listener(message)
         for (int checkNum = 0;checkNum < list.size();checkNum++) {
 
-            List smallList = new ArrayList(pullNum);
+
 
             smallList.add(list.remove(checkNum));
 
-            if (list.size() == pullNum) {
+            if (smallList.size() == pullNum) {
                 bigList.add(smallList);
+                smallList = new ArrayList(pullNum);
+
             }
         }
-        cacheList = list;
+        cacheList = smallList;
+
 
 
         return bigList;
