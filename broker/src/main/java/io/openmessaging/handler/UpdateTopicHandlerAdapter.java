@@ -36,7 +36,6 @@ public class UpdateTopicHandlerAdapter extends ChannelHandlerAdapter {
         byteBuf.readBytes(topicByte);
         String topic = new String(topicByte);
 
-        System.out.println("broker:"+topic);
         putTopicQueue(topic);
 
         ByteBuf back = Unpooled.buffer(1);

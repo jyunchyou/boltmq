@@ -87,7 +87,6 @@ import java.util.List;
                 }
             }
 
-            System.out.println("listSize:"+list.size());
 
 
             if (shardingKey == null) {

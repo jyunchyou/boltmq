@@ -41,7 +41,6 @@ public class PullHandlerAdapter extends ChannelHandlerAdapter {
 
         if (map == null) {
 
-            System.out.println("map is null");
             channelHandlerContext.writeAndFlush(Unpooled.buffer(0));
             return;
 
@@ -54,11 +53,6 @@ public class PullHandlerAdapter extends ChannelHandlerAdapter {
 
 
         byte[] messageByte = abstractMessage.getMessageByte();
-
-        for (int i= 0;i < messageByte.length;i++) {
-            System.out.print(messageByte[i]);
-        }
-        System.out.println();
 
 
 

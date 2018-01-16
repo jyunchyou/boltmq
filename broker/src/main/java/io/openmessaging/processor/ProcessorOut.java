@@ -47,7 +47,6 @@ public class ProcessorOut {
             List list = indexFileQueue.getIndexFileQueue();
 
             long index = indexFileQueue.getIndex();
-            System.out.println("consumeIndex"+consumeIndex+"index"+index);
             while (consumeIndex >= index) {
 
                 //TODO 等待新消息发送
@@ -95,10 +94,6 @@ public class ProcessorOut {
 
     public AbstractMessage outMessage(String topic,AbstractIndex abstractIndex){
 
-        System.out.println("topic:"+topic);
-        System.out.println("sendTime:"+abstractIndex.getSendTime());
-        System.out.println("out 消息index:"+abstractIndex.getIndex());
-        System.out.println("len"+abstractIndex.getLen());
         long sendTime = abstractIndex.getSendTime();
         long index = abstractIndex.getIndex();
         long len = abstractIndex.getLen();
@@ -114,8 +109,6 @@ public class ProcessorOut {
         long fileIndexLong = index - queueIndex * ConstantBroker.FILE_SIZE;
 
         int fileIndex = new Long(fileIndexLong).intValue();
-        System.out.println("----get 下标:"+fileIndex);
-        System.out.println("----before long:"+fileIndexLong);
 
         AbstractMessage abstractMessage = abstractFile.getMessage((int)fileIndex,(int)len);
 

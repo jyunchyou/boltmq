@@ -37,7 +37,6 @@ public class FilterList {
             list = l;
         }
 
-        System.out.println(list.size());
         int bigListSize = list.size()/pullNum;
 
         if (bigListSize <= 0) {

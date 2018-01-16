@@ -164,7 +164,6 @@ public class NettyServer {
         }
         channel.writeAndFlush(byteBuf);
 
-        System.out.println("notify all broker");
 
 
 

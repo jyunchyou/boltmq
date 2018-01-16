@@ -25,10 +25,6 @@ public class ProcessorIn {
     public void inputMessage(byte[] byteBuf,String topic,String queueId,long sendTime){
 
 
-        for (int i= 0;i < byteBuf.length;i++) {
-            System.out.print(byteBuf[i]);
-        }
-        System.out.println();
         FileQueue fileQueue = FileQueueMap.queueMap.get(queueId);
         long writeIndex = fileQueue.getFileWriteIndex();
 
@@ -72,7 +68,6 @@ public class ProcessorIn {
         inputIndex(offset,byteBuf.length,sendTime,queueId);
         fileQueue.setFileWriteIndex(offset);
 
-        System.out.println("input message Len:"+byteBuf.length);
 
         abstractFile.putMessage(byteBuf);
 
@@ -83,7 +78,6 @@ public class ProcessorIn {
     public void inputIndex(long offset,long len,long sendTime,String queueId){
 
 
-        System.out.println("input消息下标:"+offset);
         byte[] indexByte = encodeAndDecode.encodeIndex(offset,len,sendTime);
 
         IndexFileQueue indexFileQueue = IndexFileQueueMap.indexQueueMap.get(queueId);

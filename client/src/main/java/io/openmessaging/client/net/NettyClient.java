@@ -128,7 +128,6 @@ public class NettyClient implements ConnectionHandler {
 
     public void send(Channel channel, ByteBuf byteBuf, int delayTime, SendCallBack sendCallBack,CountDownLatch countDownLatch){
 
-        System.out.println(byteBuf.readableBytes());
         ChannelFuture channelFuture = channel.writeAndFlush(byteBuf);
 
         if (sendCallBack != null) {

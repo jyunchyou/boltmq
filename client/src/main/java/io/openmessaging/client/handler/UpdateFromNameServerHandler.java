@@ -63,7 +63,6 @@ public class UpdateFromNameServerHandler extends ChannelHandlerAdapter {
         byteBuf.markReaderIndex();
         byte[] r = new byte[byteBuf.readableBytes()];
         byteBuf.readBytes(r);
-        System.out.println(new String(r));
         byteBuf.resetReaderIndex();
 
 

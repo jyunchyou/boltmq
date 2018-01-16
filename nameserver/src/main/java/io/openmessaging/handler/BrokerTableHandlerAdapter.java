@@ -37,7 +37,6 @@ public class BrokerTableHandlerAdapter extends ChannelHandlerAdapter {
         byteBuf.markReaderIndex();
         byte[] test = new byte[byteBuf.readableBytes()];
         byteBuf.readBytes(test);
-        System.out.println("nameServer收到来自broker的消息:"+new String(test));
         byteBuf.resetReaderIndex();
 
         byteBuf.markReaderIndex();

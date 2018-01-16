@@ -65,7 +65,6 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
             byteBuf.markReaderIndex();
             byte[] d = new byte[byteBuf.readableBytes()];
             byteBuf.readBytes(d);
-            System.out.println("准备返回getLIst"+new String(d));
             byteBuf.resetReaderIndex();
 
             channelHandlerContext.writeAndFlush(byteBuf);
@@ -78,7 +77,6 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
             String topic = result;
 
 
-            System.out.println(topic);
             this.notifyAllBroker(topic);
 
             ByteBuf byteBuf = null;

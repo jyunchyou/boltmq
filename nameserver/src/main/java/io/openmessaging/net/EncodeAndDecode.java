@@ -51,7 +51,6 @@ public class EncodeAndDecode {
 
 
         Map map = encodeAndDecodeFilter.filterBrokerTopicTable(BrokerTopicTable.concurrentHashMap);
-        System.out.println(map.size());
         Set<Map.Entry<BrokerInfo, ArrayList<String>>> set = map.entrySet();
 
         int brokerSize = map.size();
@@ -78,7 +77,6 @@ public class EncodeAndDecode {
 
 
 
-            System.out.println("listSize:"+arrayList.size());
             int topicSize = arrayList.size();
             byte topicSizeByte = (byte) topicSize;
             heapBuffer.writeByte(topicSizeByte);
@@ -379,7 +377,6 @@ public class EncodeAndDecode {
             }
 
 
-            System.out.println("继续");
             int mSize = byteBuf.readInt();
             for (int checkNum = 0;checkNum < mSize;checkNum++) {
 

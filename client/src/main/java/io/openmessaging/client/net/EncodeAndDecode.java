@@ -293,7 +293,6 @@ public class EncodeAndDecode {
             byte brokerNumByte = byteBuf.readByte();
             int brokerNum = brokerNumByte;
 
-            System.out.println(brokerNum);
             for (int checkNum = 0;checkNum < brokerNum;checkNum++) {
                 int ipLen = byteBuf.readByte();
                 byte[] ipByte = new byte[ipLen];
