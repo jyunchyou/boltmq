@@ -57,6 +57,7 @@ public class AbstractConsumer {
 
 
 
+
         //获取唯一id
         long uniqId;
         if (consumeModel == ConsumeModel.BROADCAST) {
@@ -66,6 +67,7 @@ public class AbstractConsumer {
             uniqId = ConstantConsumer.GROUP_ID;
         }
         kernelConsumer.subscribe(topic,listenerMessage,num,countDownLatch,uniqId);
+
 
     }
     //开启定时任务

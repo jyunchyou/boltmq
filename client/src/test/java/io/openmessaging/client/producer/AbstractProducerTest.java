@@ -58,7 +58,7 @@ public class AbstractProducerTest {
 
 
         long startTime = System.currentTimeMillis();
-        for (int indexNum = 0;indexNum < 100000;indexNum++) {
+        for (int indexNum = 0;indexNum < 1000000;indexNum++) {
             Message message = new Message("TOPIC_01", "1", "发送成功".getBytes());
 
             abstractProducer.send(message);
@@ -69,7 +69,8 @@ public class AbstractProducerTest {
 
 
 
-          System.out.println("tps:"+(100000/(endTime - startTime)) * 1000+"t/s");
+        float tpsMillis = (1000000l/(float)(endTime - startTime));
+          System.out.println("tps:"+tpsMillis * 1000+"t/s");
 
 
 

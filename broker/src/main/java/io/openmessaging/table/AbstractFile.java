@@ -63,6 +63,7 @@ public class AbstractFile {
     public void putMessage(byte[] messageByte){
         mappedByteBuffer.put(messageByte);
 
+        mappedByteBuffer.force();
 
 
     }

@@ -58,7 +58,6 @@ public class AbstractIndexFile {
             indexByte[indexNum] = mappedByteBuffer.get(fileOffset++);
         }
 
-        System.out.println("indexByte:"+new String(indexByte));
         AbstractIndex abstractIndex = encodeAndDecode.decodeIndex(indexByte);
         return abstractIndex;
     }
@@ -66,6 +65,7 @@ public class AbstractIndexFile {
     public void putIndex(byte[] indexByte){
         mappedByteBuffer.put(indexByte);
 
+        mappedByteBuffer.force();
 
 
 

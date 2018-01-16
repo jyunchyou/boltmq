@@ -94,7 +94,6 @@ public class Test {
 
 
 
-        System.out.println(calculation(nodes,bNode));
 
 
 

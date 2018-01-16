@@ -50,10 +50,6 @@ public class TestReceiveMessageTable {
 
                     public void listener(List<Message> list) {
 
-                       for (Message message : list) {
-                           System.out.println(new String(message.getBody()));
-
-                       }
                     }
 
 
