@@ -20,16 +20,18 @@
   
 * [文档目录](https://github.com/jyunchyou/boltmq/blob/master/docs/README.md)  
 
- 下面是待完善的功能模块 
-* 索引持久化   
+ 下面是待完善的功能模块    
   
+* master/slave机制
+
 * 重启处理   
 
 * 过期索引删除   
 
 * 过期消息删除   
 
-* netty长连接断开处理   
+* 连接断开处理
+   
 ## BoltMQ名字的由来 
 * Bolt是我非常喜爱的一位短跑明星[尤塞恩-博尔特](https://weibo.com/bolt?refer_flag=1001030101_)的名字，  
   
