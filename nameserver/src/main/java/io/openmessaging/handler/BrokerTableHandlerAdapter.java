@@ -3,6 +3,7 @@ package io.openmessaging.handler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.ReferenceCountUtil;
 import io.openmessaging.constant.ConstantNameServer;
 import io.openmessaging.net.EncodeAndDecode;
 import io.openmessaging.start.BrokerRestart;
@@ -42,6 +43,8 @@ public class BrokerTableHandlerAdapter extends ChannelHandlerAdapter {
         byteBuf.markReaderIndex();
         String result = encodeAndDecode.decode(byteBuf);
         indexStore.saveOrRestart(byteBuf,result,channelHandlerContext);
+
+        ReferenceCountUtil.release(byteBuf);
 
     }
     }

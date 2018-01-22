@@ -31,20 +31,4 @@ public class NettyClientTest {
         nameServerInfo.setPort(8080);
     }
 
-    @Test
-    public void testConnServer() throws InterruptedException {
-        Channel channel = nettyClient.bind(nameServerInfo);
-        nettyClient.sendRouteRequest(channel);
-
-        if (channel == null) {
-
-            logger.info("得到Channel为null");
-
-        }else{
-
-            logger.info("成功得到channel");
-        }
-        Thread.sleep(300000);
-
-    }
 }

@@ -5,6 +5,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.ReferenceCountUtil;
 import io.openmessaging.net.EncodeAndDecode;
 import io.openmessaging.net.NettyServer;
 import io.openmessaging.producer.BrokerInfo;
@@ -67,6 +68,7 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
             byteBuf.readBytes(d);
             byteBuf.resetReaderIndex();
 
+            System.out.println(new String(d));
             channelHandlerContext.writeAndFlush(byteBuf);
 
 
@@ -103,6 +105,8 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
 
         SendQueues.routeByteBuffer = byteBuffer;
 */
+
+        ReferenceCountUtil.release(data);
 
     }
 

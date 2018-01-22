@@ -4,6 +4,7 @@ package io.openmessaging.client.handler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.ReferenceCountUtil;
 import io.openmessaging.client.net.SendResult;
 import io.openmessaging.client.producer.BrokerInfo;
 import io.openmessaging.client.table.ConnectionCacheTable;
@@ -67,7 +68,7 @@ public class NettyClientHandler extends ChannelHandlerAdapter {
         if (countDownLatch != null) {
             countDownLatch.countDown();
         }
-
+        ReferenceCountUtil.release(byteBuf);
 
 
 

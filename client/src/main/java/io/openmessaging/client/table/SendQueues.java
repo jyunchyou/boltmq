@@ -2,6 +2,7 @@ package io.openmessaging.client.table;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
+import io.netty.util.ReferenceCountUtil;
 import io.openmessaging.client.constant.ConstantClient;
 import io.openmessaging.client.net.EncodeAndDecode;
 import io.openmessaging.client.net.NettyClient;
@@ -62,10 +63,12 @@ public class SendQueues {
 //            System.out.println("aaaa"+new String(routeByteBuffer.array()));
 
 
-           messageQueues = encodeAndDecode.decodeNameServerRoute(routeByteBuf,messageQueues);
+            messageQueues = encodeAndDecode.decodeNameServerRoute(routeByteBuf,messageQueues);
 
 
-        }
+
+
+          }
 
 
         return messageQueues;

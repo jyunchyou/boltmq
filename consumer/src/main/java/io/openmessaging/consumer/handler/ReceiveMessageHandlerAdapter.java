@@ -3,6 +3,7 @@ package io.openmessaging.consumer.handler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.ReferenceCountUtil;
 import io.openmessaging.consumer.filter.FilterList;
 import io.openmessaging.consumer.listener.ListenerMessage;
 import io.openmessaging.consumer.net.EncodeAndDecode;
@@ -89,5 +90,6 @@ public class ReceiveMessageHandlerAdapter extends ChannelHandlerAdapter {
             }
 
         }
+        ReferenceCountUtil.release(byteBuf);
     }
 }

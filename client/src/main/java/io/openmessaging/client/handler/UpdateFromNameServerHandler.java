@@ -4,6 +4,7 @@ package io.openmessaging.client.handler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.ReferenceCountUtil;
 import io.openmessaging.client.table.SendQueues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +64,8 @@ public class UpdateFromNameServerHandler extends ChannelHandlerAdapter {
         byteBuf.markReaderIndex();
         byte[] r = new byte[byteBuf.readableBytes()];
         byteBuf.readBytes(r);
+
+        System.out.println(new String(r));
         byteBuf.resetReaderIndex();
 
 
@@ -73,6 +76,7 @@ public class UpdateFromNameServerHandler extends ChannelHandlerAdapter {
 
 
         countDownLatch.countDown();
+
     }
 
 

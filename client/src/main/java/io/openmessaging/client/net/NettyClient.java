@@ -17,6 +17,7 @@ import io.openmessaging.client.handler.UpdateFromNameServerHandler;
 import io.openmessaging.client.producer.BrokerInfo;
 import io.openmessaging.client.producer.FactoryProducer;
 import io.openmessaging.client.producer.NameServerInfo;
+import io.openmessaging.client.table.SendQueue;
 import io.openmessaging.client.table.SendQueues;
 import io.openmessaging.client.table.ConnectionCacheNameServerTable;
 import io.openmessaging.client.table.ConnectionCacheTable;

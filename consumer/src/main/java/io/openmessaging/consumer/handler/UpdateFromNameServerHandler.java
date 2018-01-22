@@ -4,6 +4,7 @@ package io.openmessaging.consumer.handler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.ReferenceCountUtil;
 import io.openmessaging.consumer.net.EncodeAndDecode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,8 @@ public class UpdateFromNameServerHandler extends ChannelHandlerAdapter {
         encodeAndDecode.decodeReceiveTable(byteBuf);
 
         countDownLatch.countDown();
+
+        ReferenceCountUtil.release(byteBuf);
     }
 
 

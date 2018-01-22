@@ -5,6 +5,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.ReferenceCountUtil;
 import io.openmessaging.net.EncodeAndDecode;
 import io.openmessaging.processor.ProcessorOut;
 import io.openmessaging.table.AbstractMessage;
@@ -68,8 +69,9 @@ public class PullHandlerAdapter extends ChannelHandlerAdapter {
               }
 
 
-
+        ReferenceCountUtil.release(byteBuf);
 
 
     }
+
 }

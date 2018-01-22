@@ -16,9 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class EncodeAndDecode {
 
-    private TopicBrokerTable topicBrokerTable = new TopicBrokerTable();
-
-    private BrokerInfoTable brokerInfoTable = new BrokerInfoTable();
 
     private BrokerRestart brokerRestart = new BrokerRestart();
 
@@ -56,6 +53,7 @@ public class EncodeAndDecode {
         int brokerSize = map.size();
 
 
+        System.out.println("brokerSize:"+brokerSize);
 
         byte brokerSizeByte = (byte) brokerSize;
         heapBuffer.writeByte(brokerSizeByte);
@@ -75,6 +73,7 @@ public class EncodeAndDecode {
 
             ArrayList<String> arrayList = (ArrayList) e.getValue();
 
+            System.out.println("topicSize:"+arrayList.size());
 
 
             int topicSize = arrayList.size();
@@ -180,10 +179,10 @@ public class EncodeAndDecode {
         ByteBuf heapBuffer = Unpooled.buffer(ConstantNameServer.ROUTE_TABLE_BUFFER_SIZE);
 
 
-        if (!topicBrokerTable.concurrentHashMap.containsKey(topic)) {
+        if (!TopicBrokerTable.concurrentHashMap.containsKey(topic)) {
             return null;
         }
-        List<Map<BrokerInfo, List<String>>> list = topicBrokerTable.concurrentHashMap.get(topic);
+        List<Map<BrokerInfo, List<String>>> list = TopicBrokerTable.concurrentHashMap.get(topic);
 
         if (list.size() == 0) {
 
@@ -455,11 +454,14 @@ public class EncodeAndDecode {
             if (arrayList == null) {
                 arrayList = new ArrayList();
             }
-            arrayList.add(topic);
 
+            if (!arrayList.contains(topic)) {
+                arrayList.add(topic);
+
+            }
             //set TopicBrokerTable
 
-            list = topicBrokerTable.concurrentHashMap.get(topic);
+            list = TopicBrokerTable.concurrentHashMap.get(topic);
             Map map = new HashMap<BrokerInfo, List<String>>(1);
 
             List topics = new ArrayList();
@@ -469,12 +471,12 @@ public class EncodeAndDecode {
 
             if (list == null) {
                 list = new ArrayList<Map<BrokerInfo, List<String>>>();
-                topicBrokerTable.concurrentHashMap.put(topic, list);
+                TopicBrokerTable.concurrentHashMap.put(topic, list);
 
             }else {
 
 
-                topicBrokerTable.concurrentHashMap.put(topic,list);
+                TopicBrokerTable.concurrentHashMap.put(topic,list);
 
 
 

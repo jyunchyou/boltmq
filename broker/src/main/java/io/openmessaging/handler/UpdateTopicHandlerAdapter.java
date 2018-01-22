@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.ReferenceCountUtil;
 import io.openmessaging.table.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,7 @@ public class UpdateTopicHandlerAdapter extends ChannelHandlerAdapter {
         back.writeBytes("0".getBytes());
         channelHandlerContext.writeAndFlush(back);
 
-
+        ReferenceCountUtil.release(byteBuf);
 
 
 

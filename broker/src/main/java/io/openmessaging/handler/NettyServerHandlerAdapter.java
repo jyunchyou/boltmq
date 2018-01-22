@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.ReferenceCountUtil;
 import io.openmessaging.net.EncodeAndDecode;
 import io.openmessaging.processor.ProcessorIn;
 import org.slf4j.Logger;
@@ -98,7 +99,7 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
                     }
 
 
-
+        ReferenceCountUtil.release(data);
 
 
     }

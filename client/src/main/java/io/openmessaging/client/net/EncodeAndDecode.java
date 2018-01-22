@@ -304,6 +304,7 @@ public class EncodeAndDecode {
                 byteBuf.readBytes(portByte);
                 String port = new String(portByte);
 
+                System.out.println(port);
                 byte listSizeByte = byteBuf.readByte();
                 int listSize = listSizeByte;
 

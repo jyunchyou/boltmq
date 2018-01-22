@@ -1,7 +1,9 @@
 package io.openmessaging.handler;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.ReferenceCountUtil;
 import io.openmessaging.producer.BrokerInfo;
 import io.openmessaging.table.BrokerConnectionCacheTable;
 import io.openmessaging.table.BrokerInfoTable;
@@ -36,6 +38,9 @@ public class UpdateTopicHandlerAdapter extends ChannelHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg) {
+
+        ByteBuf byteBuf = (ByteBuf) msg;
+        ReferenceCountUtil.release(byteBuf);
 
 
 

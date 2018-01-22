@@ -3,6 +3,7 @@ package io.openmessaging.handler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.ReferenceCountUtil;
 import io.openmessaging.net.EncodeAndDecode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,7 @@ public class RestartHandlerAdapter extends ChannelHandlerAdapter {
         //TODO 解析为Index
 
         //encodeAndDecode.decodeRestart(byteBuf);
-
+        ReferenceCountUtil.release(byteBuf);
 
 
     }
