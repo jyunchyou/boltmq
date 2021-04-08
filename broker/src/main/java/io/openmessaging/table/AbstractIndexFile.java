@@ -3,10 +3,7 @@ package io.openmessaging.table;
 import io.openmessaging.Constant.ConstantBroker;
 import io.openmessaging.net.EncodeAndDecode;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
@@ -25,14 +22,14 @@ public class AbstractIndexFile {
 
     private FileChannel channel = null;
 
-    public AbstractIndexFile(String queueId,String path,int fileSize){
-        init(queueId,path,fileSize);
+    public AbstractIndexFile(String topic,String fileName,long fileSize){
+        init(topic,fileName,fileSize);
     }
 
-    public void init(String queueId,String fileName,int fileSize){
+    public void init(String topic,String fileName,long fileSize){
 
 
-        file = new File(ConstantBroker.ROOT_INDEX_PATH+queueId+"/"+fileName);
+        file = new File(ConstantBroker.ROOT_INDEX_PATH+topic+"\\"+fileName);
         try {
 
             if (!file.exists()) {
@@ -70,8 +67,60 @@ public class AbstractIndexFile {
 
 
     }
+
+    public void putIndex(long l1,int l2,long l3){
+
+        mappedByteBuffer.putLong(l1);
+        mappedByteBuffer.putInt(l2);
+        mappedByteBuffer.putLong(l3);
+        mappedByteBuffer.put(ConstantBroker.loadFlag);
+        mappedByteBuffer.force();
+
+
+    }
+
+    public void position(int position){
+        mappedByteBuffer.position(position);
+    }
+
+
     public void flip(){
         mappedByteBuffer.flip();
     }
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+
+   /*     RandomAccessFile randomAccessFile = new RandomAccessFile(new File("D:\\cjnf\\test.txt"),"rw");
+        FileChannel fileChannel = randomAccessFile.getChannel();
+        MappedByteBuffer mappedByteBuffer = fileChannel.map(FileChannel.MapMode.READ_WRITE,0,1073741824);
+
+
+
+
+
+
+
+        System.out.println(mappedByteBuffer.remaining());
+        System.out.println(mappedByteBuffer.hasRemaining());
+        mappedByteBuffer.put("777".getBytes(),0,2);
+
+        System.out.println(mappedByteBuffer.remaining());
+
+        mappedByteBuffer.put("888".getBytes(),3,6);
+        byte[] b = new byte[200];
+
+        mappedByteBuffer.position(0);
+        mappedByteBuffer.get(b);
+        System.out.println(new String(b));
+
+
+
+        //mappedByteBuffer.put("&&&".getBytes());
+
+        mappedByteBuffer.force();
+
+
+        Thread.sleep(60000);*/
+        }
 
 }

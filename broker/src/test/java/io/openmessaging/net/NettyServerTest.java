@@ -12,12 +12,12 @@ public class NettyServerTest{
     Logger logger = LoggerFactory.getLogger(NettyServerTest.class);
     private NettyServer nettyServer = null;
 
-    @Before
+   /* @Before
     public void init(){
          nettyServer = new NettyServer();
 
     }
-
+*/
 
     @Test
     public  void testConn() throws InterruptedException {

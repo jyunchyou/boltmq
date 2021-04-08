@@ -2,9 +2,7 @@ package io.openmessaging.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandlerAdapter;
-import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.*;
 import io.netty.util.ReferenceCountUtil;
 import io.openmessaging.net.EncodeAndDecode;
 import io.openmessaging.processor.ProcessorOut;
@@ -12,12 +10,14 @@ import io.openmessaging.table.AbstractMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.Future;
 
 /**
  * Created by fbhw on 17-12-9.
  */
-public class PullHandlerAdapter extends ChannelHandlerAdapter {
+public class PullHandlerAdapter extends ChannelInboundHandlerAdapter {
 
     Logger logger = LoggerFactory.getLogger(PullHandlerAdapter.class);
 
@@ -25,53 +25,32 @@ public class PullHandlerAdapter extends ChannelHandlerAdapter {
 
     private ProcessorOut processorOut = new ProcessorOut();
 
+    public ConcurrentSkipListMap ackMap = new ConcurrentSkipListMap();
+
+    private ByteBuf lastByteBuf = null;
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-
         logger.info("method channelActive has executed");
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg) {
-
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf byteBuf = (ByteBuf) msg;
 
 
+        //encodeAndDecode.deCode(byteBuf,ctx.channel());
 
-        Map map = encodeAndDecode.decodePull(byteBuf);
+        if (lastByteBuf != null) {
 
-        if (map == null) {
 
-            channelHandlerContext.writeAndFlush(Unpooled.buffer(0));
-            return;
 
+
+            lastByteBuf.writeBytes(byteBuf);
+            byteBuf = lastByteBuf;
         }
-        String topic = (String) map.get("topic");
-        int pullNum = (int) map.get("pullNum");
-        long uniqId = (long) map.get("uniqId");
-
-        AbstractMessage abstractMessage = processorOut.out(topic,pullNum,uniqId);
 
 
-        byte[] messageByte = abstractMessage.getMessageByte();
-
-
-
-
-        ByteBuf messageByteBuf = Unpooled.buffer(messageByte.length);
-        messageByteBuf.writeBytes(messageByte);
-        ChannelFuture channelFuture = channelHandlerContext.writeAndFlush(messageByteBuf);
-
-
-        if (!channelFuture.isSuccess()){
-            System.out.println("back 失败");
-
-              }
-
-
-        ReferenceCountUtil.release(byteBuf);
-
-
+        lastByteBuf = EncodeAndDecode.decodeConsumeBackge(byteBuf,processorOut,ctx,ackMap);
     }
-
 }

@@ -1,18 +1,10 @@
 package io.openmessaging.client.net;
 
 import io.netty.buffer.ByteBuf;
-import io.openmessaging.client.constant.ConstantClient;
-import io.openmessaging.client.exception.OutOfBodyLengthException;
-import io.openmessaging.client.producer.Message;
-import io.openmessaging.client.producer.Properties;
-import org.junit.Assert;
+import io.openmessaging.client.producer.BProperties;
 import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.nio.ByteBuffer;
 
 /**
  * Created by fbhw on 17-12-1.
@@ -30,25 +22,23 @@ public class EncodeAndDecodeTest {
         encodeAndDecode = new EncodeAndDecode();
     }
 
-    @Test
+    //@Test
     public void testDecode(){
-        Message message = new Message("TOPIC_01","consumer","消费成功!".getBytes());
+        io.openmessaging.client.producer.Message message = new io.openmessaging.client.producer.Message("TOPIC_01","consumer","消费成功!".getBytes());
 
-        Properties properties = new Properties();
+        BProperties BProperties = new BProperties();
 
-        properties.putProperties("属性key1","属性value1");
-        properties.putProperties("属性key2","属性value2");
-        properties.putProperties("属性key3","属性value3");
+        BProperties.putProperties("属性key1","属性value1");
+        BProperties.putProperties("属性key2","属性value2");
+        BProperties.putProperties("属性key3","属性value3");
 
-        RequestDto requestDto = new RequestDto();
+        BaseMessage requestDto = new BaseMessage();
 
-        requestDto.setId("1");
-        requestDto.setCode(0);
-        requestDto.setDelayTime(10000);
+          requestDto.setDelayTime((byte) 10000);
 
         ByteBuf byteBuf = null;
         try {
-            byteBuf = encodeAndDecode.encodeMessage(message,properties,requestDto);
+            byteBuf = encodeAndDecode.encodeMessage(message, BProperties,requestDto);
 
         } catch (Exception e) {
             e.printStackTrace();

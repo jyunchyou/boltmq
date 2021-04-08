@@ -3,7 +3,6 @@ package io.openmessaging.client.producer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.openmessaging.client.common.SendCallBack;
-import io.openmessaging.client.constant.ConstantClient;
 import io.openmessaging.client.exception.OutOfBodyLengthException;
 import io.openmessaging.client.exception.OutOfByteBufferException;
 import io.openmessaging.client.net.*;
@@ -22,31 +21,29 @@ public class KernelProducer {
 
    EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
 
-    NettyClient nettyClient = NettyClient.getNettyClient();
+    //NettyClient nettyClient = NettyClient.getNettyClient();
 
     Map<BrokerInfo,Channel> map = ConnectionCacheTable.getConnectionCacheTable();
 
     private CountDownLatch countDownLatch = new CountDownLatch(1);
+/*
 
-    public void send(Message message, int delayTime, SendQueue sendQueue, Properties properties, SendCallBack sendCallBack,boolean oneWay) throws OutOfBodyLengthException, OutOfByteBufferException {
+    public void send(Message message, int delayTime, SendQueue sendQueue, BProperties BProperties, SendCallBack sendCallBack, boolean oneWay) throws OutOfBodyLengthException, OutOfByteBufferException {
+
 
 
         BrokerInfo brokerInfo = sendQueue.getBrokerInfo();
         Channel channel = null;
 
         //构建Dto
-        RequestDto requestDto = new RequestDto();
-        requestDto.setId(sendQueue.getQueueId());//TODO 消息序号
-        requestDto.setLanguage(ConstantClient.JAVA);
-        requestDto.setSerialModel(ConstantClient.JSON);
-        requestDto.setVersion(ConstantClient.VERSION);
-        requestDto.setDelayTime(delayTime);
-        requestDto.setQueueId(sendQueue.getQueueId());
+        BaseMessage requestDto = new BaseMessage();
 
 
+
+        
 
         ByteBuf byteBuf = null;
-        byteBuf = encodeAndDecode.encodeMessage(message,properties,requestDto);
+        byteBuf = encodeAndDecode.encodeMessage(message, BProperties,requestDto);
 
 
 
@@ -81,4 +78,7 @@ public class KernelProducer {
         nettyClient.start(sendQueues);
 
     }
+*/
+
+
 }

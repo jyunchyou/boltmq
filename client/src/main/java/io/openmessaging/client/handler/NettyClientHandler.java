@@ -2,10 +2,15 @@ package io.openmessaging.client.handler;
 
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.util.ReferenceCountUtil;
+import io.openmessaging.client.net.EncodeAndDecode;
 import io.openmessaging.client.net.SendResult;
+import io.openmessaging.client.producer.AbstractProducer;
 import io.openmessaging.client.producer.BrokerInfo;
 import io.openmessaging.client.table.ConnectionCacheTable;
 import io.openmessaging.client.table.SendQueue;
@@ -20,7 +25,7 @@ import java.util.concurrent.CountDownLatch;
 /**
  * Created by fbhw on 17-11-25.
  */
-public class NettyClientHandler extends ChannelHandlerAdapter {
+public class NettyClientHandler extends ChannelInboundHandlerAdapter {
 
     Logger logger = LoggerFactory.getLogger(NettyClientHandler.class);
 
@@ -30,67 +35,43 @@ public class NettyClientHandler extends ChannelHandlerAdapter {
 
     private BrokerInfo brokerInfo = null;
 
-    public NettyClientHandler(SendResult sendResult, CountDownLatch countDownLatch,BrokerInfo brokerInfo){
+    public SocketChannel socketChannel = null;
 
-        this.sendResult = sendResult;
-        this.countDownLatch = countDownLatch;
-        this.brokerInfo = brokerInfo;
-    }
+    private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
 
-    @Override
-    public void channelActive(ChannelHandlerContext channelHandlerContext){
+    public NettyClientHandler(SocketChannel socketChannel,AbstractProducer abstractProducer){
 
-
+        this.abstractProducer = abstractProducer;
+        this.socketChannel = socketChannel;
 
     }
 
-    @Override
-    public void channelRead(ChannelHandlerContext channelHandlerContext,Object msg) {
+    private ByteBuf lastByteBuf = null;
 
-        ByteBuf byteBuf  = (ByteBuf) msg;
+    private AbstractProducer abstractProducer = null;
 
-        byte[] resultBytes = new byte[byteBuf.readableBytes()];
-        byteBuf.readBytes(resultBytes);
-
-        String resultString = new String(resultBytes);
+    private Channel channel = null;
 
 
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+
+        logger.info("method channelActive has executed2");
+    }
+
+    public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg) throws Exception {
+        ByteBuf byteBuf = (ByteBuf) msg;
 
 
+        if (lastByteBuf != null) {
 
-        if ("1".equals(resultString)) {
-
-        }else{
-
-             }
-
-        //同步发送释放
-        if (countDownLatch != null) {
-            countDownLatch.countDown();
+            lastByteBuf.writeBytes(byteBuf);
+            byteBuf = lastByteBuf;
         }
-        ReferenceCountUtil.release(byteBuf);
 
 
+        lastByteBuf = encodeAndDecode.deCode(byteBuf,abstractProducer,socketChannel);
 
-}
-
-//channel连接超时,在连接表中移除,锁释放
-        @Override
-        public void userEventTriggered(ChannelHandlerContext ctx,Object object){
-
-            Map map = ConnectionCacheTable.getConnectionCacheTable();
-
-            map.remove(brokerInfo);
-            for (SendQueue sendQueue : SendQueues.messageQueues){
-
-                if (sendQueue.getBrokerInfo().equals(brokerInfo)) {
-                    SendQueues.messageQueues.remove(sendQueue);
-
-                }
-
-            }
-                countDownLatch.countDown();
-        }
+    }
 
 
 }

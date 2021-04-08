@@ -20,9 +20,9 @@ public class NettyClientTest {
 
     private Logger logger = LoggerFactory.getLogger(NettyClientTest.class);
 
-    @Before
+    //@Before
     public void init(){
-        nettyClient = NettyClient.getNettyClient();
+        //nettyClient = NettyClient.getNettyClient();
 
         nameServerInfo = new NameServerInfo();
 

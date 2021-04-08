@@ -1,5 +1,6 @@
 package io.openmessaging.net;
 
+import com.alibaba.nacos.api.naming.pojo.Instance;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
@@ -10,16 +11,14 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.openmessaging.Constant.ConstantBroker;
 import io.openmessaging.broker.BrokerInfo;
-import io.openmessaging.handler.NettyServerHandlerAdapter;
-import io.openmessaging.handler.PullHandlerAdapter;
-import io.openmessaging.handler.RestartHandlerAdapter;
-import io.openmessaging.handler.UpdateTopicHandlerAdapter;
+import io.openmessaging.handler.*;
 import io.openmessaging.broker.NameServerInfo;
 import io.openmessaging.table.ConnectionCacheNameServerTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -27,6 +26,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * Created by fbhw on 17-12-3.
  */
 public class NettyServer {
+    private NettyServer(){
+    }
+    public static NettyServer nettyServer = new NettyServer();
 
     Logger logger = LoggerFactory.getLogger("NettyServer");
 
@@ -40,6 +42,38 @@ public class NettyServer {
 
     private EncodeAndDecode encodeAndDecode = new EncodeAndDecode(lock);
 
+    public static ConcurrentHashMap ConsumeIndexMap = new ConcurrentHashMap();
+
+    public Channel bindChannel(Instance instance){
+
+        Bootstrap bootstrap = new Bootstrap();
+        bootstrap.group(work);
+
+        bootstrap.channel(NioSocketChannel.class);
+        bootstrap.option(ChannelOption.SO_KEEPALIVE,true);
+        bootstrap.handler(new ChannelInitializer<SocketChannel>() {
+            @Override
+            protected void initChannel(SocketChannel socketChannel) throws Exception {
+                socketChannel.pipeline().addLast(new RestartHandlerAdapter());
+            }
+        });
+        ChannelFuture channelFuture = null;
+
+        try {
+            channelFuture = bootstrap.connect(instance.getIp(),instance.getPort()).sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            work.shutdownGracefully();
+        }
+        if (channelFuture.isSuccess()) {
+
+
+        }
+        return  channelFuture.channel();
+
+
+
+    }
 
 
     public void bind(int port){
@@ -98,6 +132,37 @@ public class NettyServer {
         if (channelFuture.isSuccess()) {
             logger.info("bind consumer port success");
         }
+
+    }
+
+
+    public void bindUpdateConsumeIndexPort(int port){//用于集群消费时的消费确认，下标保存在broker上
+
+        ServerBootstrap bootstrap = new ServerBootstrap();
+        bootstrap.group(boss,work);
+
+        bootstrap.channel(NioServerSocketChannel.class);
+        bootstrap.option(ChannelOption.TCP_NODELAY,true);
+        bootstrap.childOption(ChannelOption.SO_KEEPALIVE,true);
+        bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
+            @Override
+            protected void initChannel(SocketChannel socketChannel) throws Exception {
+                socketChannel.pipeline().addLast(new UpdateConsumeIndexHandler());
+            }
+        });
+        ChannelFuture channelFuture = null;
+
+        try {
+            channelFuture = bootstrap.bind(port).sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            work.shutdownGracefully();
+            boss.shutdownGracefully();
+        }
+        if (channelFuture.isSuccess()) {
+            logger.info("bind update consume index port success");
+        }
+
 
     }
 
@@ -196,5 +261,11 @@ public class NettyServer {
     }
 
 
+    public ConcurrentHashMap getConsumeIndexMap() {
+        return ConsumeIndexMap;
+    }
 
+    public void setConsumeIndexMap(ConcurrentHashMap consumeIndexMap) {
+        ConsumeIndexMap = consumeIndexMap;
+    }
 }

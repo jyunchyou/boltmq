@@ -2,18 +2,30 @@ package io.openmessaging.net;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
 import io.openmessaging.Constant.ConstantBroker;
 import io.openmessaging.broker.BrokerInfo;
+import io.openmessaging.processor.ProcessorIn;
+import io.openmessaging.processor.ProcessorOut;
 import io.openmessaging.table.*;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.Lock;
 
 /**
  * Created by fbhw on 17-12-5.
  */
 public class EncodeAndDecode {
+
 
     private boolean discard = false;
 
@@ -27,6 +39,8 @@ public class EncodeAndDecode {
 
     private Lock lock = null;
 
+    public static final byte[] magicByte = {0x16,0x52,0xB,0x23};
+
     public EncodeAndDecode(Lock lock){
 
         this.lock = lock;
@@ -36,6 +50,295 @@ public class EncodeAndDecode {
 
     }
 
+
+
+    /*
+    private final int constantLen = 27;
+
+    private int totalSize;//消息总长 4字节!
+
+    private boolean isDelay;//是否延时!
+
+    private boolean isSeq;//是否顺序!
+
+    private boolean isCallBack;//是否返回!
+
+    private boolean isOneWay;//是否单向！
+
+    private boolean isSyn;//是否同步！ 判断位共一字节
+
+    private long sendTimeStamp;//消息发送时的事件戳 8字节
+
+    private long conserveTime;//消息保存时间,单位ms 8字节
+
+    private byte delayTime;//延时时间,支持1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h，不等向短靠近 1字节
+
+    private String delayTimeUnit;//延时消息单位,s,m,h 1字节
+
+    //消息体=============================================
+    private int batchNum = 1;
+
+    private byte topicLength;//topic长度 1字节！
+
+    private String topic;！
+
+    private int valueLength;//value长度 4字节！
+
+    private String value;！
+
+*/
+
+
+
+    public static Object decodeConsumeBackge2(ByteBuf byteBuf,ProcessorOut processorOut,ChannelHandlerContext cxt,Map ackMap) throws IOException, ExecutionException, InterruptedException {
+
+        byte[] b = new byte[byteBuf.readableBytes()];
+        int i = byteBuf.readerIndex();
+        byteBuf.readBytes(b);
+
+        byteBuf.readerIndex(i);
+        int savedReaderIndex = byteBuf.readerIndex();
+        int readable = byteBuf.readableBytes();
+
+        if (readable < 4) {
+            return DecodeResult.NEED_MORE_INPUT;
+        }
+
+        int topicLen = byteBuf.readInt();
+
+        if (byteBuf.readableBytes() < topicLen + 22) {
+            byteBuf.readerIndex(savedReaderIndex);
+            return DecodeResult.NEED_MORE_INPUT;
+        }
+        byte[] topicB = new byte[topicLen];
+        byteBuf.readBytes(topicB);
+        String topic = new String(topicB);
+
+        boolean isAck = byteBuf.readBoolean();
+        long messageId = byteBuf.readLong();
+
+        if (isAck) {
+            //将ackMap置为已执行
+            ackMap.remove(messageId,1);
+            byteBuf.skipBytes(13);
+            return null;
+        }
+        boolean consumeModel = byteBuf.readBoolean();
+        long offset = 0;
+
+        if (consumeModel) {
+            //集群消費
+            offset = loadConsumeOffset(topic);
+            byteBuf.skipBytes(8);
+
+        }else {
+            offset = byteBuf.readLong();
+
+
+        }
+        int messageNum = byteBuf.readInt();
+        processorOut.outIndexShardingPage(topic,offset,messageNum,cxt,consumeModel,ackMap);
+        return null;
+    }
+
+    public static long loadConsumeOffset(String topic) throws IOException {//获取消费下标，在集群消费模式时调用
+        MappedByteBuffer mappedByteBuffer = (MappedByteBuffer) NettyServer.ConsumeIndexMap.get(topic);
+        if (mappedByteBuffer == null) {
+            File file = new File(ConstantBroker.CONSUME_INDEX_FILE_ADDRESS);
+            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
+            FileChannel channel = randomAccessFile.getChannel();
+            mappedByteBuffer = channel.map(FileChannel.MapMode.READ_WRITE, 0, 8);
+            NettyServer.ConsumeIndexMap.put(topic,mappedByteBuffer);
+            mappedByteBuffer.putLong(1L);
+        }
+        mappedByteBuffer.position(0);
+
+        long offset = mappedByteBuffer.getLong();
+
+        mappedByteBuffer.position(0);
+
+        mappedByteBuffer.putLong(offset + 1);
+
+        return offset;
+    }
+
+        public static ByteBuf decodeConsumeBackge(ByteBuf byteBuf, ProcessorOut processorOut, ChannelHandlerContext cxt,Map ackMap) throws IOException, ExecutionException, InterruptedException {
+
+
+            try {
+                do {
+                    //int savedReaderIndex = byteBuf.readerIndex();
+                    Object msg = null;
+                    try {
+                        msg = decodeConsumeBackge2(byteBuf,processorOut,cxt,ackMap);
+                    } catch (Exception e) {
+                        throw e;
+                    }
+                    if (msg == DecodeResult.NEED_MORE_INPUT) {
+                      //  byteBuf.readerIndex(savedReaderIndex);
+                        break;
+                    }
+
+                } while (byteBuf.isReadable());
+            } finally {
+                if (byteBuf.isReadable()) {
+                    byteBuf.discardReadBytes();//将readIndex和writeIndex之间数据拷贝到index0处，index置于数据长度位置
+
+                    return byteBuf;
+                }
+
+            }
+
+            return null;
+    }
+
+    enum DecodeResult {
+        NEED_MORE_INPUT, DISCARD
+    }
+
+    public static boolean compereByteArray(byte[] b1, byte[] b2) {
+
+//1：
+        if(b1.length == 0 || b2.length == 0 ){
+            return false;
+        }
+
+//2：
+        if (b1.length != b2.length) {
+            return false;
+        }
+
+//3：
+        boolean isEqual = true;
+
+        for (int i = 0; i < b1.length && i < b2.length; i++) {
+            if (b1[i] != b2[i]) {
+                isEqual = false;
+                break;
+            }
+        }
+        return isEqual;
+    }
+
+    public Object decode2(ByteBuf byteBuf, Channel channel, ProcessorIn processorIn){
+
+        int savedReaderIndex = byteBuf.readerIndex();
+        int readable = byteBuf.readableBytes();
+
+        if (readable < 4) {//记录总长数的字节数
+            byteBuf.readerIndex(savedReaderIndex);
+            return DecodeResult.NEED_MORE_INPUT;
+        }
+        int test = byteBuf.readerIndex();
+        int totalLen = byteBuf.readInt();
+
+        readable = byteBuf.readableBytes();
+
+/*
+        if (totalLen == 0) {
+            byteBuf.readerIndex(test);
+            byte[] b = new byte[byteBuf.readableBytes()];
+            byteBuf.readBytes(b);
+             }
+*/
+        if (readable < totalLen) {
+
+            byteBuf.readerIndex(savedReaderIndex);
+            return DecodeResult.NEED_MORE_INPUT;
+        }
+
+        int testM = byteBuf.readerIndex();
+
+        int messageIndex = byteBuf.readerIndex() - 4;
+
+        byteBuf.readerIndex(messageIndex);
+
+        byte[] messageAllByte = new byte[totalLen + 4];
+
+        byteBuf.readBytes(messageAllByte);
+
+        byteBuf.readerIndex(messageIndex + 4);
+
+        //消息类型
+        byte type = byteBuf.readByte();
+
+
+        int i = type;
+
+        byte i1 = (byte) (type>>4);
+        byte i2 = (byte) (type>>3);
+        byte i3 = (byte) (type>>2);
+        byte i4 = (byte) (type>>1);
+        boolean isDelay = (i1&1)==1?true:false;//是否延时
+
+        boolean isSeq = (i2&1)==1?true:false;//是否顺序!
+
+        boolean isCallBack = (i3&1)==1?true:false;//是否返回!
+
+        boolean isOneWay = (i4&1)==1?true:false;//是否单向！
+
+        boolean isSyn = (type&1)==1?true:false;//是否同步！ 判断位共一字节
+
+
+        byteBuf.skipBytes(18);//跳过一定字节数读取topic
+
+
+        byte topicLenByte = byteBuf.readByte();
+
+        int topicLen = topicLenByte;
+        byte[] topicByte = new byte[topicLen];
+        byteBuf.readBytes(topicByte);
+
+        int testMark = byteBuf.readerIndex();
+        String topic = new String(topicByte);
+
+
+        byteBuf.skipBytes(totalLen - 20 - topicLen - 8);
+
+        long confirmIndex = byteBuf.readLong();
+
+        ByteBuf confirmBuf = Unpooled.buffer(8);
+
+        confirmBuf.writeLong(confirmIndex);
+        channel.writeAndFlush(confirmBuf);
+        processorIn.inputMessage(messageAllByte,topic);
+
+        return null;
+
+    }
+
+    public ByteBuf deCode(ByteBuf byteBuf,Channel channel,ProcessorIn processorIn){
+
+
+
+       /* byte[] by = new byte[byteBuf.readableBytes()];
+        byteBuf.readBytes(by);
+        */ try {
+            do {
+                //int savedReaderIndex = byteBuf.readerIndex();
+                Object msg = null;
+                try {
+                    msg = decode2(byteBuf,channel,processorIn);
+                } catch (Exception e) {
+                    throw e;
+                }
+                if (msg == DecodeResult.NEED_MORE_INPUT) {
+                 //   byteBuf.readerIndex(savedReaderIndex);
+                    break;
+                }
+
+            } while (byteBuf.isReadable());
+        } finally {
+            if (byteBuf.isReadable()) {
+                byteBuf.discardReadBytes();//将readIndex和writeIndex之间数据拷贝到index0处，index置于数据长度位置
+
+                return byteBuf;
+            }
+        }
+
+
+        return null;
+    }
 
     //包括粘包处理
         public List decode(ByteBuf byteBuf){
@@ -578,7 +881,7 @@ public class EncodeAndDecode {
         byte[] offsetByte = longToBytes(offset);
         byte[] lenByte = longToBytes(len);
         byte[] sendTimeByte = longToBytes(sendTime);
-         byte[] indexByte = new byte[3 * 8];
+        byte[] indexByte = new byte[ConstantBroker.INDEX_SIZE];
 
 
         int indexNum = 0;
@@ -606,7 +909,7 @@ public class EncodeAndDecode {
 
         ByteBuffer b = ByteBuffer.allocate(8);
 
-        //TODO 更换更快的转化方式
+
     public static byte[] longToBytes(long x) {
         ByteBuffer buffer = ByteBuffer.allocate(8);
         buffer.putLong(0, x);
@@ -658,6 +961,13 @@ public class EncodeAndDecode {
 
 
 
+
+    }
+
+    public static void main(String[] args){
+        byte b = 1;
+
+        int j = b>>1;
 
     }
 }

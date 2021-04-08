@@ -1,23 +1,18 @@
-import io.netty.buffer.ByteBuf;
 import io.openmessaging.Constant.ConstantBroker;
-import io.openmessaging.net.EncodeAndDecode;
-import io.openmessaging.table.AbstractFile;
+import io.openmessaging.exception.RegisterException;
+import io.openmessaging.net.NettyServer;
+import io.openmessaging.processor.ProcessorIn;
+import io.openmessaging.processor.ProcessorOut;
+import io.openmessaging.start.AbstractStart;
+import io.openmessaging.start.BProperties;
 import io.openmessaging.table.AbstractMessage;
-import io.openmessaging.table.FileQueue;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.*;
-import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.zip.Deflater;
-import java.util.zip.Inflater;
+import java.util.concurrent.ExecutionException;
 
 public class Main {
 
@@ -32,7 +27,7 @@ public class Main {
 
     @Before
     public void s() {
-        init("test", "test", 10000);
+       // init("test", "test", 10000);
     }
 
     public void init(String queueId, String fileName, int fileSize) {
@@ -73,8 +68,48 @@ public class Main {
 
     }
 
-    @Test
-    public void test() {
+
+    public static  void main(String[] args) throws RegisterException, InterruptedException, IOException, ExecutionException {
+        BProperties bProperties = new BProperties();
+        bProperties.setServiceName("broker2");
+        bProperties.setGroup("brokers");
+        bProperties.setServer("127.0.0.1:8848");
+        bProperties.setIp("127.0.0.1");
+        bProperties.setPort(ConstantBroker.PULL_PORT);
+
+
+        AbstractStart.registry(bProperties);
+
+
+        BProperties Properties = new BProperties();
+        Properties.setServiceName("broker1");
+        Properties.setGroup("brokers");
+        Properties.setServer("127.0.0.1:8848");
+        Properties.setIp("127.0.0.1");
+        Properties.setPort(ConstantBroker.SEND_PORT);
+
+
+        //接收consumer发来的请求
+        NettyServer.nettyServer.bindPullPort(ConstantBroker.PULL_PORT);
+
+        NettyServer.nettyServer.bindUpdateConsumeIndexPort(ConstantBroker.CONSUME_CONFIRM_PORT);
+
+
+        NettyServer.nettyServer.bind(ConstantBroker.SEND_PORT);
+
+
+        AbstractStart.registry(Properties);
+
+
+        AbstractStart.loadIndexMap();
+        AbstractStart.loadMassageIndex();
+
+       // ProcessorOut processorOut = new ProcessorOut();
+        //processorOut.outIndexShardingPage("iiiiii",10,1,null,false,null);
+
+
+
+        Thread.sleep(500000);
          /*   byte[] b = "   abc发  射的  发送，反倒是撒发f  asdf a".getBytes();
             mappedByteBuffer.put(b);
             mappedByteBuffer.force();
@@ -98,13 +133,13 @@ public class Main {
         }
 */
 
-        byte[] b = "   abc发  射的  发送，反倒是撒发f  asdf a".getBytes();
+       /* byte[] b = "   abc发  射的  发送，反倒是撒发f  asdf a".getBytes();
 
         FileQueue fileQueue = new FileQueue("TOPIC_01");
         AbstractFile abstractFile = new AbstractFile("TOPIC_01",1+"", (int) ConstantBroker.FILE_SIZE);
         abstractFile.putMessage(b);
 
-        for (int i= 0;i < b.length;i++) {
+        for (int i= 0;i <初始化测试 b.length;i++) {
             System.out.print(b[i]);
         }
         System.out.println();
@@ -117,6 +152,12 @@ public class Main {
             System.out.print(backB[i]);
         }
 
+*/
+
+    }
+
+    @Test
+    public void test() throws RegisterException, InterruptedException {
 
 
     }

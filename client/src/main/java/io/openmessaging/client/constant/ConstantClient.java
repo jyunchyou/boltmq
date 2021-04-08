@@ -5,6 +5,16 @@ package io.openmessaging.client.constant;
  */
 public class ConstantClient {
 
+    public static int CONFIRM_TIME = 30000;
+
+    public static int SEND_CONFIRM_SIZE = 300;
+
+    public static final int CLIENT_PORT = 9089;
+
+    public static final int SCHEDULE_UPDATE_CHANNEL_TIME = 30;
+
+    public static final String brokerServiceName = "broker1";
+
     public static final String VERSION = "0.1";
 
     public static final int SYNC_MODEL = 0;
@@ -39,7 +49,10 @@ public class ConstantClient {
 
     public static final int BODY_OVER_HOW_MUTH_COMRESS = 4094;//body超过多大开始缓存,请务必保证与消费端配置一致
 
+    public static final int ASYN_MAX_NUM = 10000;
 
+    public static final byte loadFlag = '$';//用来系统重启时，重新定位写入位置
 
+    public static final long SEND_OUT_TIME = 300000;
 
 }

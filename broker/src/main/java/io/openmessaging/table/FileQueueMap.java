@@ -4,7 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class FileQueueMap {
 
-    public static ConcurrentHashMap<String,FileQueue> queueMap = new ConcurrentHashMap();
+    public static ConcurrentHashMap<String, MessageFileQueue> queueMap = new ConcurrentHashMap();
 
 
 }

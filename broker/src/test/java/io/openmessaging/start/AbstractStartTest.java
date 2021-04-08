@@ -1,8 +1,7 @@
 package io.openmessaging.start;
 
-import io.openmessaging.broker.NameServerInfo;
+import io.openmessaging.exception.RegisterException;
 import io.openmessaging.net.NettyServerTest;
-import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,19 +12,18 @@ import org.slf4j.LoggerFactory;
 public class AbstractStartTest {
 
     Logger logger = LoggerFactory.getLogger(NettyServerTest.class);
-    private AbstractStart abstractStart = null;
 
 
-    @Before
+    /*@Before
     public void init(){
         abstractStart = new AbstractStart();
 
 
-    }
+    }*/
 
 
     @Test
-    public void testStart(){
+    public void testStart() throws RegisterException {
 
         /*messageInfoQueues = new MessageInfoQueues();*/
 
@@ -54,11 +52,14 @@ public class AbstractStartTest {
 
         System.out.println(MessageInfoQueues.concurrentHashMap.hashCode());
 */
-        NameServerInfo nameServerInfo = new NameServerInfo();
-        nameServerInfo.setIp("127.0.0.1");
-        nameServerInfo.setPort(8088);
+        BProperties BProperties = new BProperties();
+        BProperties.setIp("127.0.0.1");
+        BProperties.setPort(7790);//服务器的
+        BProperties.setGroup("brokers");
+        BProperties.setServer("127.0.0.1:8848");
+        BProperties.setServiceName("broker");
 
-        abstractStart.start(nameServerInfo);
+        AbstractStart.registry(BProperties);
 
         try {
             Thread.sleep(1000000);

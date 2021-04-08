@@ -33,7 +33,7 @@ public class MessageStore {
         if (file == null) {
 
 
-            file = new File(ConstantBroker.ROOT_PATH + queueAddress + "/" + fileAddress);
+            file = new File(ConstantBroker.ROOT_PATH + queueAddress + "\\" + fileAddress);
 
             if (!file.exists()) {
                 File directFile = new File(ConstantBroker.ROOT_PATH + queueAddress);
@@ -77,7 +77,7 @@ public class MessageStore {
 
 
                long newFileName = fileAddress + ConstantBroker.FILE_SIZE;
-               File f = new File(ConstantBroker.ROOT_PATH+queueAddress+"/" + newFileName);
+               File f = new File(ConstantBroker.ROOT_PATH+queueAddress+"\\" + newFileName);
 
 
                    if (!file.exists()) {
@@ -124,7 +124,7 @@ public class MessageStore {
         String fileName = fileNum * ConstantBroker.FILE_SIZE + "";
 
 
-        File file = new File(ConstantBroker.ROOT_PATH+queueId+"/"+fileName);
+        File file = new File(ConstantBroker.ROOT_PATH+queueId+"\\"+fileName);
 
         byte[] messageByte = null;
         RandomAccessFile randomAccessFile = null;

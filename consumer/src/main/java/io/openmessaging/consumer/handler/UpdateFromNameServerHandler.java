@@ -37,6 +37,9 @@ public class UpdateFromNameServerHandler extends ChannelHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg)  {
 
+        logger.info("method channelActive has executed1");
+
+
         ByteBuf byteBuf = (ByteBuf) msg;
 
         encodeAndDecode.decodeReceiveTable(byteBuf);

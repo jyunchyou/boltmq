@@ -1,11 +1,13 @@
 package io.openmessaging.consumer.broker;
 
+import com.alibaba.nacos.api.exception.NacosException;
+import com.alibaba.nacos.api.naming.NamingFactory;
+import com.alibaba.nacos.api.naming.NamingService;
+
 /**
  * Created by fbhw on 17-11-6.
  */
 public class BrokerInfo {
-
-    private String address = null;
 
     private String ip;
 
@@ -14,14 +16,6 @@ public class BrokerInfo {
     private int nameServerPort;
 
     private int consumerPort;
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 
     public String getIp() {
         return ip;
@@ -95,5 +89,17 @@ public class BrokerInfo {
 
     public void setConsumerPort(int consumerPort) {
         this.consumerPort = consumerPort;
+    }
+
+
+    public static void main(String[] args) throws NacosException, InterruptedException {
+
+        NamingService naming = NamingFactory.createNamingService("192.168.3.238:8848");
+        naming.registerInstance("broker2", "11.11.11.11", 8888, "brokers");
+
+        for (;;) {
+            Thread.sleep(5000);
+
+        }
     }
 }

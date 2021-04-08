@@ -1,12 +1,16 @@
 package io.openmessaging.client.net;
 
 
+import com.alibaba.nacos.api.exception.NacosException;
+import com.alibaba.nacos.api.naming.pojo.Instance;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.openmessaging.client.common.SendCallBack;
@@ -14,6 +18,8 @@ import io.openmessaging.client.constant.ConstantClient;
 import io.openmessaging.client.handler.ConnectionHandler;
 import io.openmessaging.client.handler.NettyClientHandler;
 import io.openmessaging.client.handler.UpdateFromNameServerHandler;
+import io.openmessaging.client.handler.UpdateSendIndexHandler;
+import io.openmessaging.client.producer.AbstractProducer;
 import io.openmessaging.client.producer.BrokerInfo;
 import io.openmessaging.client.producer.FactoryProducer;
 import io.openmessaging.client.producer.NameServerInfo;
@@ -24,7 +30,11 @@ import io.openmessaging.client.table.ConnectionCacheTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -33,13 +43,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class NettyClient implements ConnectionHandler {
 
-    private static NettyClient nettyClient = new NettyClient();
+    public static Map<String,Channel> channels = new ConcurrentHashMap<String, Channel>();
 
     private Map<BrokerInfo,Channel> connectionCacheTable = ConnectionCacheTable.getConnectionCacheTable();
 
     private Map<NameServerInfo,Channel> nameServerConnectionCacheTable = ConnectionCacheNameServerTable.getConnectionCacheNameServerTable();
-
-    private SocketChannel socketChannel;
 
     private Channel channel;
 
@@ -53,21 +61,98 @@ public class NettyClient implements ConnectionHandler {
 
     private Bootstrap bootstrap = null;
 
-    private NettyClient(){
+    private EventLoopGroup work = new NioEventLoopGroup();
 
+    private EventLoopGroup boss = new NioEventLoopGroup();
+
+    public NettyClient(){
 
     }
 
-    public static NettyClient getNettyClient() {
+
+
+    /*public static NettyClient getNettyClient() {
         return nettyClient;
     }
-
-    public static void setNettyClient(NettyClient nettyClient) {
+*/
+  /*  public static void setNettyClient(NettyClient nettyClient) {
         NettyClient.nettyClient = nettyClient;
+    }
+*/
+
+    public void send(ByteBuf byteBuf){
+
+
     }
 
 
-    public  Channel bind(BrokerInfo brokerInfo,CountDownLatch countDownLatch){
+
+
+    public  void putChannel(Instance instance, final AbstractProducer abstractProducer){
+        Channel channel = null;
+        if (( channel = channels.get(instance.getInstanceId())) != null) {
+
+            return;
+
+        }
+
+
+        String ip = instance.getIp();
+        int port = instance.getPort();
+
+        if (bootstrap == null) {
+
+            try {
+                bootstrap = new Bootstrap();
+                bootstrap.group(eventLoopGroup);
+                bootstrap.channel(NioSocketChannel.class);
+                bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
+                bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS,ConstantClient.CHANNEL_TIMEOUT);
+
+
+                //bootstrap.remoteAddress(ip,port);
+            }catch (Exception e){
+                eventLoopGroup.shutdownGracefully();
+            }
+        }
+
+        bootstrap.handler(new ChannelInitializer<SocketChannel>() {
+            @Override
+            protected void initChannel(SocketChannel socketChannel) throws Exception {
+
+                socketChannel.pipeline().addLast(new NettyClientHandler(socketChannel,abstractProducer));
+
+                socketChannel.pipeline().addLast(new IdleStateHandler(ConstantClient.CHANNEL_TIMEOUT,0,0, TimeUnit.MILLISECONDS));
+
+            }
+        });
+        ChannelFuture future = null;
+        try {
+            future = bootstrap.connect(ip,port).sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        if (future.isSuccess()) {
+
+            SocketChannel socketChannel = (SocketChannel) future.channel();
+
+            channels.put(instance.getIp() + instance.getPort(),socketChannel);
+
+            logger.info("connect broker success");
+
+        }
+
+
+
+
+        return;
+    }
+
+
+
+    public  Channel bind(final BrokerInfo brokerInfo, CountDownLatch countDownLatch, final AbstractProducer abstractProducer){
         Channel channel = null;
         if (( channel = connectionCacheTable.get(brokerInfo)) != null) {
 
@@ -99,7 +184,7 @@ public class NettyClient implements ConnectionHandler {
                 @Override
                 protected void initChannel(SocketChannel socketChannel) throws Exception {
 
-                    socketChannel.pipeline().addLast(new NettyClientHandler(new SendResult(),countDownLatchSendMessage,brokerInfo));
+                    socketChannel.pipeline().addLast(new NettyClientHandler(socketChannel,abstractProducer));
 
                     socketChannel.pipeline().addLast(new IdleStateHandler(ConstantClient.CHANNEL_TIMEOUT,0,0, TimeUnit.MILLISECONDS));
 
@@ -115,7 +200,7 @@ public class NettyClient implements ConnectionHandler {
 
             if (future.isSuccess()) {
 
-                socketChannel = (SocketChannel) future.channel();
+                SocketChannel socketChannel = (SocketChannel) future.channel();
 
                 logger.info("connect broker success");
 
@@ -227,14 +312,21 @@ public class NettyClient implements ConnectionHandler {
         return ;
     }
 
-    public void start(SendQueues sendQueues){
+    public void start(final SendQueues sendQueues){
+
+
+
        java.util.Timer timer = new java.util.Timer();
        timer.schedule(new java.util.TimerTask() {
            @Override
            public void run() {
-               sendQueues.updateListFromNameServer();
+  //             sendQueues.updateListFromNameServer();
            }
 
        },0, ConstantClient.GET_LIST_TIMER_PERIOD);
     }
+
+
+
+
 }

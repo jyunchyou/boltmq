@@ -5,6 +5,7 @@ package io.openmessaging.client.net;
  */
 public class SendResult {
 
+    private NettyClient NettyClient;
     private String info;
 
     public void decode(byte[] buffer){
@@ -18,5 +19,11 @@ public class SendResult {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+
+    public static void main(String[] args){
+
+
     }
 }

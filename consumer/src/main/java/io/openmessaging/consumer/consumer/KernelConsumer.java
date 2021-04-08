@@ -1,5 +1,6 @@
 package io.openmessaging.consumer.consumer;
 
+import com.alibaba.nacos.api.exception.NacosException;
 import io.openmessaging.consumer.constant.ConstantConsumer;
 import io.openmessaging.consumer.listener.ListenerMessage;
 import io.openmessaging.consumer.net.EncodeAndDecode;
@@ -36,14 +37,7 @@ public class KernelConsumer {
         KernelConsumer.kernelConsumer = kernelConsumer;
     }
 
-    public void subscribe(String topic, ListenerMessage listenerMessage, int num, CountDownLatch countDownLatch, long consumeModel){
-
-
-
-
-
-
-
+    public void subscribe(String topic, ListenerMessage listenerMessage, int num, CountDownLatch countDownLatch, long consumeModel) throws NacosException, InterruptedException {
 
         while (TopicBrokerTable.concurrentHashMap.isEmpty()) {
 
@@ -94,9 +88,9 @@ public class KernelConsumer {
 
 
 
-    public void pull(String topic,int num,ListenerMessage listenerMessage,CountDownLatch countDownLatch,long uniqId){
+    public void pull(String topic,int num,ListenerMessage listenerMessage,CountDownLatch countDownLatch,long uniqId) throws NacosException, InterruptedException {
 
-        nettyConsumer.pull(topic,num,listenerMessage,countDownLatch,uniqId);
+        //nettyConsumer.pull(topic,num,listenerMessage,countDownLatch,uniqId);
 
 
 

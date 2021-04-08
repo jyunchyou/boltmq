@@ -1,5 +1,7 @@
 package io.openmessaging.consumer.net;
 
+import com.alibaba.nacos.api.exception.NacosException;
+import com.alibaba.nacos.api.naming.pojo.Instance;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -7,8 +9,12 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.Future;
 import io.openmessaging.consumer.broker.BrokerInfo;
+import io.openmessaging.consumer.constant.ConstantConsumer;
+import io.openmessaging.consumer.consumer.ConsumeCallBack;
+import io.openmessaging.consumer.consumer.FactoryConsumer;
 import io.openmessaging.consumer.handler.ReceiveMessageHandlerAdapter;
 import io.openmessaging.consumer.handler.UpdateFromNameServerHandler;
 import io.openmessaging.consumer.nameserver.NameServerInfo;
@@ -16,20 +22,24 @@ import io.openmessaging.consumer.listener.ListenerMessage;
 import io.openmessaging.consumer.table.ConnectionCacheBrokerTabel;
 import io.openmessaging.consumer.table.ConnectionCacheNameServerTable;
 import io.openmessaging.consumer.table.TopicBrokerTable;
+import io.openmessaging.consumer.util.InfoCast;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by fbhw on 17-12-7.
  */
 public class NettyConsumer {
 
-    private static  NettyConsumer nettyConsumer = new NettyConsumer();
+    public static  NettyConsumer nettyConsumer = new NettyConsumer();
 
     Logger logger = LoggerFactory.getLogger(NettyConsumer.class);
 
@@ -43,6 +53,14 @@ public class NettyConsumer {
 
     private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
 
+    //key 为topic + brokerId
+    public static Map<String,Channel> channelMap = new ConcurrentHashMap<String,Channel>();
+
+    public static Map<String,ConsumeCallBack> consumeCallBackMap = new ConcurrentHashMap<String, ConsumeCallBack>();
+
+    //key 为topic + brokerId
+    public static Map<String,Long> consumeIndexMap = new ConcurrentHashMap<String, Long>();//broker消费下标
+
     private NettyConsumer(){
 
     }
@@ -54,6 +72,63 @@ public class NettyConsumer {
     public static void setNettyConsumer(NettyConsumer nettyConsumer) {
         NettyConsumer.nettyConsumer = nettyConsumer;
     }
+
+    public  void putNewChannel(final String topic,final Instance instance, final String consumerName,final int model){
+
+        Channel channel = null;
+        if (channelMap.containsKey(topic + instance.getInstanceId())) {
+
+            return;
+
+        }
+
+
+        String ip = instance.getIp();
+        int port = instance.getPort();
+
+        if (bootstrap == null) {
+
+            try {
+                bootstrap = new Bootstrap();
+                bootstrap.group(eventLoopGroup);
+                bootstrap.channel(NioSocketChannel.class);
+                bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
+                bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, ConstantConsumer.CHANNEL_TIMEOUT);
+                //bootstrap.remoteAddress(ip,port);
+            }catch (Exception e){
+                eventLoopGroup.shutdownGracefully();
+            }
+        }
+        bootstrap.handler(new ChannelInitializer<SocketChannel>() {
+            @Override
+            protected void initChannel(SocketChannel socketChannel) throws Exception {
+                socketChannel.pipeline().addLast(new ReceiveMessageHandlerAdapter(topic,instance.getInstanceId(),consumerName,model));
+                socketChannel.pipeline().addLast(new IdleStateHandler(ConstantConsumer.CHANNEL_TIMEOUT,0,0, TimeUnit.MILLISECONDS));
+            }
+        });
+        ChannelFuture future = null;
+        try {
+            future = bootstrap.connect(ip,port).sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (future.isSuccess()) {
+            SocketChannel socketChannel = (SocketChannel) future.channel();
+            channelMap.put(topic + instance.getInstanceId(),socketChannel);
+            //127.0.0.1#8100#brokers#DEFAULT_GROUP@@broker2
+            logger.info("connect broker success");
+//127.0.0.1#8099#brokers#DEFAULT_GROUP@@broker2
+        }
+
+
+
+
+
+
+
+        return;
+    }
+
 
     public Channel bind(NameServerInfo nameServerInfo){
 
@@ -130,7 +205,7 @@ public class NettyConsumer {
 
     }
 
-
+/*
     public Channel bind(BrokerInfo brokerInfo, final int num, final ListenerMessage listenerMessage, final CountDownLatch countDownLatch){
 
 
@@ -146,13 +221,13 @@ public class NettyConsumer {
             @Override
             protected void initChannel(SocketChannel socketChannel) throws Exception {
 
-                socketChannel.pipeline().addLast(new ReceiveMessageHandlerAdapter(num,listenerMessage,countDownLatch));
+                socketChannel.pipeline().addLast(new ReceiveMessageHandlerAdapter());
             }
         });
         ChannelFuture future = null;
         try {
             future = bootstrap.connect(ip,port).sync();
-           /* future.channel().close().sync();*/
+           *//* future.channel().close().sync();*//*
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -169,10 +244,11 @@ public class NettyConsumer {
 
 
 
-    }
+    }*/
 
+/*
 
-    public void pull(String topic, int num, ListenerMessage listenerMessage, CountDownLatch countDownLatch,long uniqId) {
+    public void pull(String topic, int num, ListenerMessage listenerMessage, CountDownLatch countDownLatch,long uniqId) throws NacosException, InterruptedException {
 
         while (TopicBrokerTable.concurrentHashMap.isEmpty()) {
             try {
@@ -184,10 +260,20 @@ public class NettyConsumer {
         }
 
 
-        /**
+        Instance instance = FactoryConsumer.naming.selectOneHealthyInstance("broker");//获取所有broker
+
+
+            BrokerInfo brokerInfo1 = InfoCast.cast(instance);
+
+
+
+
+        */
+/**
          * 表结构 topic-List{BrokerInfo-List{queueId}}
          *
-         * */
+         * *//*
+
         List<Map<BrokerInfo, List<String>>> list = TopicBrokerTable.concurrentHashMap.get(topic);
 
 
@@ -203,9 +289,7 @@ public class NettyConsumer {
         for (Map map : list) {
             BrokerInfo brokerInfo = (BrokerInfo) map.keySet().iterator().next();
 
-            List queueIds = (List) map.get(brokerInfo);
-
-            ByteBuf byteBuf = encodeAndDecode.encodePull(topic, num, queueIds,uniqId);
+            ByteBuf byteBuf = encodeAndDecode.encodePull(topic, num, uniqId);
 
             Channel channel = ConnectionCacheBrokerTabel.connectionCacheBrokerTable.get(brokerInfo);
 
@@ -244,11 +328,7 @@ public class NettyConsumer {
                 Future future = c.writeAndFlush(byteBuf);
                 if (future.isSuccess()) {
 
-                    try {
                         countDownLatch.await();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                 } else {
                 }
 
@@ -258,6 +338,7 @@ public class NettyConsumer {
 
 
     }
+*/
 
 
 }

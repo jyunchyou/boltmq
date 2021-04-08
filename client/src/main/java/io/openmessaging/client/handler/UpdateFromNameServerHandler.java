@@ -34,52 +34,6 @@ public class UpdateFromNameServerHandler extends ChannelHandlerAdapter {
 
     }
 
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-
-        logger.info("method channelActive has executed");
-    }
-
-    @Override
-    public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg){
-
-
-
-
-        ByteBuf byteBuf = (ByteBuf) msg;
-
-
-//        logger.info("Server端返回消息:"+ new String(bb.array()));
-
-/*
-
-        ByteBuffer byteBuffer = (ByteBuffer) msg;
-
-        SendQueues.routeByteBuffer = byteBuffer;
-*/
-
-
-
-//Test
-        byteBuf.markReaderIndex();
-        byte[] r = new byte[byteBuf.readableBytes()];
-        byteBuf.readBytes(r);
-
-        System.out.println(new String(r));
-        byteBuf.resetReaderIndex();
-
-
-        SendQueues.routeByteBuf = byteBuf;
-
-
-
-
-
-        countDownLatch.countDown();
-
-    }
-
-
 
 
 }

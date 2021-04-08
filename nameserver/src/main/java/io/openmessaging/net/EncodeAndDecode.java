@@ -53,7 +53,6 @@ public class EncodeAndDecode {
         int brokerSize = map.size();
 
 
-        System.out.println("brokerSize:"+brokerSize);
 
         byte brokerSizeByte = (byte) brokerSize;
         heapBuffer.writeByte(brokerSizeByte);
@@ -73,7 +72,6 @@ public class EncodeAndDecode {
 
             ArrayList<String> arrayList = (ArrayList) e.getValue();
 
-            System.out.println("topicSize:"+arrayList.size());
 
 
             int topicSize = arrayList.size();

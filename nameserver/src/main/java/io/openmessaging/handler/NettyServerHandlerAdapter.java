@@ -68,7 +68,6 @@ public class NettyServerHandlerAdapter extends ChannelHandlerAdapter{
             byteBuf.readBytes(d);
             byteBuf.resetReaderIndex();
 
-            System.out.println(new String(d));
             channelHandlerContext.writeAndFlush(byteBuf);
 
 

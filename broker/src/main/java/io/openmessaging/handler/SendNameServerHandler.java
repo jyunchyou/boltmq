@@ -14,16 +14,4 @@ public class SendNameServerHandler extends ChannelHandlerAdapter {
 
     Logger logger = LoggerFactory.getLogger(SendNameServerHandler.class);
 
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-
-        logger.info("method channelActive has executed");
-    }
-
-    @Override
-    public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg) {
-
-        ByteBuf byteBuf = (ByteBuf) msg;
-        ReferenceCountUtil.release(byteBuf);
-    }
 }

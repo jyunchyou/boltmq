@@ -1,8 +1,25 @@
 package io.openmessaging.client;
 
 
+import com.alibaba.nacos.api.exception.NacosException;
+import io.netty.channel.Channel;
+import io.openmessaging.client.constant.ConstantClient;
+import io.openmessaging.client.exception.RegisterException;
+import io.openmessaging.client.net.BaseMessage;
+import io.openmessaging.client.net.NettyClient;
+import io.openmessaging.client.process.ProcessDelayAck;
+import io.openmessaging.client.producer.AbstractProducer;
+import io.openmessaging.client.producer.BProperties;
+import io.openmessaging.client.producer.FactoryProducer;
+import io.openmessaging.client.producer.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by fbhw on 17-11-10.
@@ -26,12 +43,52 @@ import org.slf4j.LoggerFactory;
  </dependency>
  */
 public class Test {
+    public static void main(String[] args) throws NacosException, RegisterException, InterruptedException, IOException/* throws ClientException*/ {
+        BProperties bProperties = new BProperties();
+        bProperties.setServiceName("client1");
+        bProperties.setGroup("clients");
+        bProperties.setServer("localhost:8848");
+        bProperties.setIp("127.0.0.1");
+        bProperties.setPort(ConstantClient.CLIENT_PORT);
 
-    public static void main(String[] args)/* throws ClientException*/ {
+        ProcessDelayAck processDelayAck = new ProcessDelayAck();
+        new Thread(processDelayAck).start();
+        AbstractProducer abstractProducer = FactoryProducer.createProducer();
 
+        FactoryProducer.registry(bProperties,abstractProducer);
+        Object[] stri =  NettyClient.channels.keySet().toArray();
+
+
+        for (Object s :stri) {
+
+            String s1 = (String) s;
+            Channel channel = NettyClient.channels.get(s);
+            processDelayAck.delayAckMap.put(channel,abstractProducer.getSendConfirmMap());
+
+
+        }
+
+
+
+            for (int index = 0;index < 10001;index++) {
+                System.out.println(stri.length);
+            for (Object s :stri) {
+                String s1 = (String) s;
+                Channel channel = NettyClient.channels.get(s);
+                BaseMessage baseMessage = new BaseMessage();
+                baseMessage.setTopic("hhjjqq");
+
+                byte[] b = new byte[2000];
+                baseMessage.setValue(b);
+                abstractProducer.send(baseMessage, null, true, false, false, false, false, 0, (byte) 0, "h", channel);
+            }
+        }
+       /* channel = NettyClient.channels.get(NettyClient.channels.keySet().toArray()[1]);
+        baseMessage.setTopic("hujunqiu");
+        baseMessage.setValue("1234567891");
+        abstractProducer.send(baseMessage,null,true,false,false,false,false,0, (byte) 0,"h",channel);
+*/
    /*     Logger logger = LoggerFactory.getLogger(Test.class);
-
-
         logger.trace("======trace") ;
         logger.info("fads");
         logger.warn("======warn");

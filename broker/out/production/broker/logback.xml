@@ -11,7 +11,7 @@
 
 
     <appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
-        <file>/home/fbhw/java*/log</file>
+        <file>D:\boltmq\log</file>
 
         <encoder><!-- 必须指定，否则不会往文件输出内容 -->
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}  [%thread] %-5level %logger{5} - %msg%n</pattern>

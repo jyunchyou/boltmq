@@ -17,22 +17,5 @@ public class RestartHandlerAdapter extends ChannelHandlerAdapter {
 
     private EncodeAndDecode encodeAndDecode = new EncodeAndDecode();
 
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-
-        logger.info("method channelActive has executed");
-    }
-
-    @Override
-    public void channelRead(ChannelHandlerContext channelHandlerContext, Object msg) {
-
-        ByteBuf byteBuf = (ByteBuf) msg;
-        //TODO 解析为Index
-
-        //encodeAndDecode.decodeRestart(byteBuf);
-        ReferenceCountUtil.release(byteBuf);
-
-
-    }
 
 }

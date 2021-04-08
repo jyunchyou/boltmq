@@ -1,8 +1,6 @@
 package io.openmessaging.client.net;
 
-import io.openmessaging.client.constant.ConstantClient;
-import io.openmessaging.client.producer.Message;
-import io.openmessaging.client.producer.Properties;
+import io.openmessaging.client.producer.BProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -141,7 +139,7 @@ public class ClientProcessor {
     //////////////////////////////////////////////////////////////////////////////////////////////////////
    /* -------------------------------下面为消息发送--------------------------------------------------------*/
 
-    public ByteBuffer encode(Message message,Properties properties, RequestDto requestDto){
+    public ByteBuffer encode(io.openmessaging.client.producer.Message message, BProperties BProperties, BaseMessage requestDto){
 
         return null;
     }
@@ -151,7 +149,7 @@ public class ClientProcessor {
         return null;
     }
 
-    public void processRequest(RequestDto requestDto){
+    public void processRequest(BaseMessage baseMessage){
 
     }
     /*//发送结束,accept到response后执行;
